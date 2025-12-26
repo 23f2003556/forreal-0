@@ -30,7 +30,18 @@ export function useChat() {
                             setCurrentUser({ ...profile, status: newStatus })
                         })
                     }
+                } else {
+                    // If auth user exists but profile is missing, set a placeholder
+                    // to allow MainLayout to redirect to /setup-profile
+                    setCurrentUser({
+                        id: user.id,
+                        username: '',
+                        avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${user.email || user.id}`,
+                        status: 'Hey there! I am using ForReal.'
+                    })
                 }
+            } else {
+                setCurrentUser(null)
             }
             setLoading(false)
         }

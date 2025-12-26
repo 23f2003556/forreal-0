@@ -14,9 +14,15 @@ export default function LoginPage() {
 
     useEffect(() => {
         const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser()
-            if (user) {
-                router.push('/')
+            console.log('DEBUG: Initial session check starting...')
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser()
+                console.log('DEBUG: Initial session check result:', { user: user?.id, error })
+                if (user) {
+                    router.push('/')
+                }
+            } catch (err) {
+                console.error('DEBUG: Initial session check failed:', err)
             }
         }
         checkUser()
@@ -28,9 +34,10 @@ export default function LoginPage() {
         setError(null)
 
         try {
+            const trimmedEmail = email.trim()
             if (isSignUp) {
-                const trimmedEmail = email.trim()
-                const { error } = await supabase.auth.signUp({
+                console.log('DEBUG: Attempting signup for:', JSON.stringify(trimmedEmail))
+                const { data, error } = await supabase.auth.signUp({
                     email: trimmedEmail,
                     password,
                     options: {
@@ -40,17 +47,44 @@ export default function LoginPage() {
                         },
                     },
                 })
+                console.log('DEBUG: Signup result:', { data, error })
                 if (error) throw error
-                alert('Check your email for the confirmation link!')
+
+                if (data.user) {
+                    const fullName = trimmedEmail.split('@')[0];
+                    const { error: profileError } = await supabase
+                        .from('profiles')
+                        .upsert({
+                            id: data.user.id,
+                            username: fullName.trim(),
+                            avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${fullName.trim()}`,
+                            updated_at: new Date().toISOString()
+                        })
+
+                    if (!profileError) {
+                        // If signup and profile creation are successful, redirect
+                        window.location.href = '/'
+                    } else {
+                        console.error('DEBUG: Profile setup error:', profileError)
+                        alert('Error saving profile: ' + profileError.message)
+                    }
+                } else {
+                    // If user data is not immediately available (e.g., email confirmation needed)
+                    alert('Check your email for the confirmation link!')
+                }
             } else {
-                const { error } = await supabase.auth.signInWithPassword({
-                    email: email.trim(),
+                console.log('DEBUG: Attempting login for:', JSON.stringify(trimmedEmail))
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: trimmedEmail,
                     password,
                 })
+                console.log('DEBUG: Login result:', { data, error })
                 if (error) throw error
-                router.push('/')
+                // Use window.location.href for a hard redirect to ensure cookies are sent
+                window.location.href = '/'
             }
         } catch (err: any) {
+            console.error('DEBUG: Auth error:', err)
             setError(err.message)
         } finally {
             setLoading(false)

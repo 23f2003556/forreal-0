@@ -43,15 +43,18 @@ export default function SetupProfile() {
         if (user) {
             const { error } = await supabase
                 .from('profiles')
-                .update({
+                .upsert({
+                    id: user.id,
                     username: fullName.trim(),
-                    full_name: fullName.trim(),
-                    avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${fullName.trim()}`
+                    avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${fullName.trim()}`,
+                    updated_at: new Date().toISOString()
                 })
-                .eq('id', user.id)
 
             if (!error) {
-                router.push('/')
+                window.location.href = '/'
+            } else {
+                console.error('DEBUG: Profile setup error:', error)
+                alert('Error saving profile: ' + error.message)
             }
         }
         setLoading(false)
