@@ -12,8 +12,12 @@ export function MainLayout() {
     const router = useRouter()
 
     React.useEffect(() => {
-        if (!loading && !currentUser) {
-            router.push('/login')
+        if (!loading) {
+            if (!currentUser) {
+                router.push('/login')
+            } else if (!currentUser.username || currentUser.username.startsWith('user_')) {
+                router.push('/setup-profile')
+            }
         }
     }, [loading, currentUser, router])
 
