@@ -202,6 +202,12 @@ export default function LoginPage() {
                     </button>
                 </div>
             </div>
+
+            <div className="mt-8 text-center">
+                <p className="text-xs text-text-secondary opacity-60 font-medium tracking-widest uppercase">
+                    jannu की rachna
+                </p>
+            </div>
         </div>
     )
 }
