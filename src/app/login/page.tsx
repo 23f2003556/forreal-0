@@ -85,7 +85,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-app-background flex flex-col items-center justify-center p-4">
+        <div className="min-h-[100dvh] bg-app-background flex flex-col items-center justify-center p-4">
             <div className="mb-8 text-center">
                 <h1 className="text-3xl font-bold text-teal-primary tracking-tight">"more than just texting"</h1>
             </div>

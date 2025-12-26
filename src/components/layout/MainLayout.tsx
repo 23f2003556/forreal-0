@@ -32,7 +32,7 @@ export function MainLayout() {
     if (!currentUser) return null
 
     return (
-        <div className="flex h-screen w-full overflow-hidden bg-app-background">
+        <div className="flex h-[100dvh] w-full overflow-hidden bg-app-background">
             {/* Sidebar - Visible on desktop, or on mobile when no chat is active */}
             <div className={cn(
                 "w-full md:w-auto md:flex-none",

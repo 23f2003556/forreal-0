@@ -59,14 +59,14 @@ export default function SetupProfile() {
 
     if (checking) {
         return (
-            <div className="flex h-screen w-full items-center justify-center bg-app-background">
+            <div className="flex h-[100dvh] w-full items-center justify-center bg-app-background">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-primary"></div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-app-background flex flex-col items-center justify-center p-4">
+        <div className="min-h-[100dvh] bg-app-background flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
                 <div className="text-center space-y-2">
                     <div className="inline-flex p-3 rounded-2xl bg-teal-50 text-teal-primary mb-2">
