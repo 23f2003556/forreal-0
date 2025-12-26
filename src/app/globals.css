@@ -1,26 +1,69 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f0f2f5;
+  --foreground: #111b21;
+
+  --teal-primary: #008069;
+  --teal-secondary: #00a884;
+
+  --app-background: #f0f2f5;
+  --chat-background: #efeae2;
+  --panel-header-background: #f0f2f5;
+  --panel-background: #ffffff;
+
+  --incoming-background: #ffffff;
+  --outgoing-background: #d9fdd3;
+
+  --icon-gray: #54656f;
+  --text-primary: #111b21;
+  --text-secondary: #667781;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111b21;
+    --foreground: #e9edef;
+
+    --teal-primary: #00a884;
+    --teal-secondary: #008069;
+
+    --app-background: #111b21;
+    --chat-background: #0b141a;
+    --panel-header-background: #202c33;
+    --panel-background: #111b21;
+
+    --incoming-background: #202c33;
+    --outgoing-background: #005c4b;
+
+    --icon-gray: #aebac1;
+    --text-primary: #e9edef;
+    --text-secondary: #8696a0;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-teal-primary: var(--teal-primary);
+  --color-teal-secondary: var(--teal-secondary);
+
+  --color-app-background: var(--app-background);
+  --color-chat-background: var(--chat-background);
+  --color-panel-header-background: var(--panel-header-background);
+  --color-panel-background: var(--panel-background);
+
+  --color-incoming-background: var(--incoming-background);
+  --color-outgoing-background: var(--outgoing-background);
+
+  --color-icon-gray: var(--icon-gray);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
 }
 
 body {
-  background: var(--background);
+  background: var(--app-background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
