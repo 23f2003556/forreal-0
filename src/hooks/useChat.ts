@@ -121,7 +121,17 @@ export function useChat() {
             }
         }
 
+        // Initial fetch
         fetchRooms()
+
+        // 🔄 Auto-refresh rooms every 5 seconds to update online status
+        const roomsInterval = setInterval(() => {
+            fetchRooms()
+        }, 5000) // Poll every 5 seconds
+
+        return () => {
+            clearInterval(roomsInterval)
+        }
     }, [currentUser, setRooms])
 
     // Fetch messages for active room
@@ -141,22 +151,40 @@ export function useChat() {
             if (data) setMessages(data)
         }
 
+        // Initial fetch
         fetchMessages()
 
-        // Realtime subscription
+        // 🔄 Auto-refresh every 1 second for real-time updates
+        const pollInterval = setInterval(() => {
+            fetchMessages()
+        }, 1000) // Poll every 1 second
+
+        // Realtime subscription with status logging
         const channel = supabase
-            .channel(`room:${activeRoomId}`)
+            .channel(`room:${activeRoomId}`, {
+                config: {
+                    broadcast: { self: false }
+                }
+            })
             .on('postgres_changes', {
                 event: 'INSERT',
                 schema: 'public',
                 table: 'messages',
                 filter: `room_id=eq.${activeRoomId}`,
             }, (payload) => {
+                console.log('📨 New message received:', payload.new)
                 addMessage(payload.new)
             })
-            .subscribe()
+            .subscribe((status) => {
+                console.log('🔌 Subscription status:', status)
+                if (status === 'SUBSCRIBED') {
+                    console.log('✅ Real-time subscription active for room:', activeRoomId)
+                }
+            })
 
         return () => {
+            console.log('🔌 Unsubscribing from room:', activeRoomId)
+            clearInterval(pollInterval) // Clean up polling
             supabase.removeChannel(channel)
         }
     }, [activeRoomId, setMessages, addMessage])
@@ -164,19 +192,7 @@ export function useChat() {
     const sendMessage = async (content: string, type: 'text' | 'image' | 'audio' = 'text') => {
         if (!currentUser || !activeRoomId) return
 
-        const newMessage = {
-            id: uuidv4(),
-            room_id: activeRoomId,
-            sender_id: currentUser.id,
-            content,
-            type,
-            created_at: new Date().toISOString(),
-            status: 'sent'
-        }
-
-        // Optimistic update
-        addMessage(newMessage)
-
+        // Insert message into database - real-time subscription will add it to UI
         const { error } = await supabase.from('messages').insert({
             room_id: activeRoomId,
             sender_id: currentUser.id,
