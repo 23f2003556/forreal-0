@@ -5,9 +5,27 @@ import { Sidebar } from '../sidebar/Sidebar'
 import { ChatWindow } from '../chat/ChatWindow'
 import { useChat } from '@/hooks/useChat'
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 
 export function MainLayout() {
-    const { activeRoomId } = useChat()
+    const { activeRoomId, currentUser, loading } = useChat()
+    const router = useRouter()
+
+    React.useEffect(() => {
+        if (!loading && !currentUser) {
+            router.push('/login')
+        }
+    }, [loading, currentUser, router])
+
+    if (loading) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-app-background">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-primary"></div>
+            </div>
+        )
+    }
+
+    if (!currentUser) return null
 
     return (
         <div className="flex h-screen w-full overflow-hidden bg-app-background">
