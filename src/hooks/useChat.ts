@@ -13,7 +13,8 @@ export function useChat() {
         setCurrentUser,
         setActiveRoomId,
         setRooms,
-        setMessages
+        setMessages,
+        addMessage
     } = useChatStore()
     const [loading, setLoading] = useState(true)
 
@@ -151,14 +152,14 @@ export function useChat() {
                 table: 'messages',
                 filter: `room_id=eq.${activeRoomId}`,
             }, (payload) => {
-                setMessages([...messages, payload.new])
+                addMessage(payload.new)
             })
             .subscribe()
 
         return () => {
             supabase.removeChannel(channel)
         }
-    }, [activeRoomId, setMessages])
+    }, [activeRoomId, setMessages, addMessage])
 
     const sendMessage = async (content: string, type: 'text' | 'image' | 'audio' = 'text') => {
         if (!currentUser || !activeRoomId) return
@@ -174,7 +175,7 @@ export function useChat() {
         }
 
         // Optimistic update
-        setMessages([...messages, newMessage])
+        addMessage(newMessage)
 
         const { error } = await supabase.from('messages').insert({
             room_id: activeRoomId,

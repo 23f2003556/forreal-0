@@ -1,10 +1,10 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-    if (!process.env.GEMINI_API_KEY) {
+    if (!process.env.GROQ_API_KEY) {
         return NextResponse.json(
-            { error: 'Gemini API Key is missing. Please add GEMINI_API_KEY to .env.local and restart the server.' },
+            { error: 'Groq API Key is missing. Please add GROQ_API_KEY to .env.local and restart the server.' },
             { status: 500 }
         )
     }
@@ -16,10 +16,8 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Invalid messages format' }, { status: 400 })
         }
 
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-        const model = genAI.getGenerativeModel({
-            model: "gemini-flash-latest",
-            generationConfig: { responseMimeType: "application/json" }
+        const groq = new Groq({
+            apiKey: process.env.GROQ_API_KEY
         })
 
         let modeInstructions = ""
@@ -63,7 +61,7 @@ ${style ? `**STYLE:** The user wants the suggestions to be in a "${style}" style
     *   **Option 3:** A bold or creative approach related to the request and style.
 
 **Output Format:**
-Return ONLY a JSON object with this exact structure:
+Return ONLY a JSON object with this exact structure (no markdown, no code blocks, just raw JSON):
 {
   "interestScore": number, // 0-100 (Contextual to mode)
   "vibe": "string", // Short description (max 5 words)
@@ -72,11 +70,21 @@ Return ONLY a JSON object with this exact structure:
 }
 `
 
-        const result = await model.generateContent(prompt)
-        const response = result.response
-        const text = response.text()
+        const completion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            model: "llama-3.3-70b-versatile", // Fast and free Llama model
+            temperature: 0.7,
+            max_tokens: 1024,
+            response_format: { type: "json_object" }
+        })
 
-        const analysis = JSON.parse(text)
+        const responseText = completion.choices[0]?.message?.content || '{}'
+        const analysis = JSON.parse(responseText)
 
         return NextResponse.json(analysis)
 

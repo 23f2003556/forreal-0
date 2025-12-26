@@ -24,7 +24,7 @@ To deploy your application and make it accessible to everyone, we recommend usin
 | :--- | :--- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Look for the line starting with `NEXT_PUBLIC_SUPABASE_URL=` |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Look for the line starting with `NEXT_PUBLIC_SUPABASE_ANON_KEY=` |
-| `GEMINI_API_KEY` | Look for the line starting with `GEMINI_API_KEY=` |
+| `GROQ_API_KEY` | Look for the line starting with `GROQ_API_KEY=` (Get free at https://console.groq.com) |
 
 5. Click **Add** after entering each one.
 6. Once all three are added, click **Deploy**.

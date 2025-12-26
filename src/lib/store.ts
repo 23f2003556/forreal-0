@@ -16,6 +16,7 @@ interface ChatState {
     setActiveRoomId: (roomId: string | null) => void
     setRooms: (rooms: any[]) => void
     setMessages: (messages: any[]) => void
+    addMessage: (message: any) => void
 }
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -27,4 +28,5 @@ export const useChatStore = create<ChatState>((set) => ({
     setActiveRoomId: (roomId) => set({ activeRoomId: roomId }),
     setRooms: (rooms) => set({ rooms }),
     setMessages: (messages) => set({ messages }),
+    addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
 }))

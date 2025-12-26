@@ -4,6 +4,7 @@ A high-fidelity real-time chat application built with Next.js 14, Tailwind CSS, 
 
 ## Features
 - **Real-time Messaging**: Instant message delivery using Supabase Realtime.
+- **AI-Powered Coach**: Friend Engine with chat analysis, interest scoring, and smart reply suggestions (powered by Groq AI - 100% free).
 - **Authentication**: Secure login/signup.
 - **Media Support**: Image uploads and previews.
 - **Modern Aesthetic**: Faithful recreation of a premium chat UI/UX.
@@ -23,7 +24,10 @@ Create a `.env.local` file in the root directory:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+GROQ_API_KEY=your_groq_api_key  # Get free key from https://console.groq.com
 ```
+
+> **Note**: The Groq API key is required for AI features (Friend Engine, chat analysis). See [GROQ_SETUP.md](./GROQ_SETUP.md) for detailed setup instructions.
 
 ### 3. Run Locally
 ```bash

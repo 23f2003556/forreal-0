@@ -8,5 +8,5 @@ description: how to deploy the application to Vercel
 4. Add the required environment variables:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `GEMINI_API_KEY`
+   - `GROQ_API_KEY` (Get free at https://console.groq.com)
 5. Update Supabase and Google Cloud redirect URIs with the new production domain.
