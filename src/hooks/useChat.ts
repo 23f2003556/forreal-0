@@ -5,9 +5,16 @@ import { supabase } from '@/lib/supabase/client'
 import { useChatStore } from '@/lib/store'
 
 export function useChat() {
-    const { currentUser, activeRoomId, setCurrentUser, setActiveRoomId } = useChatStore()
-    const [rooms, setRooms] = useState<any[]>([]) // eslint-disable-line @typescript-eslint/no-explicit-any
-    const [messages, setMessages] = useState<any[]>([]) // eslint-disable-line @typescript-eslint/no-explicit-any
+    const {
+        currentUser,
+        activeRoomId,
+        rooms,
+        messages,
+        setCurrentUser,
+        setActiveRoomId,
+        setRooms,
+        setMessages
+    } = useChatStore()
     const [loading, setLoading] = useState(true)
 
     // Fetch current user
@@ -76,7 +83,6 @@ export function useChat() {
                 .eq('user_id', currentUser.id)
 
             if (data) {
-                console.log('Raw rooms data:', data)
                 const formattedRooms = data.map((item: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
                     const room = item.rooms
                     // For private chats, get the other user's details
@@ -91,8 +97,6 @@ export function useChat() {
                             room.last_seen = otherParticipant.profiles.last_seen
                             room.other_user_id = otherParticipant.user_id
                         } else {
-                            console.log('No other participant found for room:', room.id, 'Participants:', room.room_participants)
-                            // Mark as invalid to filter out later
                             room.is_invalid = true
                         }
                     }
@@ -105,11 +109,6 @@ export function useChat() {
                     if (current.type === 'private' && current.other_user_id) {
                         const existingIndex = acc.findIndex(r => r.type === 'private' && r.other_user_id === current.other_user_id)
                         if (existingIndex > -1) {
-                            // Keep the one created later (or with more recent message if we had that info)
-                            // For now, just keep the one with the higher ID (assuming UUID v4 is not ordered, but created_at is)
-                            // Actually, let's keep the one that is already in the accumulator if it looks "better", or replace it.
-                            // Simple strategy: Keep the first one encountered? No, we want to clean up.
-                            // Let's just keep the first one for now to ensure uniqueness.
                             return acc
                         }
                     }
@@ -117,19 +116,19 @@ export function useChat() {
                     return acc
                 }, [])
 
-                console.log('Formatted and Unique rooms:', uniqueRooms)
                 setRooms(uniqueRooms)
             }
         }
 
         fetchRooms()
-
-        // Subscribe to new rooms (optional for MVP)
-    }, [currentUser])
+    }, [currentUser, setRooms])
 
     // Fetch messages for active room
     useEffect(() => {
-        if (!activeRoomId) return
+        if (!activeRoomId) {
+            setMessages([])
+            return
+        }
 
         const fetchMessages = async () => {
             const { data } = await supabase
@@ -152,14 +151,14 @@ export function useChat() {
                 table: 'messages',
                 filter: `room_id=eq.${activeRoomId}`,
             }, (payload) => {
-                setMessages((prev) => [...prev, payload.new])
+                setMessages([...messages, payload.new])
             })
             .subscribe()
 
         return () => {
             supabase.removeChannel(channel)
         }
-    }, [activeRoomId])
+    }, [activeRoomId, setMessages])
 
     const sendMessage = async (content: string, type: 'text' | 'image' | 'audio' = 'text') => {
         if (!currentUser || !activeRoomId) return
@@ -175,7 +174,7 @@ export function useChat() {
         }
 
         // Optimistic update
-        setMessages((prev) => [...prev, newMessage])
+        setMessages([...messages, newMessage])
 
         const { error } = await supabase.from('messages').insert({
             room_id: activeRoomId,
@@ -185,7 +184,6 @@ export function useChat() {
         })
 
         if (error) {
-            // Rollback or show error (omitted for MVP)
             console.error('Error sending message:', error)
         }
     }
@@ -227,8 +225,7 @@ export function useChat() {
             return existingRoom.id
         }
 
-        // 2. Check server-side for existing room (to avoid race conditions/stale state)
-        // We can do this by querying room_participants
+        // 2. Check server-side for existing room
         const { data: existingRoomData } = await supabase
             .from('room_participants')
             .select('room_id')
@@ -241,17 +238,8 @@ export function useChat() {
                     .then(({ data }) => data?.map(d => d.room_id) || [])
             ) as any) // eslint-disable-line @typescript-eslint/no-explicit-any
             .limit(1)
-            .single()
+            .maybeSingle()
 
-        // Note: The above query is a bit complex for client-side. 
-        // A better way is to rely on a unique constraint or a stored procedure, 
-        // but for now let's try to find a common room ID.
-
-        // Simplified check: Get all my rooms, then check if other user is in any of them.
-        // But since we already fetched rooms in `fetchRooms`, the local check #1 should cover 99% of cases
-        // IF `fetchRooms` has completed.
-
-        // If we found a server-side room that wasn't in local state yet:
         if (existingRoomData) {
             return existingRoomData.room_id
         }
@@ -292,7 +280,7 @@ export function useChat() {
             room_participants: [] // Simplified
         }
 
-        setRooms(prev => [newRoomObj, ...prev])
+        setRooms([newRoomObj, ...rooms])
 
         return newRoomId
     }

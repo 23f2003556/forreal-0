@@ -33,16 +33,20 @@ export function Sidebar() {
     }, [currentUser])
 
     React.useEffect(() => {
+        if (searchQuery.trim()) {
+            setIsSearching(true)
+        } else {
+            setIsSearching(false)
+            setSearchResults([])
+        }
+
         const delayDebounceFn = setTimeout(async () => {
             if (searchQuery.trim()) {
-                setIsSearching(true)
                 const results = await searchUsers(searchQuery)
                 setSearchResults(results)
                 setIsSearching(false)
-            } else {
-                setSearchResults([])
             }
-        }, 300)
+        }, 500) // Increased to 500ms for better UX
 
         return () => clearTimeout(delayDebounceFn)
     }, [searchQuery, searchUsers])

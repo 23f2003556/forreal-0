@@ -165,7 +165,9 @@ export function ChatWindow() {
                             <img src={activeRoom?.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${activeRoom?.name}`} alt="Contact Avatar" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex flex-col justify-center">
-                            <h2 className="font-semibold text-text-primary text-sm">{activeRoom?.name || 'Unknown'}</h2>
+                            <h2 className="font-semibold text-text-primary text-sm">
+                                {activeRoom ? activeRoom.name : 'Loading...'}
+                            </h2>
                             <p className="text-xs text-text-secondary">
                                 {activeRoom?.is_online ? 'online' : activeRoom?.last_seen ? `last seen ${format(new Date(activeRoom.last_seen), 'PP p')}` : ''}
                             </p>
