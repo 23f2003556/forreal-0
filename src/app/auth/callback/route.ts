@@ -2,9 +2,8 @@ import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
-    const { searchParams, origin } = new URL(request.url)
-    const code = searchParams.get('code')
-    const next = searchParams.get('next') ?? '/'
+    const requestUrl = new URL(request.url)
+    const code = requestUrl.searchParams.get('code')
 
     if (code) {
         const supabase = createClient(
@@ -15,11 +14,10 @@ export async function GET(request: Request) {
         const { error } = await supabase.auth.exchangeCodeForSession(code)
 
         if (!error) {
-            // Use a fresh response to ensure cookies are handled if any
-            const response = NextResponse.redirect(`${origin}${next}`)
-            return response
+            return NextResponse.redirect(new URL('/', request.url))
         }
     }
 
-    return NextResponse.redirect(`${origin}/login?error=Authentication failed`)
+    // return the user to an error page with instructions
+    return NextResponse.redirect(new URL('/login?error=Authentication failed', request.url))
 }
