@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
+    const [isSignUp, setIsSignUp] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -21,45 +22,34 @@ export default function LoginPage() {
         checkUser()
     }, [router])
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
         setError(null)
 
         try {
-            const { error } = await supabase.auth.signInWithPassword({
-                email: email.trim(),
-                password,
-            })
-
-            if (error) throw error
-            router.push('/')
-        } catch (err: any) {
-            setError(err.message)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const handleSignUp = async () => {
-        setLoading(true)
-        setError(null)
-
-        try {
-            const trimmedEmail = email.trim()
-            const { error } = await supabase.auth.signUp({
-                email: trimmedEmail,
-                password,
-                options: {
-                    data: {
-                        full_name: trimmedEmail.split('@')[0],
-                        avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${trimmedEmail}`,
+            if (isSignUp) {
+                const trimmedEmail = email.trim()
+                const { error } = await supabase.auth.signUp({
+                    email: trimmedEmail,
+                    password,
+                    options: {
+                        data: {
+                            full_name: trimmedEmail.split('@')[0],
+                            avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${trimmedEmail}`,
+                        },
                     },
-                },
-            })
-
-            if (error) throw error
-            alert('Check your email for the confirmation link!')
+                })
+                if (error) throw error
+                alert('Check your email for the confirmation link!')
+            } else {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: email.trim(),
+                    password,
+                })
+                if (error) throw error
+                router.push('/')
+            }
         } catch (err: any) {
             setError(err.message)
         } finally {
@@ -92,7 +82,7 @@ export default function LoginPage() {
 
             <div className="bg-white dark:bg-panel-header-background p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-3xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 tracking-tight">
-                    Login
+                    {isSignUp ? 'Sign Up' : 'Login'}
                 </h2>
 
                 {error && (
@@ -101,7 +91,7 @@ export default function LoginPage() {
                     </div>
                 )}
 
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-text-secondary mb-1">Email</label>
                         <input
@@ -129,7 +119,7 @@ export default function LoginPage() {
                         disabled={loading}
                         className="w-full bg-teal-primary hover:bg-teal-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors disabled:opacity-50"
                     >
-                        {loading ? 'Processing...' : 'Log In'}
+                        {loading ? 'Processing...' : (isSignUp ? 'Sign Up' : 'Log In')}
                     </button>
                 </form>
 
@@ -166,13 +156,15 @@ export default function LoginPage() {
                 </button>
 
                 <div className="mt-6 text-center">
-                    <p className="text-sm text-text-secondary">Don&apos;t have an account?</p>
+                    <p className="text-sm text-text-secondary">
+                        {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+                    </p>
                     <button
-                        onClick={handleSignUp}
+                        onClick={() => setIsSignUp(!isSignUp)}
                         disabled={loading}
                         className="text-teal-primary hover:underline text-sm font-medium mt-1"
                     >
-                        Sign up
+                        {isSignUp ? 'Log in' : 'Sign up'}
                     </button>
                 </div>
             </div>
