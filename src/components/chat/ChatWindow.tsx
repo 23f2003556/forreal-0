@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { ArrowLeft, Sparkles, Send } from 'lucide-react'
+import { Virtuoso } from 'react-virtuoso'
 import { MessageBubble } from './MessageBubble'
 import { useChat } from '@/hooks/useChat'
 import { format } from 'date-fns'
@@ -12,18 +13,9 @@ export function ChatWindow() {
     const { activeRoomId, messages, currentUser, sendMessage, rooms, sendTyping, setActiveRoomId } = useChat()
     const [newMessage, setNewMessage] = useState('')
     const [isRecording, setIsRecording] = useState(false)
-    const messagesEndRef = useRef<HTMLDivElement>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const activeRoom = rooms.find(r => r.id === activeRoomId)
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }
-
-    useEffect(() => {
-        scrollToBottom()
-    }, [messages])
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -185,18 +177,26 @@ export function ChatWindow() {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-4 z-10 custom-scrollbar flex flex-col gap-2">
-                    {messages.map((msg) => (
-                        <MessageBubble
-                            key={msg.id}
-                            content={msg.content}
-                            time={format(new Date(msg.created_at), 'HH:mm')}
-                            isOutgoing={msg.sender_id === currentUser?.id}
-                            status={msg.status}
-                            type={msg.type}
-                        />
-                    ))}
-                    <div ref={messagesEndRef} />
+                <div className="flex-1 z-10 min-h-0">
+                    <Virtuoso
+                        style={{ height: '100%' }}
+                        data={messages}
+                        initialTopMostItemIndex={messages.length - 1}
+                        followOutput="smooth"
+                        className="custom-scrollbar"
+                        itemContent={(index, msg) => (
+                            <div className="px-4 py-1">
+                                <MessageBubble
+                                    key={msg.id}
+                                    content={msg.content}
+                                    time={format(new Date(msg.created_at), 'HH:mm')}
+                                    isOutgoing={msg.sender_id === currentUser?.id}
+                                    status={msg.status}
+                                    type={msg.type}
+                                />
+                            </div>
+                        )}
+                    />
                 </div>
 
                 {/* Input Area */}
