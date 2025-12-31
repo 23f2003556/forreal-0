@@ -1,13 +1,14 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ArrowLeft, Sparkles, Send } from 'lucide-react'
+import { ArrowLeft, Sparkles, Send, Paperclip, Mic } from 'lucide-react'
 import { Virtuoso } from 'react-virtuoso'
 import { MessageBubble } from './MessageBubble'
 import { useChat } from '@/hooks/useChat'
 import { format } from 'date-fns'
 import { CoachPanel } from './CoachPanel'
 import { cn } from '@/lib/utils'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function ChatWindow() {
     const { activeRoomId, messages, currentUser, sendMessage, rooms, sendTyping, setActiveRoomId } = useChat()
@@ -126,12 +127,15 @@ export function ChatWindow() {
 
     if (!activeRoomId) {
         return (
-            <div className="flex flex-col h-full bg-app-background w-full items-center justify-center border-b-[6px] border-teal-primary">
+            <div className="flex flex-col h-full bg-app-background w-full items-center justify-center">
                 <div className="text-center max-w-md px-4">
-                    <h1 className="text-3xl font-light text-gray-600 mb-4">ForReal Web</h1>
-                    <p className="text-gray-500 text-sm">
+                    <div className="w-24 h-24 bg-gradient-to-br from-primary to-purple-600 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-primary/20">
+                        <Sparkles className="w-12 h-12 text-white" />
+                    </div>
+                    <h1 className="text-3xl font-bold text-text-primary mb-3">ForReal Web</h1>
+                    <p className="text-text-secondary text-base leading-relaxed">
                         Send and receive messages without keeping your phone online.<br />
-                        Use ForReal on up to 4 linked devices and 1 phone.
+                        Experience the new modern interface.
                     </p>
                 </div>
             </div>
@@ -139,36 +143,44 @@ export function ChatWindow() {
     }
 
     return (
-        <div className="flex h-full w-full relative">
-            <div className="flex flex-col h-full bg-chat-background flex-1 relative min-w-0">
-                {/* Doodle Background Pattern */}
-                <div className="absolute inset-0 opacity-40 pointer-events-none bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-repeat"></div>
+        <div className="flex h-full w-full relative bg-app-background">
+            <div className="flex flex-col h-full flex-1 relative min-w-0">
 
-                {/* Header */}
-                <div className="px-4 py-2 bg-panel-header-background flex justify-between items-center h-[60px] z-10 border-b border-gray-200 dark:border-gray-800">
+                {/* Header - Glassmorphism */}
+                <div className="absolute top-0 left-0 right-0 h-[70px] z-20 px-4 flex justify-between items-center backdrop-blur-md bg-white/70 dark:bg-black/70 border-b border-gray-200/50 dark:border-gray-800/50">
                     <div className="flex items-center gap-4 cursor-pointer">
                         <button
                             onClick={() => setActiveRoomId(null)}
-                            className="md:hidden text-icon-gray mr-2"
+                            className="md:hidden text-icon-gray hover:text-primary transition-colors"
                         >
                             <ArrowLeft className="w-6 h-6" />
                         </button>
-                        <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
-                            <img src={activeRoom?.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${activeRoom?.name}`} alt="Contact Avatar" className="w-full h-full object-cover" />
+                        <div className="relative">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white dark:ring-gray-800 shadow-sm">
+                                <img src={activeRoom?.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${activeRoom?.name}`} alt="Contact Avatar" className="w-full h-full object-cover" />
+                            </div>
+                            {activeRoom?.is_online && (
+                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black"></div>
+                            )}
                         </div>
                         <div className="flex flex-col justify-center">
-                            <h2 className="font-semibold text-text-primary text-sm">
+                            <h2 className="font-semibold text-text-primary text-base tracking-tight">
                                 {activeRoom ? activeRoom.name : 'Loading...'}
                             </h2>
-                            <p className="text-xs text-text-secondary">
-                                {activeRoom?.is_online ? 'online' : activeRoom?.last_seen ? `last seen ${format(new Date(activeRoom.last_seen), 'PP p')}` : ''}
+                            <p className="text-xs text-text-secondary font-medium">
+                                {activeRoom?.is_online ? 'Active now' : activeRoom?.last_seen ? `Last seen ${format(new Date(activeRoom.last_seen), 'PP p')}` : ''}
                             </p>
                         </div>
                     </div>
-                    <div className="flex gap-4 text-icon-gray">
+                    <div className="flex gap-2">
                         <button
                             onClick={() => setIsCoachOpen(!isCoachOpen)}
-                            className={cn("transition-colors", isCoachOpen ? "text-purple-600" : "hover:text-purple-600")}
+                            className={cn(
+                                "p-2 rounded-full transition-all duration-300",
+                                isCoachOpen
+                                    ? "bg-primary/10 text-primary"
+                                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-icon-gray"
+                            )}
                             title="ForReal AI"
                         >
                             <Sparkles className="w-5 h-5" />
@@ -177,15 +189,15 @@ export function ChatWindow() {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 z-10 min-h-0">
+                <div className="flex-1 z-10 min-h-0 pt-[70px] pb-[80px]">
                     <Virtuoso
                         style={{ height: '100%' }}
                         data={messages}
                         initialTopMostItemIndex={messages.length - 1}
                         followOutput="smooth"
-                        className="custom-scrollbar"
+                        className="custom-scrollbar px-2"
                         itemContent={(index, msg) => (
-                            <div className="px-4 py-1">
+                            <div className="px-2 py-1 max-w-3xl mx-auto w-full">
                                 <MessageBubble
                                     key={msg.id}
                                     content={msg.content}
@@ -199,31 +211,62 @@ export function ChatWindow() {
                     />
                 </div>
 
-                {/* Input Area */}
-                <form onSubmit={handleSend} className="px-4 py-2 bg-panel-header-background z-10 flex items-center gap-2 min-h-[62px]">
-                    <div className="flex-1 bg-white dark:bg-gray-700 rounded-lg px-4 py-2 mx-2">
-                        <input
-                            type="text"
-                            value={newMessage}
-                            onChange={(e) => {
-                                setNewMessage(e.target.value)
-                                // Debounce typing indicator could be added here
-                                sendTyping()
-                            }}
-                            placeholder="Type a message"
-                            className="w-full bg-transparent border-none focus:outline-none text-sm text-text-primary placeholder:text-text-secondary"
-                        />
-                    </div>
+                {/* Floating Input Area */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 z-20 bg-gradient-to-t from-app-background via-app-background to-transparent pb-6">
+                    <form onSubmit={handleSend} className="max-w-3xl mx-auto relative flex items-center gap-2">
+                        <div className="flex-1 bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 px-4 py-3 flex items-center gap-3 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+                            <button
+                                type="button"
+                                className="text-icon-gray hover:text-primary transition-colors"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                <Paperclip className="w-5 h-5" />
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    onChange={handleFileUpload}
+                                    accept="image/*"
+                                />
+                            </button>
 
-                    <button
-                        type="button"
-                        onClick={() => setIsCoachOpen(!isCoachOpen)}
-                        className={cn("text-icon-gray hover:text-purple-600 transition-colors", isCoachOpen && "text-purple-600")}
-                    >
-                        <Sparkles className="w-6 h-6" />
-                    </button>
-                    <button type="submit" className="text-icon-gray"><Send className="w-6 h-6" /></button>
-                </form>
+                            <input
+                                type="text"
+                                value={newMessage}
+                                onChange={(e) => {
+                                    setNewMessage(e.target.value)
+                                    sendTyping()
+                                }}
+                                placeholder="Type a message..."
+                                className="flex-1 bg-transparent border-none focus:outline-none text-sm text-text-primary placeholder:text-text-secondary font-medium"
+                            />
+
+                            <button
+                                type="button"
+                                onClick={handleVoiceNote}
+                                className={cn(
+                                    "transition-colors",
+                                    isRecording ? "text-red-500 animate-pulse" : "text-icon-gray hover:text-primary"
+                                )}
+                            >
+                                <Mic className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={!newMessage.trim()}
+                            className={cn(
+                                "w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95",
+                                newMessage.trim()
+                                    ? "bg-gradient-to-r from-primary to-purple-600 text-white shadow-primary/30"
+                                    : "bg-gray-200 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
+                            )}
+                        >
+                            <Send className="w-5 h-5 ml-0.5" />
+                        </button>
+                    </form>
+                </div>
             </div>
 
             {/* Coach Panel */}
@@ -235,7 +278,6 @@ export function ChatWindow() {
                 insights={coachInsights}
                 onSuggestionClick={(text) => {
                     setNewMessage(text)
-                    // Auto-close on mobile for better UX
                     if (window.innerWidth < 768) {
                         setIsCoachOpen(false)
                     }
@@ -258,3 +300,4 @@ export function ChatWindow() {
         </div>
     )
 }
+

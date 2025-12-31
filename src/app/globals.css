@@ -1,44 +1,69 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f0f2f5;
-  --foreground: #111b21;
+  /* Modern Aether Palette */
+  --background: #fafafa;
+  /* Zinc-50 */
+  --foreground: #18181b;
+  /* Zinc-900 */
 
-  --teal-primary: #008069;
-  --teal-secondary: #00a884;
+  /* Violet Accents */
+  --primary: #7c3aed;
+  /* Violet-600 */
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  /* Zinc-100 */
+  --secondary-foreground: #18181b;
 
-  --app-background: #f0f2f5;
-  --chat-background: #efeae2;
-  --panel-header-background: #f0f2f5;
+  /* Chat Specifics */
+  --app-background: #f4f4f5;
+  /* Zinc-100 */
+  --chat-background: #ffffff;
+  --panel-header-background: rgba(255, 255, 255, 0.8);
   --panel-background: #ffffff;
 
-  --incoming-background: #ffffff;
-  --outgoing-background: #d9fdd3;
+  --incoming-background: #f4f4f5;
+  /* Zinc-100 */
+  --outgoing-background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  /* Violet Gradient */
 
-  --icon-gray: #54656f;
-  --text-primary: #111b21;
-  --text-secondary: #667781;
+  --icon-gray: #a1a1aa;
+  /* Zinc-400 */
+  --text-primary: #18181b;
+  /* Zinc-900 */
+  --text-secondary: #71717a;
+  /* Zinc-500 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111b21;
-    --foreground: #e9edef;
+    --background: #09090b;
+    /* Zinc-950 */
+    --foreground: #fafafa;
+    /* Zinc-50 */
 
-    --teal-primary: #00a884;
-    --teal-secondary: #008069;
+    --primary: #8b5cf6;
+    /* Violet-500 */
+    --primary-foreground: #ffffff;
+    --secondary: #27272a;
+    /* Zinc-800 */
+    --secondary-foreground: #fafafa;
 
-    --app-background: #111b21;
-    --chat-background: #0b141a;
-    --panel-header-background: #202c33;
-    --panel-background: #111b21;
+    --app-background: #000000;
+    --chat-background: #09090b;
+    --panel-header-background: rgba(9, 9, 11, 0.8);
+    --panel-background: #18181b;
 
-    --incoming-background: #202c33;
-    --outgoing-background: #005c4b;
+    --incoming-background: #27272a;
+    /* Zinc-800 */
+    --outgoing-background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
 
-    --icon-gray: #aebac1;
-    --text-primary: #e9edef;
-    --text-secondary: #8696a0;
+    --icon-gray: #71717a;
+    /* Zinc-500 */
+    --text-primary: #fafafa;
+    /* Zinc-50 */
+    --text-secondary: #a1a1aa;
+    /* Zinc-400 */
   }
 }
 
@@ -46,8 +71,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-teal-primary: var(--teal-primary);
-  --color-teal-secondary: var(--teal-secondary);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
 
   --color-app-background: var(--app-background);
   --color-chat-background: var(--chat-background);
