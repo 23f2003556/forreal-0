@@ -270,33 +270,37 @@ export function ChatWindow() {
             </div>
 
             {/* Coach Panel */}
-            <CoachPanel
-                isOpen={isCoachOpen}
-                onClose={() => setIsCoachOpen(false)}
-                loading={isAnalyzing}
-                error={analysisError}
-                insights={coachInsights}
-                onSuggestionClick={(text) => {
-                    setNewMessage(text)
-                    if (window.innerWidth < 768) {
-                        setIsCoachOpen(false)
-                    }
-                }}
-                onRefresh={(prompt, style) => {
-                    if (typeof prompt === 'string') {
-                        handleAnalyze(undefined, prompt, style)
-                    } else {
-                        handleAnalyze(undefined, undefined, style)
-                    }
-                }}
-                mode={coachMode}
-                onModeChange={(mode) => {
-                    setCoachMode(mode)
-                    if (mode) {
-                        handleAnalyze(mode)
-                    }
-                }}
-            />
+            <AnimatePresence>
+                {isCoachOpen && (
+                    <CoachPanel
+                        isOpen={isCoachOpen}
+                        onClose={() => setIsCoachOpen(false)}
+                        loading={isAnalyzing}
+                        error={analysisError}
+                        insights={coachInsights}
+                        onSuggestionClick={(text) => {
+                            setNewMessage(text)
+                            if (window.innerWidth < 768) {
+                                setIsCoachOpen(false)
+                            }
+                        }}
+                        onRefresh={(prompt, style) => {
+                            if (typeof prompt === 'string') {
+                                handleAnalyze(undefined, prompt, style)
+                            } else {
+                                handleAnalyze(undefined, undefined, style)
+                            }
+                        }}
+                        mode={coachMode}
+                        onModeChange={(mode) => {
+                            setCoachMode(mode)
+                            if (mode) {
+                                handleAnalyze(mode)
+                            }
+                        }}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     )
 }
