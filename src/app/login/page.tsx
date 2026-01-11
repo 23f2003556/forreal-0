@@ -109,41 +109,43 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-[100dvh] bg-app-background flex flex-col items-center justify-center p-4">
+        <div className="min-h-[100dvh] bg-black flex flex-col items-center justify-center p-4">
             <div className="mb-8 text-center">
-                <h1 className="text-3xl font-bold text-teal-primary tracking-tight">"more than just texting"</h1>
+                <h1 className="text-3xl font-bold text-white tracking-tight">"more than just texting"</h1>
             </div>
 
-            <div className="bg-white dark:bg-panel-header-background p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-3xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 tracking-tight">
+            <div className="bg-gray-900 border border-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md">
+                <h2 className="text-3xl font-extrabold mb-8 text-center text-white tracking-tight">
                     {isSignUp ? 'Sign Up' : 'Login'}
                 </h2>
 
                 {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+                    <div className="bg-red-500/10 border border-red-500/50 text-red-200 px-4 py-3 rounded mb-4 text-sm">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-text-secondary mb-1">Email</label>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Email</label>
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-teal-primary dark:bg-gray-800 dark:border-gray-700"
+                            className="w-full p-3 bg-gray-950 border border-gray-800 rounded-xl focus:outline-none focus:border-purple-500 text-white placeholder-gray-600 transition-colors"
+                            placeholder="name@example.com"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-text-secondary mb-1">Password</label>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Password</label>
                         <input
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-teal-primary dark:bg-gray-800 dark:border-gray-700"
+                            className="w-full p-3 bg-gray-950 border border-gray-800 rounded-xl focus:outline-none focus:border-purple-500 text-white placeholder-gray-600 transition-colors"
+                            placeholder="••••••••"
                             required
                         />
                     </div>
@@ -151,22 +153,22 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-teal-primary hover:bg-teal-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors disabled:opacity-50"
+                        className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-purple-900/20 disabled:opacity-50"
                     >
                         {loading ? 'Processing...' : (isSignUp ? 'Sign Up' : 'Log In')}
                     </button>
                 </form>
 
-                <div className="mt-6 flex items-center justify-between">
-                    <span className="border-b w-[35%] lg:w-[40%] dark:border-gray-700"></span>
-                    <span className="text-xs text-center text-gray-500 uppercase dark:text-gray-400">or</span>
-                    <span className="border-b w-[35%] lg:w-[40%] dark:border-gray-700"></span>
+                <div className="mt-8 flex items-center justify-between">
+                    <span className="border-b w-[35%] lg:w-[40%] border-gray-800"></span>
+                    <span className="text-xs text-center text-gray-500 uppercase">or</span>
+                    <span className="border-b w-[35%] lg:w-[40%] border-gray-800"></span>
                 </div>
 
                 <button
                     onClick={handleGoogleLogin}
                     disabled={loading}
-                    className="mt-6 w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium py-2 px-4 rounded focus:outline-none transition-colors disabled:opacity-50"
+                    className="mt-6 w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium py-3 px-4 rounded-xl focus:outline-none transition-colors disabled:opacity-50"
                 >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                         <path
@@ -189,17 +191,17 @@ export default function LoginPage() {
                     Continue with Google
                 </button>
 
-                <div className="mt-6 text-center">
-                    <p className="text-sm text-text-secondary">
+                <div className="mt-8 text-center bg-white/5 mx-auto w-fit px-4 py-2 rounded-full border border-white/5">
+                    <p className="text-sm text-gray-400">
                         {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+                        <button
+                            onClick={() => setIsSignUp(!isSignUp)}
+                            disabled={loading}
+                            className="text-purple-400 hover:text-purple-300 font-bold ml-2 transition-colors focus:outline-none"
+                        >
+                            {isSignUp ? 'Log in' : 'Sign up'}
+                        </button>
                     </p>
-                    <button
-                        onClick={() => setIsSignUp(!isSignUp)}
-                        disabled={loading}
-                        className="text-teal-primary hover:underline text-sm font-medium mt-1"
-                    >
-                        {isSignUp ? 'Log in' : 'Sign up'}
-                    </button>
                 </div>
             </div>
 
