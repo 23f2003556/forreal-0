@@ -76,81 +76,81 @@ export function Sidebar() {
                 animate={{ x: 0, opacity: 1 }}
                 className="flex flex-col h-full bg-white dark:bg-gray-900 w-full md:w-[400px] border-r border-gray-100 dark:border-gray-800"
             >
-                <div className="h-[200px] bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 relative p-6 flex flex-col justify-end text-white">
+                <div className="h-[180px] bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 relative p-6 flex flex-col justify-end text-white shrink-0">
                     <button
                         onClick={() => setIsProfileOpen(false)}
                         className="absolute top-6 left-6 p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </button>
-                    <h2 className="text-3xl font-bold mb-1">Profile</h2>
-                    <p className="text-blue-100 text-sm">Customize how others see you</p>
+                    <div>
+                        <h2 className="text-3xl font-bold mb-1">Profile</h2>
+                        <p className="text-blue-100 text-sm">Customize how others see you</p>
+                    </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 -mt-10">
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-6 border border-gray-100 dark:border-gray-700">
-                        <div className="flex justify-center -mt-16 mb-6">
-                            <div className="w-28 h-28 rounded-full ring-4 ring-white dark:ring-gray-800 bg-gray-200 overflow-hidden relative group cursor-pointer shadow-lg">
-                                <img src={currentUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${currentUser?.username}`} alt="Profile" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-white text-[10px] font-bold tracking-widest uppercase flex-col gap-1 transition-all">
-                                    <span>Change</span>
-                                </div>
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-6 pt-0 pb-6 bg-white dark:bg-gray-950">
+                    <div className="relative -mt-12 mb-8 flex justify-center">
+                        <div className="w-32 h-32 rounded-full ring-4 ring-white dark:ring-gray-900 bg-gray-200 overflow-hidden relative group cursor-pointer shadow-xl z-10">
+                            <img src={currentUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${currentUser?.username}`} alt="Profile" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-white text-[10px] font-bold tracking-widest uppercase flex-col gap-1 transition-all">
+                                <span>Change</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-6">
+                        <div className="group">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Display Name</label>
+                            <div className="flex items-center justify-between gap-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-transparent group-hover:border-purple-200 dark:group-hover:border-purple-900 transition-colors">
+                                {isEditingUsername ? (
+                                    <div className="flex-1 flex items-center gap-2">
+                                        <input
+                                            type="text"
+                                            value={newUsername}
+                                            onChange={(e) => setNewUsername(e.target.value)}
+                                            className="flex-1 bg-transparent focus:outline-none text-gray-900 dark:text-gray-100 font-medium"
+                                            autoFocus
+                                        />
+                                        <button onClick={handleUpdateProfile} className="text-green-500 hover:text-green-600 p-1">
+                                            <Check className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <span className="text-gray-900 dark:text-gray-100 font-medium">{currentUser?.username}</span>
+                                        <button onClick={() => setIsEditingUsername(true)} className="text-gray-400 hover:text-purple-600 p-1">
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
 
-                        <div className="space-y-6">
-                            <div className="group">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Display Name</label>
-                                <div className="flex items-center justify-between gap-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-transparent group-hover:border-purple-200 dark:group-hover:border-purple-900 transition-colors">
-                                    {isEditingUsername ? (
-                                        <div className="flex-1 flex items-center gap-2">
-                                            <input
-                                                type="text"
-                                                value={newUsername}
-                                                onChange={(e) => setNewUsername(e.target.value)}
-                                                className="flex-1 bg-transparent focus:outline-none text-gray-900 dark:text-gray-100 font-medium"
-                                                autoFocus
-                                            />
-                                            <button onClick={handleUpdateProfile} className="text-green-500 hover:text-green-600 p-1">
-                                                <Check className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <span className="text-gray-900 dark:text-gray-100 font-medium">{currentUser?.username}</span>
-                                            <button onClick={() => setIsEditingUsername(true)} className="text-gray-400 hover:text-purple-600 p-1">
-                                                <Edit2 className="w-4 h-4" />
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="group">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Bio / Status</label>
-                                <div className="flex items-center justify-between gap-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-transparent group-hover:border-purple-200 dark:group-hover:border-purple-900 transition-colors">
-                                    {isEditingStatus ? (
-                                        <div className="flex-1 flex items-center gap-2">
-                                            <input
-                                                type="text"
-                                                value={newStatus}
-                                                onChange={(e) => setNewStatus(e.target.value)}
-                                                className="flex-1 bg-transparent focus:outline-none text-gray-900 dark:text-gray-100 text-sm"
-                                                autoFocus
-                                            />
-                                            <button onClick={handleUpdateProfile} className="text-green-500 hover:text-green-600 p-1">
-                                                <Check className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <span className="text-gray-700 dark:text-gray-300 text-sm">{currentUser?.status || "Hey there! I am using ForReal."}</span>
-                                            <button onClick={() => setIsEditingStatus(true)} className="text-gray-400 hover:text-purple-600 p-1">
-                                                <Edit2 className="w-4 h-4" />
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
+                        <div className="group">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Bio / Status</label>
+                            <div className="flex items-center justify-between gap-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-transparent group-hover:border-purple-200 dark:group-hover:border-purple-900 transition-colors">
+                                {isEditingStatus ? (
+                                    <div className="flex-1 flex items-center gap-2">
+                                        <input
+                                            type="text"
+                                            value={newStatus}
+                                            onChange={(e) => setNewStatus(e.target.value)}
+                                            className="flex-1 bg-transparent focus:outline-none text-gray-900 dark:text-gray-100 text-sm"
+                                            autoFocus
+                                        />
+                                        <button onClick={handleUpdateProfile} className="text-green-500 hover:text-green-600 p-1">
+                                            <Check className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <span className="text-gray-700 dark:text-gray-300 text-sm">{currentUser?.status || "Hey there! I am using ForReal."}</span>
+                                        <button onClick={() => setIsEditingStatus(true)} className="text-gray-400 hover:text-purple-600 p-1">
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
