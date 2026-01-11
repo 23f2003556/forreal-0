@@ -90,8 +90,8 @@ export function Sidebar() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar px-6 pt-0 pb-6 bg-white dark:bg-gray-950">
-                    <div className="relative -mt-12 mb-8 flex justify-center">
-                        <div className="w-32 h-32 rounded-full ring-4 ring-white dark:ring-gray-900 bg-gray-200 overflow-hidden relative group cursor-pointer shadow-xl z-10">
+                    <div className="relative -mt-16 mb-6 flex justify-center">
+                        <div className="w-32 h-32 rounded-full ring-4 ring-white dark:ring-gray-950 bg-gray-200 overflow-hidden relative group cursor-pointer shadow-xl z-10">
                             <img src={currentUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${currentUser?.username}`} alt="Profile" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-white text-[10px] font-bold tracking-widest uppercase flex-col gap-1 transition-all">
                                 <span>Change</span>
