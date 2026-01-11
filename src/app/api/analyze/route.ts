@@ -49,24 +49,25 @@ ${style ? `**STYLE:** The user wants the suggestions to be in a "${style}" style
 
 **Your Goal:**
 1.  **Analyze Personality:** Briefly describe the partner's communication style.
-2.  **Gauge Interest:** Estimate the partner's interest/engagement level (0-100) **based strictly on the current mode**:
-    *   **Work Mode:** Interest = Professional engagement, responsiveness, and willingness to collaborate.
-    *   **Chill Mode:** Interest = Friendliness, fun, and vibe matching.
-    *   **Love Mode:** Interest = Romantic interest, flirtation, and emotional connection.
-3.  **Vibe Check:** Describe the current atmosphere (max 5 words) **based on the mode** (e.g., "Productive", "Chill", "Flirty").
-4.  **Summary:** Provide 3 short bullet points summarizing the key takeaways or context of the conversation so far.
-5.  **Suggest Replies:** Generate 3 distinct reply options for the user based on the "${mode}" mode ${userPrompt ? `and the specific request: "${userPrompt}"` : ''} ${style ? `in a "${style}" style` : ''}:
-    *   **Option 1:** Matches the mode, request, and style perfectly.
-    *   **Option 2:** A slightly different take on the request and style.
-    *   **Option 3:** A bold or creative approach related to the request and style.
+2.  **Gauge Interest:** Estimate the partner's interest/engagement level (0-100) **based strictly on the current mode**.
+3.  **Vibe Check:** Describe the current atmosphere (max 5 words).
+4.  **Flags Analysis:**
+    *   **Red Flags 🚩:** Identify potential issues, toxic behavior, or lack of professionalism/interest based on the mode. Return empty array if none.
+    *   **Green Flags 🟢:** Identify positive signals, compatibility, or good professional/social etiquette. Return empty array if none.
+5.  **Icebreaker 🧊:** A specific conversation starter or topic change if the conversation seems dry or stalled.
+6.  **Summary:** Provide 3 short bullet points summarizing the key takeaways.
+7.  **Suggest Replies:** Generate 3 distinct reply options.
 
 **Output Format:**
-Return ONLY a JSON object with this exact structure (no markdown, no code blocks, just raw JSON):
+Return ONLY a JSON object with this exact structure (no markdown, no code blocks):
 {
-  "interestScore": number, // 0-100 (Contextual to mode)
-  "vibe": "string", // Short description (max 5 words)
-  "summary": ["string", "string", "string"], // 3 bullet points
-  "suggestions": ["string", "string", "string"] // The 3 reply options
+  "interestScore": number, // 0-100
+  "vibe": "string", // Short description
+  "redFlags": ["string", "string"], // Max 2 items
+  "greenFlags": ["string", "string"], // Max 2 items
+  "icebreaker": "string", // A specific question or topic to bring up
+  "summary": ["string", "string", "string"],
+  "suggestions": ["string", "string", "string"]
 }
 `
 
@@ -77,7 +78,7 @@ Return ONLY a JSON object with this exact structure (no markdown, no code blocks
                     content: prompt
                 }
             ],
-            model: "llama-3.3-70b-versatile", // Fast and free Llama model
+            model: "llama-3.3-70b-versatile",
             temperature: 0.7,
             max_tokens: 1024,
             response_format: { type: "json_object" }

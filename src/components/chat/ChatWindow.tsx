@@ -55,6 +55,9 @@ export function ChatWindow() {
         vibe: string
         summary: string[]
         suggestions: string[]
+        redFlags?: string[]
+        greenFlags?: string[]
+        icebreaker?: string
     } | null>(null)
     const [isAnalyzing, setIsAnalyzing] = useState(false)
     const [analysisError, setAnalysisError] = useState<string | null>(null)
