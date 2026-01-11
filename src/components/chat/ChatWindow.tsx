@@ -136,9 +136,8 @@ export function ChatWindow() {
                         <Sparkles className="w-12 h-12 text-white" />
                     </div>
                     <h1 className="text-3xl font-bold text-text-primary mb-3">ForReal Web</h1>
-                    <p className="text-text-secondary text-base leading-relaxed">
-                        Send and receive messages without keeping your phone online.<br />
-                        Experience the new modern interface.
+                    <p className="text-text-secondary text-base leading-relaxed font-medium uppercase tracking-widest mt-4">
+                        MORE THAN TEXTING
                     </p>
                 </div>
             </div>
@@ -171,7 +170,7 @@ export function ChatWindow() {
                                 {activeRoom ? activeRoom.name : 'Loading...'}
                             </h2>
                             <p className="text-xs text-text-secondary font-medium">
-                                {activeRoom?.is_online ? 'Active now' : activeRoom?.last_seen ? `Last seen ${format(new Date(activeRoom.last_seen), 'PP p')}` : ''}
+                                {activeRoom?.is_online ? 'Active now' : ''}
                             </p>
                         </div>
                     </div>
