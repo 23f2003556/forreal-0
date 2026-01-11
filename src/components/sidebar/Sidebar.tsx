@@ -99,57 +99,73 @@ export function Sidebar() {
                         </div>
                     </div>
 
-                    <div className="space-y-6">
-                        <div className="group">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Display Name</label>
-                            <div className="flex items-center justify-between gap-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-transparent group-hover:border-purple-200 dark:group-hover:border-purple-900 transition-colors">
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+                        {/* Display Name Section */}
+                        <div className="p-4 border-b border-gray-50 dark:border-gray-800 group transition-colors hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                                    <Users className="w-4 h-4" />
+                                </div>
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Display Name</label>
+                            </div>
+
+                            <div className="pl-11">
                                 {isEditingUsername ? (
-                                    <div className="flex-1 flex items-center gap-2">
+                                    <div className="flex items-center gap-2">
                                         <input
                                             type="text"
                                             value={newUsername}
                                             onChange={(e) => setNewUsername(e.target.value)}
-                                            className="flex-1 bg-transparent focus:outline-none text-gray-900 dark:text-gray-100 font-medium"
+                                            className="w-full bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 font-medium text-sm transition-all"
                                             autoFocus
+                                            placeholder="Enter your name"
                                         />
-                                        <button onClick={handleUpdateProfile} className="text-green-500 hover:text-green-600 p-1">
+                                        <button onClick={handleUpdateProfile} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
                                             <Check className="w-4 h-4" />
                                         </button>
                                     </div>
                                 ) : (
-                                    <>
-                                        <span className="text-gray-900 dark:text-gray-100 font-medium">{currentUser?.username}</span>
-                                        <button onClick={() => setIsEditingUsername(true)} className="text-gray-400 hover:text-purple-600 p-1">
-                                            <Edit2 className="w-4 h-4" />
+                                    <div className="flex items-center justify-between group/edit cursor-pointer" onClick={() => setIsEditingUsername(true)}>
+                                        <span className="text-gray-900 dark:text-gray-100 font-medium text-base">{currentUser?.username}</span>
+                                        <button className="text-gray-300 group-hover/edit:text-blue-600 p-1 opacity-0 group-hover/edit:opacity-100 transition-all">
+                                            <Edit2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         </div>
 
-                        <div className="group">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block">Bio / Status</label>
-                            <div className="flex items-center justify-between gap-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-transparent group-hover:border-purple-200 dark:group-hover:border-purple-900 transition-colors">
+                        {/* Bio / Status Section */}
+                        <div className="p-4 group transition-colors hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
+                                    <MessageSquare className="w-4 h-4" />
+                                </div>
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Bio / Status</label>
+                            </div>
+
+                            <div className="pl-11">
                                 {isEditingStatus ? (
-                                    <div className="flex-1 flex items-center gap-2">
+                                    <div className="flex items-center gap-2">
                                         <input
                                             type="text"
                                             value={newStatus}
                                             onChange={(e) => setNewStatus(e.target.value)}
-                                            className="flex-1 bg-transparent focus:outline-none text-gray-900 dark:text-gray-100 text-sm"
+                                            className="w-full bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-gray-900 dark:text-gray-100 text-sm transition-all"
                                             autoFocus
+                                            placeholder="What's on your mind?"
                                         />
-                                        <button onClick={handleUpdateProfile} className="text-green-500 hover:text-green-600 p-1">
+                                        <button onClick={handleUpdateProfile} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
                                             <Check className="w-4 h-4" />
                                         </button>
                                     </div>
                                 ) : (
-                                    <>
-                                        <span className="text-gray-700 dark:text-gray-300 text-sm">{currentUser?.status || "Hey there! I am using ForReal."}</span>
-                                        <button onClick={() => setIsEditingStatus(true)} className="text-gray-400 hover:text-purple-600 p-1">
-                                            <Edit2 className="w-4 h-4" />
+                                    <div className="flex items-center justify-between group/edit cursor-pointer" onClick={() => setIsEditingStatus(true)}>
+                                        <span className="text-gray-600 dark:text-gray-400 text-sm">{currentUser?.status || "Hey there! I am using ForReal."}</span>
+                                        <button className="text-gray-300 group-hover/edit:text-purple-600 p-1 opacity-0 group-hover/edit:opacity-100 transition-all">
+                                            <Edit2 className="w-3.5 h-3.5" />
                                         </button>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         </div>
