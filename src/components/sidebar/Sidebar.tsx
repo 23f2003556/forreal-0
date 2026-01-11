@@ -1,7 +1,8 @@
 "use client"
 
 import React from 'react'
-import { Search, MoreVertical, LogOut, ArrowLeft, Check, Edit2, Users, MessageSquare } from 'lucide-react'
+import { Search, MoreVertical, LogOut, ArrowLeft, Check, Edit2, Users, MessageSquare, Sun, Moon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { useChat } from '@/hooks/useChat'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -11,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export function Sidebar() {
     const { rooms, activeRoomId, setActiveRoomId, loading, searchUsers, createPrivateRoom, updateProfile, currentUser } = useChat()
+    const { theme, setTheme } = useTheme()
     const [searchQuery, setSearchQuery] = React.useState('')
     const [searchResults, setSearchResults] = React.useState<any[]>([])
     const [isSearching, setIsSearching] = React.useState(false)
@@ -207,6 +209,13 @@ export function Sidebar() {
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 className="absolute top-12 right-0 bg-white dark:bg-gray-900 shadow-xl rounded-xl py-1 w-48 border border-gray-100 dark:border-gray-800 overflow-hidden"
                             >
+                                <button
+                                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                    className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-medium flex items-center gap-2"
+                                >
+                                    {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                                    {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                                </button>
                                 <button
                                     onClick={handleLogout}
                                     className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2"

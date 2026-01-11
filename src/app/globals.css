@@ -1,28 +1,69 @@
 @import "tailwindcss";
 
 :root {
-  /* Modern Aether Palette (FORCED DARK MODE) */
-  --background: #09090b; /* Zinc-950 */
-  --foreground: #fafafa; /* Zinc-50 */
+  /* Modern Aether Palette (Light Mode Default) */
+  --background: #fafafa;
+  /* Zinc-50 */
+  --foreground: #18181b;
+  /* Zinc-900 */
 
   /* Violet Accents */
-  --primary: #8b5cf6; /* Violet-500 */
+  --primary: #7c3aed;
+  /* Violet-600 */
   --primary-foreground: #ffffff;
-  --secondary: #27272a; /* Zinc-800 */
-  --secondary-foreground: #fafafa;
+  --secondary: #f4f4f5;
+  /* Zinc-100 */
+  --secondary-foreground: #18181b;
 
   /* Chat Specifics */
+  --app-background: #f4f4f5;
+  /* Zinc-100 */
+  --chat-background: #ffffff;
+  --panel-header-background: rgba(255, 255, 255, 0.8);
+  --panel-background: #ffffff;
+
+  --incoming-background: #f4f4f5;
+  /* Zinc-100 */
+  --outgoing-background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  /* Violet Gradient */
+
+  --icon-gray: #a1a1aa;
+  /* Zinc-400 */
+  --text-primary: #18181b;
+  /* Zinc-900 */
+  --text-secondary: #71717a;
+  /* Zinc-500 */
+}
+
+.dark {
+  /* Dark Mode Overrides */
+  --background: #09090b;
+  /* Zinc-950 */
+  --foreground: #fafafa;
+  /* Zinc-50 */
+
+  --primary: #8b5cf6;
+  /* Violet-500 */
+  --primary-foreground: #ffffff;
+  --secondary: #27272a;
+  /* Zinc-800 */
+  --secondary-foreground: #fafafa;
+
   --app-background: #000000;
   --chat-background: #09090b;
   --panel-header-background: rgba(9, 9, 11, 0.8);
   --panel-background: #18181b;
 
-  --incoming-background: #27272a; /* Zinc-800 */
-  --outgoing-background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); /* Violet Gradient */
+  --incoming-background: #27272a;
+  /* Zinc-800 */
+  --outgoing-background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
 
-  --icon-gray: #71717a; /* Zinc-500 */
-  --text-primary: #fafafa; /* Zinc-50 */
-  --text-secondary: #a1a1aa; /* Zinc-400 */
+  --icon-gray: #71717a;
+  /* Zinc-500 */
+  --text-primary: #fafafa;
+  /* Zinc-50 */
+  --text-secondary: #a1a1aa;
+  /* Zinc-400 */
 }
 
 @theme inline {
