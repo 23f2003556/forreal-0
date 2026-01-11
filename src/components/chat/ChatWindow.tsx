@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ArrowLeft, Sparkles, Send, Paperclip, Mic } from 'lucide-react'
+import { ArrowLeft, Sparkles, Send, Paperclip } from 'lucide-react'
 import { Virtuoso } from 'react-virtuoso'
 import { MessageBubble } from './MessageBubble'
 import { useChat } from '@/hooks/useChat'
@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 export function ChatWindow() {
     const { activeRoomId, messages, currentUser, sendMessage, rooms, sendTyping, setActiveRoomId } = useChat()
     const [newMessage, setNewMessage] = useState('')
-    const [isRecording, setIsRecording] = useState(false)
+
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const activeRoom = rooms.find(r => r.id === activeRoomId)
@@ -38,15 +38,7 @@ export function ChatWindow() {
         await sendMessage(fakeUrl, 'image')
     }
 
-    const handleVoiceNote = async () => {
-        if (!isRecording) {
-            setIsRecording(true)
-        } else {
-            setIsRecording(false)
-            // Send dummy voice note
-            await sendMessage('dummy-audio-url', 'audio')
-        }
-    }
+
 
     const [isCoachOpen, setIsCoachOpen] = useState(false)
     const [coachMode, setCoachMode] = useState<'work' | 'chill' | 'love' | null>(null)
@@ -198,18 +190,21 @@ export function ChatWindow() {
                         initialTopMostItemIndex={messages.length - 1}
                         followOutput="smooth"
                         className="custom-scrollbar px-2"
-                        itemContent={(index, msg) => (
-                            <div className="px-2 py-1 max-w-3xl mx-auto w-full">
-                                <MessageBubble
-                                    key={msg.id}
-                                    content={msg.content}
-                                    time={format(new Date(msg.created_at), 'HH:mm')}
-                                    isOutgoing={msg.sender_id === currentUser?.id}
-                                    status={msg.status}
-                                    type={msg.type}
-                                />
-                            </div>
-                        )}
+                        itemContent={(index, msg) => {
+                            if (msg.type === 'audio') return null;
+                            return (
+                                <div className="px-2 py-1 max-w-3xl mx-auto w-full">
+                                    <MessageBubble
+                                        key={msg.id}
+                                        content={msg.content}
+                                        time={format(new Date(msg.created_at), 'HH:mm')}
+                                        isOutgoing={msg.sender_id === currentUser?.id}
+                                        status={msg.status}
+                                        type={msg.type}
+                                    />
+                                </div>
+                            )
+                        }}
                     />
                 </div>
 
@@ -243,16 +238,7 @@ export function ChatWindow() {
                                 className="flex-1 bg-transparent border-none focus:outline-none text-sm text-text-primary placeholder:text-text-secondary font-medium"
                             />
 
-                            <button
-                                type="button"
-                                onClick={handleVoiceNote}
-                                className={cn(
-                                    "transition-colors",
-                                    isRecording ? "text-red-500 animate-pulse" : "text-icon-gray hover:text-primary"
-                                )}
-                            >
-                                <Mic className="w-5 h-5" />
-                            </button>
+
                         </div>
 
                         <button
