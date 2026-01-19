@@ -189,8 +189,8 @@ export function Sidebar() {
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-950 rounded-full"></div>
                     </div>
                     <div>
-                        <h2 className="font-bold text-gray-900 dark:text-white text-sm leading-tight">Chats</h2>
-                        <span className="text-xs text-green-500 font-medium">Online</span>
+                        <h2 className="font-bold text-gray-900 dark:text-white text-sm leading-tight">forreal</h2>
+                        <span className="text-xs text-green-500 font-medium">beyond texting </span>
                     </div>
                 </div>
 
