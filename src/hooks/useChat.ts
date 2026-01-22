@@ -14,7 +14,8 @@ export function useChat() {
         setActiveRoomId,
         setRooms,
         setMessages,
-        addMessage
+        addMessage,
+        updateMessage
     } = useChatStore()
     const [loading, setLoading] = useState(true)
 
@@ -174,6 +175,20 @@ export function useChat() {
             }, (payload) => {
                 console.log('📨 New message received:', payload.new)
                 addMessage(payload.new)
+
+                // If the message is from the other person, mark it as read immediately
+                if (payload.new.sender_id !== currentUser?.id) {
+                    supabase.from('messages').update({ status: 'read' }).eq('id', payload.new.id).then()
+                }
+            })
+            .on('postgres_changes', {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'messages',
+                filter: `room_id=eq.${activeRoomId}`,
+            }, (payload) => {
+                console.log('🔄 Message updated:', payload.new)
+                updateMessage(payload.new.id, payload.new)
             })
             .subscribe((status) => {
                 console.log('🔌 Subscription status:', status)
@@ -182,12 +197,24 @@ export function useChat() {
                 }
             })
 
+        // Mark unread messages as read when entering room
+        const markAsRead = async () => {
+            if (!currentUser) return
+            await supabase
+                .from('messages')
+                .update({ status: 'read' })
+                .eq('room_id', activeRoomId)
+                .neq('sender_id', currentUser.id)
+                .eq('status', 'sent') // or delivered
+        }
+        markAsRead()
+
         return () => {
             console.log('🔌 Unsubscribing from room:', activeRoomId)
             clearInterval(pollInterval) // Clean up polling
             supabase.removeChannel(channel)
         }
-    }, [activeRoomId, setMessages, addMessage])
+    }, [activeRoomId, setMessages, addMessage, updateMessage, currentUser])
 
     // Safety: Ensure active room exists in rooms list
     useEffect(() => {

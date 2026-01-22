@@ -17,6 +17,7 @@ interface ChatState {
     setRooms: (rooms: any[]) => void
     setMessages: (messages: any[]) => void
     addMessage: (message: any) => void
+    updateMessage: (id: string, updates: any) => void
 }
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -29,4 +30,7 @@ export const useChatStore = create<ChatState>((set) => ({
     setRooms: (rooms) => set({ rooms }),
     setMessages: (messages) => set({ messages }),
     addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+    updateMessage: (id, updates) => set((state) => ({
+        messages: state.messages.map((m) => (m.id === id ? { ...m, ...updates } : m))
+    })),
 }))
