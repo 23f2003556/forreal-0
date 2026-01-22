@@ -200,12 +200,19 @@ export function useChat() {
         // Mark unread messages as read when entering room
         const markAsRead = async () => {
             if (!currentUser) return
-            await supabase
+            const { error, count } = await supabase
                 .from('messages')
                 .update({ status: 'read' })
                 .eq('room_id', activeRoomId)
                 .neq('sender_id', currentUser.id)
-                .eq('status', 'sent') // or delivered
+                .in('status', ['sent', 'delivered'])
+                .select() // Select is needed to return count/data with RLS? Usually update returns count if specified.
+
+            if (error) {
+                console.error('❌ Error marking messages as read:', error)
+            } else {
+                console.log(`✅ Marked ${count || '?'} messages as read`)
+            }
         }
         markAsRead()
 
