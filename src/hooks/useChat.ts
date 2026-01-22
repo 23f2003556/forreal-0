@@ -280,12 +280,20 @@ export function useChat() {
     const sendMessage = async (content: string, type: 'text' | 'image' | 'audio' = 'text') => {
         if (!currentUser || !activeRoomId) return
 
+        // Check if recipient is online to determine initial status
+        let initialStatus = 'sent'
+        const currentRoom = rooms.find(r => r.id === activeRoomId)
+        if (currentRoom && currentRoom.is_online) {
+            initialStatus = 'delivered'
+        }
+
         // Insert message into database - real-time subscription will add it to UI
         const { error } = await supabase.from('messages').insert({
             room_id: activeRoomId,
             sender_id: currentUser.id,
             content,
             type,
+            status: initialStatus
         })
 
         if (error) {

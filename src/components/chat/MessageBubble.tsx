@@ -71,7 +71,7 @@ export function MessageBubble({ content, time, isOutgoing, status = 'sent', type
                         <span className="text-[10px] font-medium">{time}</span>
                         {isOutgoing && (
                             <span className="text-[10px]">
-                                {status === 'read' ? <CheckCheck className="w-3 h-3" /> :
+                                {status === 'read' ? <CheckCheck className="w-3 h-3 text-blue-500" /> :
                                     status === 'delivered' ? <CheckCheck className="w-3 h-3" /> :
                                         <Check className="w-3 h-3" />}
                             </span>
