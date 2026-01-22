@@ -301,6 +301,71 @@ export function useChat() {
         }
     }
 
+    const deleteMessage = async (messageId: string) => {
+        if (!currentUser) return
+
+        // Optimistic update
+        setMessages(messages.filter(m => m.id !== messageId))
+
+        const { error } = await supabase
+            .from('messages')
+            .delete()
+            .eq('id', messageId)
+
+        if (error) {
+            console.error('Error deleting message:', error)
+            // Revert on error? For now, fetchMessages will handle sync
+            const { data } = await supabase.from('messages').select('*').eq('id', messageId).single()
+            if (data) addMessage(data)
+        }
+    }
+
+    const reactToMessage = async (messageId: string, emoji: string) => {
+        if (!currentUser) return
+
+        // Find message
+        const message = messages.find(m => m.id === messageId)
+        if (!message) return
+
+        const currentReactions = message.reactions || {}
+        // Toggle reaction for current user: { "👍": ["userId1", "userId2"] }
+        // Or simpler: { "userId": "👍" } -> Limit 1 reaction per user?
+        // Let's go with array of users per emoji: { "👍": ["user1"] }
+
+        // Actually simpler for MVP: Array of objects { emoji, user_id } stored in JSONB
+        // Or just let Supabase handle it via a separate table?
+        // The prompt implies a "reactions" column. Let's assume it's JSONB: { "👍": [uid1, uid2], "❤️": [] }
+
+        let newReactions = { ...currentReactions }
+        const userIds = newReactions[emoji] || []
+
+        if (userIds.includes(currentUser.id)) {
+            // Remove reaction
+            newReactions[emoji] = userIds.filter((id: string) => id !== currentUser.id)
+        } else {
+            // Add reaction
+            newReactions[emoji] = [...userIds, currentUser.id]
+        }
+
+        // Clean up empty keys
+        if (newReactions[emoji].length === 0) {
+            delete newReactions[emoji]
+        }
+
+        // Optimistic UI
+        updateMessage(messageId, { reactions: newReactions })
+
+        const { error } = await supabase
+            .from('messages')
+            .update({ reactions: newReactions })
+            .eq('id', messageId)
+
+        if (error) {
+            console.error('Error reacting:', error)
+            updateMessage(messageId, { reactions: currentReactions })
+        }
+    }
+
     const sendTyping = async () => {
         if (!activeRoomId) return
         await supabase.channel(`room:${activeRoomId}`).send({
@@ -425,5 +490,7 @@ export function useChat() {
         searchUsers,
         createPrivateRoom,
         updateProfile,
+        deleteMessage,
+        reactToMessage,
     }
 }

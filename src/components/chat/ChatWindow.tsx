@@ -11,8 +11,9 @@ import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function ChatWindow() {
-    const { activeRoomId, messages, currentUser, sendMessage, rooms, sendTyping, setActiveRoomId } = useChat()
+    const { activeRoomId, messages, currentUser, sendMessage, rooms, sendTyping, setActiveRoomId, deleteMessage, reactToMessage } = useChat()
     const [newMessage, setNewMessage] = useState('')
+    const [replyingTo, setReplyingTo] = useState<any | null>(null)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -136,6 +137,17 @@ export function ChatWindow() {
         )
     }
 
+    const handleMessageAction = (id: string, action: string, data?: any) => {
+        if (action === 'delete') {
+            deleteMessage(id)
+        } else if (action === 'react') {
+            reactToMessage(id, data) // data is emoji
+        } else if (action === 'reply') {
+            const msg = messages.find(m => m.id === id)
+            if (msg) setReplyingTo(msg)
+        }
+    }
+
     return (
         <div className="flex h-full w-full relative bg-app-background">
             <div className="flex flex-col h-full flex-1 relative min-w-0">
@@ -208,11 +220,14 @@ export function ChatWindow() {
                                 <div className="px-2 py-1 max-w-3xl mx-auto w-full">
                                     <MessageBubble
                                         key={msg.id}
+                                        id={msg.id}
                                         content={msg.content}
                                         time={format(new Date(msg.created_at), 'HH:mm')}
                                         isOutgoing={msg.sender_id === currentUser?.id}
                                         status={msg.status}
                                         type={msg.type}
+                                        reactions={msg.reactions}
+                                        onAction={handleMessageAction}
                                     />
                                 </div>
                             )
@@ -222,6 +237,18 @@ export function ChatWindow() {
 
                 {/* Floating Input Area */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 z-20 bg-gradient-to-t from-app-background via-app-background to-transparent pb-6">
+                    {replyingTo && (
+                        <div className="max-w-3xl mx-auto mb-2 flex items-center justify-between bg-gray-50 dark:bg-gray-800/80 backdrop-blur-md px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <div className="flex flex-col text-sm border-l-2 border-primary pl-2">
+                                <span className="text-primary font-medium text-xs">Replying to {activeRoom?.name}</span>
+                                <span className="text-text-secondary truncate max-w-xs">{replyingTo.content}</span>
+                            </div>
+                            <button onClick={() => setReplyingTo(null)} className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full">
+                                <span className="sr-only">Cancel reply</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                    )}
                     <form onSubmit={handleSend} className="max-w-3xl mx-auto relative flex items-center gap-2">
                         <div className="flex-1 bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 px-4 py-3 flex items-center gap-3 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
                             <button
