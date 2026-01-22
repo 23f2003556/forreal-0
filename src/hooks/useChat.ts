@@ -189,6 +189,60 @@ export function useChat() {
         }
     }, [activeRoomId, setMessages, addMessage])
 
+    // Safety: Ensure active room exists in rooms list
+    useEffect(() => {
+        if (!activeRoomId || !currentUser) return
+
+        const activeRoomExists = rooms.find(r => r.id === activeRoomId)
+        if (!activeRoomExists) {
+            console.log('⚠️ Active room not in list, fetching details...', activeRoomId)
+            const fetchActiveRoom = async () => {
+                const { data } = await supabase
+                    .from('room_participants')
+                    .select(`
+                      room_id,
+                      rooms (
+                        id,
+                        name,
+                        type,
+                        image_url,
+                        room_participants (
+                          user_id,
+                          profiles (
+                            username,
+                            avatar_url,
+                            is_online,
+                            last_seen
+                          )
+                        )
+                      )
+                    `)
+                    .eq('room_id', activeRoomId)
+                    .eq('user_id', currentUser.id)
+                    .single()
+
+                if (data && data.rooms) {
+                    const room = data.rooms as any
+                    if (room.type === 'private') {
+                        const otherParticipant = room.room_participants.find(
+                            (p: any) => p.user_id !== currentUser.id
+                        )
+                        if (otherParticipant) {
+                            room.name = otherParticipant.profiles.username
+                            room.image_url = otherParticipant.profiles.avatar_url
+                            room.is_online = otherParticipant.profiles.is_online
+                            room.last_seen = otherParticipant.profiles.last_seen
+                            room.other_user_id = otherParticipant.user_id
+                        }
+                    }
+                    // Add to rooms list to resolve "Loading..." state
+                    setRooms([...rooms, room])
+                }
+            }
+            fetchActiveRoom()
+        }
+    }, [activeRoomId, rooms, currentUser, setRooms])
+
     const sendMessage = async (content: string, type: 'text' | 'image' | 'audio' = 'text') => {
         if (!currentUser || !activeRoomId) return
 

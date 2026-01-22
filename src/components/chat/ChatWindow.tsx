@@ -150,20 +150,32 @@ export function ChatWindow() {
                             <ArrowLeft className="w-6 h-6" />
                         </button>
                         <div className="relative">
-                            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white dark:ring-gray-800 shadow-sm">
-                                <img src={activeRoom?.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${activeRoom?.name}`} alt="Contact Avatar" className="w-full h-full object-cover" />
-                            </div>
-                            {activeRoom?.is_online && (
-                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black"></div>
+                            {activeRoom ? (
+                                <>
+                                    <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white dark:ring-gray-800 shadow-sm">
+                                        <img src={activeRoom.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${activeRoom.name}`} alt="Contact Avatar" className="w-full h-full object-cover" />
+                                    </div>
+                                    {activeRoom.is_online && (
+                                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black"></div>
+                                    )}
+                                </>
+                            ) : (
+                                <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 animate-pulse" />
                             )}
                         </div>
                         <div className="flex flex-col justify-center">
-                            <h2 className="font-semibold text-text-primary text-base tracking-tight">
-                                {activeRoom ? activeRoom.name : 'Loading...'}
-                            </h2>
-                            <p className="text-xs text-text-secondary font-medium">
-                                {activeRoom?.is_online ? 'Active now' : ''}
-                            </p>
+                            {activeRoom ? (
+                                <>
+                                    <h2 className="font-semibold text-text-primary text-base tracking-tight">
+                                        {activeRoom.name}
+                                    </h2>
+                                    <p className="text-xs text-text-secondary font-medium">
+                                        {activeRoom.is_online ? 'Active now' : ''}
+                                    </p>
+                                </>
+                            ) : (
+                                <div className="h-5 w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                            )}
                         </div>
                     </div>
                     <div className="flex gap-2">
