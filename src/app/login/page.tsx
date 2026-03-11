@@ -154,7 +154,7 @@ export default function LoginPage() {
                         {isSignUp ? 'Create an account' : 'Welcome back'}
                     </h1>
                     <p className="text-gray-400 text-sm">
-                        {isSignUp ? 'Join forreal to start interpreting intent instantly.' : 'Log in to continue your communication coaching.'}
+                        {isSignUp ? 'Join forreal to start interpreting intent instantly.' : 'Log in to continue'}
                     </p>
                 </div>
 
