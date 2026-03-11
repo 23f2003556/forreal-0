@@ -106,11 +106,6 @@ export function LandingPage() {
                     initial="hidden"
                     animate="visible"
                 >
-                    <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-purple-300 mb-8 hover:bg-white/10 transition-colors cursor-default">
-                        <span className="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
-                        beyond texting
-                    </motion.div>
-
                     <motion.div variants={itemVariants} className="mb-4 h-12 flex items-center justify-center overflow-hidden">
                         <AnimatePresence mode="popLayout">
                             <motion.span
@@ -243,8 +238,8 @@ export function LandingPage() {
                                         key={feature.id}
                                         onClick={() => setActiveTechFeature(index)}
                                         className={`p-6 rounded-3xl cursor-pointer transition-all border ${isActive
-                                                ? 'bg-zinc-900 border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]'
-                                                : 'bg-zinc-900/40 border-white/5 hover:border-white/10 hover:bg-zinc-900/60'
+                                            ? 'bg-zinc-900 border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]'
+                                            : 'bg-zinc-900/40 border-white/5 hover:border-white/10 hover:bg-zinc-900/60'
                                             }`}
                                     >
                                         <div className="flex items-start gap-4">
