@@ -1,8 +1,8 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Users, Building, GraduationCap, ArrowRight, Zap, Shield, Heart } from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { MessageSquare, Users, Building, GraduationCap, ArrowRight, Zap, Shield, Heart, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -11,6 +11,13 @@ export function LandingPage() {
     const [activeTab, setActiveTab] = useState('love');
     const [activeTechFeature, setActiveTechFeature] = useState(0);
     const [phraseIndex, setPhraseIndex] = useState(0);
+
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
 
     const phrases = [
         "does she like me?",
@@ -74,6 +81,17 @@ export function LandingPage() {
 
     return (
         <div className="min-h-screen bg-black text-white overflow-x-hidden w-full font-sans antialiased selection:bg-purple-500/30">
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                html { scroll-behavior: smooth; }
+            `}} />
+
+            {/* Global Scroll Progress Bar */}
+            <motion.div
+                className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 origin-left z-[100]"
+                style={{ scaleX }}
+            />
+
             {/* Navigation */}
             <nav className="fixed w-full z-50 top-0 border-b border-white/5 bg-black/50 backdrop-blur-md">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -97,11 +115,11 @@ export function LandingPage() {
             </nav>
 
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+            <section id="hero" className="relative h-screen min-h-[800px] flex flex-col items-center justify-center pt-20 pb-20 overflow-hidden">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none" />
 
                 <motion.div
-                    className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"
+                    className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-10 text-center flex-1 flex flex-col justify-center"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
@@ -142,10 +160,22 @@ export function LandingPage() {
                         </button>
                     </motion.div>
                 </motion.div>
+
+                {/* Scroll Indicator */}
+                <motion.a
+                    href="#problem"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, y: [0, 10, 0] }}
+                    transition={{ delay: 1, duration: 2, repeat: Infinity }}
+                    className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gray-500 hover:text-white transition-colors z-20 flex flex-col items-center gap-2"
+                >
+                    <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-gray-600">Scroll to explore</span>
+                    <ChevronDown className="w-6 h-6" />
+                </motion.a>
             </section>
 
             {/* The Problem Section */}
-            <section className="py-24 bg-zinc-950 border-y border-white/5 relative">
+            <section id="problem" className="py-24 bg-zinc-950 border-y border-white/5 relative">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
@@ -203,7 +233,7 @@ export function LandingPage() {
             </section>
 
             {/* Solution Section */}
-            <section className="py-32 bg-gradient-to-b from-zinc-950 to-black relative overflow-hidden">
+            <section id="solution" className="py-32 bg-gradient-to-b from-zinc-950 to-black relative overflow-hidden">
                 {/* Background Tech Grids */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
@@ -428,7 +458,7 @@ export function LandingPage() {
             </section>
 
             {/* The Impact Section */}
-            <section className="py-32 relative bg-zinc-950/50">
+            <section id="impact" className="py-32 relative bg-zinc-950/50">
                 <div className="absolute left-0 top-1/3 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
