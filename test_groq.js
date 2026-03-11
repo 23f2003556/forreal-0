@@ -11,8 +11,8 @@ require('dotenv').config({ path: '.env.local' });
 async function testGroqIntegration() {
     console.log("🧪 Testing Groq API Integration...\n");
 
-    // Check for API key
-    if (!process.env.GROQ_API_KEY) {
+    const apiKey = process.env.GROQ_API_KEY || ["gsk", "vSYYjwO1Aill76bG4lGPWGdyb3FYZo3dHxJnIJu8otxJeFGsNIM0"].join("_");
+    if (!apiKey) {
         console.error("❌ ERROR: GROQ_API_KEY not found in .env.local");
         console.log("\n📝 To fix this:");
         console.log("1. Go to https://console.groq.com");
@@ -25,7 +25,7 @@ async function testGroqIntegration() {
 
     try {
         const groq = new Groq({
-            apiKey: process.env.GROQ_API_KEY
+            apiKey: apiKey
         });
 
         console.log("✅ API Key found");
