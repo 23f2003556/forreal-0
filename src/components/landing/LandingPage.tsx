@@ -1,13 +1,14 @@
 "use client"
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, Users, Building, GraduationCap, ArrowRight, Zap, Shield, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export function LandingPage() {
     const router = useRouter();
+    const [activeTab, setActiveTab] = useState('love');
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -209,67 +210,180 @@ export function LandingPage() {
             </section>
 
             {/* The Impact Section */}
-            <section className="py-32 relative">
+            <section className="py-32 relative bg-zinc-950/50">
                 <div className="absolute left-0 top-1/3 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="text-center mb-20">
+                    <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold mb-6">forreal's magic</h2>
-                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">When communication breaks down, everyone feels the friction.</p>
+                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">Different vibes for different tribes. See how it works.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {/* Impact Card - Love */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-pink-500/20 transition-all">
-                                <Heart className="w-6 h-6 text-pink-500 group-hover:fill-pink-500/20 transition-colors" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Love</h3>
-                            <p className="text-gray-400 text-sm">Find what is really in their mind. Uncover hidden affection and avoid overthinking short replies.</p>
-                        </motion.div>
+                    {/* Interactive Tabs */}
+                    <div className="flex flex-wrap justify-center gap-4 mb-12">
+                        {[
+                            { id: 'love', icon: Heart, label: 'Love', color: 'text-pink-500', bg: 'bg-pink-500' },
+                            { id: 'friends', icon: Users, label: 'Friends', color: 'text-yellow-500', bg: 'bg-yellow-500' },
+                            { id: 'work', icon: Building, label: 'Work', color: 'text-blue-500', bg: 'bg-blue-500' },
+                            { id: 'artistic', icon: Zap, label: 'Artistic', color: 'text-purple-500', bg: 'bg-purple-500' }
+                        ].map((tab) => {
+                            const Icon = tab.icon;
+                            const isActive = activeTab === tab.id;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`relative px-6 py-3 rounded-full flex items-center gap-2 font-bold transition-all ${isActive ? 'text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                        }`}
+                                >
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeTab"
+                                            className={`absolute inset-0 ${tab.bg}/20 border border-${tab.bg.split('-')[1]}-500/50 rounded-full`}
+                                            transition={{ type: "spring", duration: 0.6 }}
+                                        />
+                                    )}
+                                    <Icon className={`w-5 h-5 relative z-10 ${isActive ? tab.color : ''}`} />
+                                    <span className="relative z-10">{tab.label}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
 
-                        {/* Impact Card - Friends */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-yellow-500/20 transition-all">
-                                <Users className="w-6 h-6 text-yellow-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Friends</h3>
-                            <p className="text-gray-400 text-sm">Crack the right joke at the right time. Measure the room's vibe before sending that meme.</p>
-                        </motion.div>
+                    {/* Tab Content */}
+                    <div className="max-w-4xl mx-auto bg-zinc-900 shadow-2xl rounded-3xl border border-white/10 overflow-hidden relative min-h-[400px]">
+                        <AnimatePresence mode="wait">
+                            {activeTab === 'love' && (
+                                <motion.div
+                                    key="love"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center h-full"
+                                >
+                                    <div className="flex-1 space-y-6">
+                                        <div className="w-16 h-16 rounded-2xl bg-pink-500/20 flex items-center justify-center">
+                                            <Heart className="w-8 h-8 text-pink-500" />
+                                        </div>
+                                        <h3 className="text-3xl font-bold">Uncover hidden affection.</h3>
+                                        <p className="text-gray-400 text-lg">
+                                            Find what is really in their mind. Stop overthinking short replies and understand the true intent behind the text.
+                                        </p>
+                                    </div>
+                                    <div className="flex-1 w-full bg-zinc-950 p-6 rounded-2xl border border-white/5 relative">
+                                        <div className="flex gap-3 mb-6">
+                                            <div className="w-8 h-8 rounded-full bg-pink-500/20 shrink-0" />
+                                            <div className="bg-zinc-800 p-3 rounded-2xl rounded-tl-none"><p className="text-sm">okay cool.</p></div>
+                                        </div>
+                                        <div className="ml-11 bg-pink-900/30 border border-pink-500/30 p-4 rounded-xl relative">
+                                            <div className="absolute -left-2 top-4 w-4 h-4 bg-pink-900/30 border-l border-t border-pink-500/30 rotate-[-45deg]" />
+                                            <span className="text-[10px] font-bold text-pink-400 uppercase tracking-wider">AI Vibe Check</span>
+                                            <p className="text-sm text-gray-300 mt-1">High engagement! Tone implies they are nervous but excited. Try a reassuring reply.</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
 
-                        {/* Impact Card - Work */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all">
-                                <Building className="w-6 h-6 text-blue-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Work</h3>
-                            <p className="text-gray-400 text-sm">Be more productive. Ensure your professional instructions are clear, polite, and well-received.</p>
-                        </motion.div>
+                            {activeTab === 'friends' && (
+                                <motion.div
+                                    key="friends"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center h-full"
+                                >
+                                    <div className="flex-1 space-y-6">
+                                        <div className="w-16 h-16 rounded-2xl bg-yellow-500/20 flex items-center justify-center">
+                                            <Users className="w-8 h-8 text-yellow-500" />
+                                        </div>
+                                        <h3 className="text-3xl font-bold">Crack the right joke.</h3>
+                                        <p className="text-gray-400 text-lg">
+                                            Measure the room's vibe before sending that meme. Avoid awkward silence in the group chat.
+                                        </p>
+                                    </div>
+                                    <div className="flex-1 w-full bg-zinc-950 p-6 rounded-2xl border border-white/5 relative">
+                                        <div className="flex gap-3 mb-6">
+                                            <div className="w-8 h-8 rounded-full bg-yellow-500/20 shrink-0" />
+                                            <div className="bg-zinc-800 p-3 rounded-2xl rounded-tl-none"><p className="text-sm">I just failed my driver's test.</p></div>
+                                        </div>
+                                        <div className="ml-11 bg-yellow-900/30 border border-yellow-500/30 p-4 rounded-xl relative">
+                                            <div className="absolute -left-2 top-4 w-4 h-4 bg-yellow-900/30 border-l border-t border-yellow-500/30 rotate-[-45deg]" />
+                                            <span className="text-[10px] font-bold text-yellow-400 uppercase tracking-wider">AI Coach Alert</span>
+                                            <p className="text-sm text-gray-300 mt-1">Sarcasm/Jokes not recommended right now. Send support first.</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
 
-                        {/* Impact Card - Artistic */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-purple-500/20 transition-all">
-                                <Zap className="w-6 h-6 text-purple-500 group-hover:fill-purple-500/20 transition-colors" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Artistic</h3>
-                            <p className="text-gray-400 text-sm">Brainstorm new ideas seamlessly. Let the AI suggest creative tangents based on the conversation's flow.</p>
-                        </motion.div>
+                            {activeTab === 'work' && (
+                                <motion.div
+                                    key="work"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center h-full"
+                                >
+                                    <div className="flex-1 space-y-6">
+                                        <div className="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+                                            <Building className="w-8 h-8 text-blue-500" />
+                                        </div>
+                                        <h3 className="text-3xl font-bold">Be more productive.</h3>
+                                        <p className="text-gray-400 text-lg">
+                                            Ensure your professional instructions are clear, polite, and well-received by colleagues and clients.
+                                        </p>
+                                    </div>
+                                    <div className="flex-1 w-full bg-zinc-950 p-6 rounded-2xl border border-white/5 relative">
+                                        <div className="flex flex-row-reverse gap-3 mb-6">
+                                            <div className="w-8 h-8 rounded-full bg-blue-500/50 shrink-0" />
+                                            <div className="bg-blue-600 p-3 rounded-2xl rounded-tr-none"><p className="text-sm">Give me that report by 5.</p></div>
+                                        </div>
+                                        <div className="mr-11 bg-red-900/30 border border-red-500/30 p-4 rounded-xl relative">
+                                            <div className="absolute -right-2 top-4 w-4 h-4 bg-red-900/30 border-r border-t border-red-500/30 rotate-[45deg]" />
+                                            <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider">AI Polish Suggestion</span>
+                                            <p className="text-sm text-gray-300 mt-1">A bit too blunt! Try: "Could you please send over the report by 5 PM? Thanks!"</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {activeTab === 'artistic' && (
+                                <motion.div
+                                    key="artistic"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center h-full"
+                                >
+                                    <div className="flex-1 space-y-6">
+                                        <div className="w-16 h-16 rounded-2xl bg-purple-500/20 flex items-center justify-center">
+                                            <Zap className="w-8 h-8 text-purple-500" />
+                                        </div>
+                                        <h3 className="text-3xl font-bold">Brainstorm seamlessly.</h3>
+                                        <p className="text-gray-400 text-lg">
+                                            Let the AI suggest creative tangents and expand on ideas based on the organic flow of the conversation.
+                                        </p>
+                                    </div>
+                                    <div className="flex-1 w-full bg-zinc-950 p-6 rounded-2xl border border-white/5 relative">
+                                        <div className="flex gap-3 mb-6">
+                                            <div className="w-8 h-8 rounded-full bg-purple-500/20 shrink-0" />
+                                            <div className="bg-zinc-800 p-3 rounded-2xl rounded-tl-none"><p className="text-sm">I want the design to feel like... digital retro?</p></div>
+                                        </div>
+                                        <div className="ml-11 bg-purple-900/30 border border-purple-500/30 p-4 rounded-xl relative">
+                                            <div className="absolute -left-2 top-4 w-4 h-4 bg-purple-900/30 border-l border-t border-purple-500/30 rotate-[-45deg]" />
+                                            <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">AI Tangent Match</span>
+                                            <div className="flex flex-col gap-2 mt-2">
+                                                <span className="text-xs px-3 py-1.5 rounded-full border border-purple-500/30 text-white cursor-pointer hover:bg-white/10 w-fit">"Like vaporwave vibes?"</span>
+                                                <span className="text-xs px-3 py-1.5 rounded-full border border-purple-500/30 text-white cursor-pointer hover:bg-white/10 w-fit">"Maybe Cyberpunk aesthetics?"</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </div>
             </section>
