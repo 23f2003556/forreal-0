@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function Sidebar() {
-    const { rooms, activeRoomId, setActiveRoomId, loading, searchUsers, createPrivateRoom, updateProfile, currentUser } = useChat()
+    const { rooms, activeRoomId, setActiveRoomId, loading, searchUsers, createPrivateRoom, updateProfile, currentUser, unreadCounts } = useChat()
     const { theme, setTheme } = useTheme()
     const [searchQuery, setSearchQuery] = React.useState('')
     const [searchResults, setSearchResults] = React.useState<any[]>([])
@@ -335,12 +335,19 @@ export function Sidebar() {
                                             {room.last_message_at ? format(new Date(room.last_message_at), 'HH:mm') : ''}
                                         </span>
                                     </div>
-                                    <p className={cn(
-                                        "text-xs truncate transition-colors",
-                                        activeRoomId === room.id ? "text-purple-700/70 dark:text-purple-200/70" : "text-gray-500 dark:text-gray-400"
-                                    )}>
-                                        {room.last_message || "Active now"}
-                                    </p>
+                                    <div className="flex justify-between items-center">
+                                        <p className={cn(
+                                            "text-xs truncate transition-colors flex-1",
+                                            activeRoomId === room.id ? "text-purple-700/70 dark:text-purple-200/70" : "text-gray-500 dark:text-gray-400"
+                                        )}>
+                                            {room.last_message || "Active now"}
+                                        </p>
+                                        {unreadCounts[room.id] > 0 && (
+                                            <div className="ml-2 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[18px] h-[18px] animate-in zoom-in duration-300">
+                                                {unreadCounts[room.id]}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </motion.div>
                         ))

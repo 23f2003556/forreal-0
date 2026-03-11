@@ -42,7 +42,12 @@ export function ChatWindow() {
 
 
     const [isCoachOpen, setIsCoachOpen] = useState(false)
-    const [coachMode, setCoachMode] = useState<'work' | 'chill' | 'love' | null>(null)
+    const { roomModes, setRoomMode, unreadCounts } = useChat()
+    const [selectedDate, setSelectedDate] = useState('')
+
+    // Get current mode for this room
+    const coachMode = activeRoomId ? roomModes[activeRoomId] || null : null
+
     const [coachInsights, setCoachInsights] = useState<{
         interestScore: number
         vibe: string
@@ -55,8 +60,6 @@ export function ChatWindow() {
     const [isAnalyzing, setIsAnalyzing] = useState(false)
     const [analysisError, setAnalysisError] = useState<string | null>(null)
     const [timeWindow, setTimeWindow] = useState<'realtime' | 'week' | 'month' | 'date'>('realtime')
-    const [customObjective, setCustomObjective] = useState('')
-    const [selectedDate, setSelectedDate] = useState('')
 
     const handleAnalyze = async (selectedMode?: 'work' | 'chill' | 'love', userPrompt?: string, style?: string) => {
         const modeToUse = selectedMode || coachMode
@@ -99,7 +102,7 @@ export function ChatWindow() {
                     partnerName: activeRoom.name,
                     userName: currentUser?.username || 'the user',
                     mode: modeToUse,
-                    userPrompt: userPrompt || customObjective,
+                    userPrompt: userPrompt, // Now only passed if explicitly provided (e.g. from a custom manual ask)
                     style,
                     timeWindow
                 })
@@ -345,7 +348,9 @@ export function ChatWindow() {
                         }}
                         mode={coachMode}
                         onModeChange={(mode) => {
-                            setCoachMode(mode)
+                            if (activeRoomId) {
+                                setRoomMode(activeRoomId, mode)
+                            }
                             if (mode) {
                                 handleAnalyze(mode)
                             }
@@ -356,10 +361,7 @@ export function ChatWindow() {
                             // Re-analyze when time window changes
                             handleAnalyze(undefined, undefined, undefined)
                         }}
-                        customObjective={customObjective}
-                        onObjectiveChange={(obj) => {
-                            setCustomObjective(obj)
-                        }}
+
                         selectedDate={selectedDate}
                         onDateChange={(date) => {
                             setSelectedDate(date)

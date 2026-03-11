@@ -25,15 +25,13 @@ interface CoachPanelProps {
     onModeChange: (mode: 'work' | 'chill' | 'love' | null) => void
     timeWindow: 'realtime' | 'week' | 'month' | 'date'
     onTimeWindowChange: (window: 'realtime' | 'week' | 'month' | 'date') => void
-    customObjective: string
-    onObjectiveChange: (objective: string) => void
     selectedDate: string
     onDateChange: (date: string) => void
 }
 
 export function CoachPanel({
     isOpen, onClose, loading, error, insights, onSuggestionClick, onRefresh, mode, onModeChange,
-    timeWindow, onTimeWindowChange, customObjective, onObjectiveChange,
+    timeWindow, onTimeWindowChange,
     selectedDate, onDateChange
 }: CoachPanelProps) {
     const getScoreColor = (score: number) => {
@@ -259,38 +257,6 @@ export function CoachPanel({
                                 )}
                             </div>
 
-                            {/* Objective Input - Only show when 'Custom' style is selected */}
-                            <AnimatePresence>
-                                {selectedStyle === 'Custom' && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        className="mt-4"
-                                    >
-                                        <div className="relative group">
-                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500">
-                                                <Sparkles className="w-3.5 h-3.5" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={customObjective}
-                                                onChange={(e) => onObjectiveChange(e.target.value)}
-                                                placeholder="Custom Goal/Style..."
-                                                className="w-full pl-9 pr-4 py-2.5 text-[11px] bg-purple-500/5 border border-purple-500/10 rounded-2xl focus:outline-none focus:ring-1 focus:ring-purple-500/30 focus:border-purple-500/40 transition-all font-medium placeholder-gray-500"
-                                            />
-                                            {customObjective && (
-                                                <button
-                                                    onClick={() => onObjectiveChange('')}
-                                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
-                                                >
-                                                    <RefreshCw className="w-3 h-3" />
-                                                </button>
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
                         </div>
 
                         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 custom-scrollbar">

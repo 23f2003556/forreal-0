@@ -10,12 +10,16 @@ export function useChat() {
         activeRoomId,
         rooms,
         messages,
+        unreadCounts,
+        roomModes,
         setCurrentUser,
         setActiveRoomId,
         setRooms,
         setMessages,
         addMessage,
-        updateMessage
+        updateMessage,
+        setUnreadCount,
+        setRoomMode
     } = useChatStore()
     const [loading, setLoading] = useState(true)
 
@@ -135,6 +139,54 @@ export function useChat() {
         }
     }, [currentUser, setRooms])
 
+    // Fetch initial unread counts
+    useEffect(() => {
+        if (!currentUser) return
+
+        const fetchUnreadCounts = async () => {
+            const { data } = await supabase
+                .from('messages')
+                .select('room_id, id')
+                .neq('sender_id', currentUser.id)
+                .in('status', ['sent', 'delivered'])
+
+            if (data) {
+                const counts: Record<string, number> = {}
+                data.forEach(msg => {
+                    counts[msg.room_id] = (counts[msg.room_id] || 0) + 1
+                })
+                Object.entries(counts).forEach(([roomId, count]) => {
+                    setUnreadCount(roomId, count)
+                })
+            }
+        }
+
+        fetchUnreadCounts()
+
+        // Global message subscription for unread notifications
+        const globalChannel = supabase
+            .channel('global-messages')
+            .on('postgres_changes', {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'messages',
+            }, (payload) => {
+                const newMsg = payload.new
+                if (newMsg.sender_id !== currentUser.id) {
+                    if (newMsg.room_id !== activeRoomId) {
+                        // Increment unread count for the room
+                        const currentCount = unreadCounts[newMsg.room_id] || 0
+                        setUnreadCount(newMsg.room_id, currentCount + 1)
+                    }
+                }
+            })
+            .subscribe()
+
+        return () => {
+            supabase.removeChannel(globalChannel)
+        }
+    }, [currentUser, activeRoomId, unreadCounts, setUnreadCount])
+
     // Fetch messages for active room
     useEffect(() => {
         if (!activeRoomId) {
@@ -212,6 +264,7 @@ export function useChat() {
                 console.error('❌ Error marking messages as read:', error)
             } else {
                 console.log(`✅ Marked ${count || '?'} messages as read`)
+                setUnreadCount(activeRoomId, 0)
             }
         }
         markAsRead()
@@ -484,6 +537,8 @@ export function useChat() {
         loading,
         currentUser,
         activeRoomId,
+        unreadCounts,
+        roomModes,
         setActiveRoomId,
         sendMessage,
         sendTyping,
@@ -492,5 +547,6 @@ export function useChat() {
         updateProfile,
         deleteMessage,
         reactToMessage,
+        setRoomMode,
     }
 }
