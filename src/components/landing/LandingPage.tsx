@@ -130,72 +130,6 @@ export function LandingPage() {
                 </div>
             </section>
 
-            {/* The Impact Section */}
-            <section className="py-32 relative">
-                <div className="absolute left-0 top-1/3 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="text-center mb-20">
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">forreal's magic</h2>
-                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">When communication breaks down, everyone feels the friction.</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {/* Impact Card - Love */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-pink-500/20 transition-all">
-                                <Heart className="w-6 h-6 text-pink-500 group-hover:fill-pink-500/20 transition-colors" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Love</h3>
-                            <p className="text-gray-400 text-sm">Find what is really in their mind. Uncover hidden affection and avoid overthinking short replies.</p>
-                        </motion.div>
-
-                        {/* Impact Card - Friends */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-yellow-500/20 transition-all">
-                                <Users className="w-6 h-6 text-yellow-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Friends</h3>
-                            <p className="text-gray-400 text-sm">Crack the right joke at the right time. Measure the room's vibe before sending that meme.</p>
-                        </motion.div>
-
-                        {/* Impact Card - Work */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all">
-                                <Building className="w-6 h-6 text-blue-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Work</h3>
-                            <p className="text-gray-400 text-sm">Be more productive. Ensure your professional instructions are clear, polite, and well-received.</p>
-                        </motion.div>
-
-                        {/* Impact Card - Artistic */}
-                        <motion.div
-                            whileHover={{ y: -10, scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
-                        >
-                            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-purple-500/20 transition-all">
-                                <Zap className="w-6 h-6 text-purple-500 group-hover:fill-purple-500/20 transition-colors" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">Artistic</h3>
-                            <p className="text-gray-400 text-sm">Brainstorm new ideas seamlessly. Let the AI suggest creative tangents based on the conversation's flow.</p>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
             {/* Solution Section */}
             <section className="py-32 bg-gradient-to-b from-zinc-950 to-black relative">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -270,6 +204,72 @@ export function LandingPage() {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* The Impact Section */}
+            <section className="py-32 relative">
+                <div className="absolute left-0 top-1/3 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-20">
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">forreal's magic</h2>
+                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">When communication breaks down, everyone feels the friction.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {/* Impact Card - Love */}
+                        <motion.div
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
+                        >
+                            <div className="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-pink-500/20 transition-all">
+                                <Heart className="w-6 h-6 text-pink-500 group-hover:fill-pink-500/20 transition-colors" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Love</h3>
+                            <p className="text-gray-400 text-sm">Find what is really in their mind. Uncover hidden affection and avoid overthinking short replies.</p>
+                        </motion.div>
+
+                        {/* Impact Card - Friends */}
+                        <motion.div
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
+                        >
+                            <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-yellow-500/20 transition-all">
+                                <Users className="w-6 h-6 text-yellow-500" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Friends</h3>
+                            <p className="text-gray-400 text-sm">Crack the right joke at the right time. Measure the room's vibe before sending that meme.</p>
+                        </motion.div>
+
+                        {/* Impact Card - Work */}
+                        <motion.div
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
+                        >
+                            <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all">
+                                <Building className="w-6 h-6 text-blue-500" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Work</h3>
+                            <p className="text-gray-400 text-sm">Be more productive. Ensure your professional instructions are clear, polite, and well-received.</p>
+                        </motion.div>
+
+                        {/* Impact Card - Artistic */}
+                        <motion.div
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
+                        >
+                            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-purple-500/20 transition-all">
+                                <Zap className="w-6 h-6 text-purple-500 group-hover:fill-purple-500/20 transition-colors" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Artistic</h3>
+                            <p className="text-gray-400 text-sm">Brainstorm new ideas seamlessly. Let the AI suggest creative tangents based on the conversation's flow.</p>
+                        </motion.div>
                     </div>
                 </div>
             </section>
