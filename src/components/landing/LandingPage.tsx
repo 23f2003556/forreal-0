@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 export function LandingPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('love');
+    const [activeTechFeature, setActiveTechFeature] = useState(0);
     const [phraseIndex, setPhraseIndex] = useState(0);
 
     const phrases = [
@@ -43,6 +44,33 @@ export function LandingPage() {
             transition: { type: "spring", stiffness: 100 }
         }
     };
+
+    const techFeatures = [
+        {
+            id: 'engine',
+            title: 'Natural Language Engine',
+            icon: Zap,
+            description: 'Forreal uses advanced LLMs fine-tuned on nuanced human conversation to detect subtle shifts in tone, sarcasm, and unspoken intent.',
+            stat: '< 200ms',
+            statLabel: 'Inference Latency'
+        },
+        {
+            id: 'context',
+            title: 'Continuous Context Memory',
+            icon: Building, // Using Building as a placeholder for database/memory
+            description: 'The AI does not just read the last message. It analyzes the entire flow of the conversation, remembering inside jokes and recurring themes.',
+            stat: '99%',
+            statLabel: 'Context Retention'
+        },
+        {
+            id: 'privacy',
+            title: 'On-Device Edge Processing',
+            icon: Shield,
+            description: 'Your private chats stay private. Critical vibe-checks and emotional analysis are processed securely, minimizing data exposure.',
+            stat: 'Zero',
+            statLabel: 'Data Sold'
+        }
+    ];
 
     return (
         <div className="min-h-screen bg-black text-white overflow-x-hidden w-full font-sans antialiased selection:bg-purple-500/30">
@@ -180,78 +208,225 @@ export function LandingPage() {
             </section>
 
             {/* Solution Section */}
-            <section className="py-32 bg-gradient-to-b from-zinc-950 to-black relative">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col lg:flex-row items-center gap-16">
-                        <div className="flex-1">
-                            <h2 className="text-3xl md:text-5xl font-bold mb-6">Forreal solves this.</h2>
-                            <p className="text-xl text-gray-400 mb-8">
-                                Our AI friend engine acts as your personal communication coach, running quietly in the background to provide real-time insights.
-                            </p>
+            <section className="py-32 bg-gradient-to-b from-zinc-950 to-black relative overflow-hidden">
+                {/* Background Tech Grids */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-                            <div className="space-y-6">
-                                <div className="flex gap-4">
-                                    <div className="mt-1 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
-                                        <Zap className="w-5 h-5 text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-lg font-bold">Real-time Vibe Checks</h4>
-                                        <p className="text-gray-400">Instantly gauge the engagement level and mood of the conversation.</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-4">
-                                    <div className="mt-1 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
-                                        <Shield className="w-5 h-5 text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-lg font-bold">Red & Green Flags</h4>
-                                        <p className="text-gray-400">Spot potential misunderstandings before they happen.</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-4">
-                                    <div className="mt-1 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
-                                        <Heart className="w-5 h-5 text-purple-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-lg font-bold">Smart Icebreakers</h4>
-                                        <p className="text-gray-400">Never run out of things to say with context-aware reply suggestions.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center max-w-3xl mx-auto mb-20">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-sm font-medium text-blue-400 mb-6"
+                        >
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                            </span>
+                            How it works
+                        </motion.div>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">Forreal solves this.</h2>
+                        <p className="text-xl text-gray-400">
+                            Our AI friend engine acts as your personal communication coach. Here is the magic under the hood.
+                        </p>
+                    </div>
 
-                        {/* Mock UI Representation */}
-                        <div className="flex-1 w-full max-w-md relative">
-                            <div className="absolute -inset-4 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-3xl blur-[30px] opacity-30 animate-pulse" />
-                            <div className="relative bg-zinc-900 border border-white/10 rounded-3xl p-6 shadow-2xl">
-                                <div className="space-y-4">
-                                    {/* Mock message */}
-                                    <div className="flex gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-gray-700 shrink-0" />
-                                        <div className="bg-zinc-800 p-3 rounded-2xl rounded-tl-none">
-                                            <p className="text-sm">Hey, are we still on for the project review later?</p>
-                                        </div>
-                                    </div>
-                                    {/* AI Insight popover mock */}
+                    <div className="flex flex-col lg:flex-row gap-12 items-start">
+                        {/* Interactive Feature List (Timeline style) */}
+                        <div className="flex-1 space-y-4 w-full">
+                            {techFeatures.map((feature, index) => {
+                                const isActive = activeTechFeature === index;
+                                const Icon = feature.icon;
+                                return (
                                     <motion.div
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        whileInView={{ opacity: 1, scale: 1 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: 0.3 }}
-                                        className="ml-11 bg-purple-900/30 border border-purple-500/30 p-4 rounded-2xl relative"
+                                        key={feature.id}
+                                        onClick={() => setActiveTechFeature(index)}
+                                        className={`p-6 rounded-3xl cursor-pointer transition-all border ${isActive
+                                                ? 'bg-zinc-900 border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.1)]'
+                                                : 'bg-zinc-900/40 border-white/5 hover:border-white/10 hover:bg-zinc-900/60'
+                                            }`}
                                     >
-                                        <div className="absolute -left-2 top-4 w-4 h-4 bg-purple-900/30 border-l border-t border-purple-500/30 rotate-[-45deg]" />
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <span className="text-xs font-bold text-purple-300 uppercase">AI Insight</span>
-                                            <span className="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-[10px] font-bold">Vibe: Professional</span>
-                                        </div>
-                                        <p className="text-sm text-gray-300">Tone is direct but friendly. High engagement (85%).</p>
-                                        <div className="mt-3 flex gap-2">
-                                            <span className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white cursor-pointer hover:bg-white/20">"Yes, see you at 3!"</span>
+                                        <div className="flex items-start gap-4">
+                                            <div className={`mt-1 w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors ${isActive ? 'bg-purple-500/20 text-purple-400' : 'bg-white/5 text-gray-500'
+                                                }`}>
+                                                <Icon className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className={`text-xl font-bold mb-2 transition-colors ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                                                    {feature.title}
+                                                </h4>
+                                                <AnimatePresence>
+                                                    {isActive && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: 'auto' }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            transition={{ duration: 0.3 }}
+                                                            className="overflow-hidden"
+                                                        >
+                                                            <p className="text-gray-400 leading-relaxed mb-4">
+                                                                {feature.description}
+                                                            </p>
+                                                            <div className="inline-flex items-center gap-2 bg-black/50 px-3 py-1.5 rounded-lg border border-white/5">
+                                                                <span className="text-purple-400 font-bold">{feature.stat}</span>
+                                                                <span className="text-xs text-gray-500 uppercase tracking-widest">{feature.statLabel}</span>
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
                                         </div>
                                     </motion.div>
-                                </div>
-                            </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Interactive Visualization Area */}
+                        <div className="flex-1 w-full bg-zinc-900/50 border border-white/10 rounded-3xl p-8 relative min-h-[500px] flex items-center justify-center overflow-hidden">
+                            {/* Ambient Glow */}
+                            <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/5 via-transparent to-blue-500/5" />
+
+                            <AnimatePresence mode="wait">
+                                {activeTechFeature === 0 && (
+                                    <motion.div
+                                        key="engine"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 1.1 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="relative w-full max-w-sm"
+                                    >
+                                        {/* Visualization for NLP Engine */}
+                                        <div className="space-y-4 relative z-10 w-full">
+                                            <div className="bg-zinc-800 p-4 rounded-2xl rounded-tr-none self-end ml-auto w-[80%] border border-white/5">
+                                                <p className="text-sm">"Fine, do whatever you want."</p>
+                                            </div>
+
+                                            {/* Scanning effect */}
+                                            <div className="relative h-20 flex flex-col justify-center items-center">
+                                                <motion.div
+                                                    animate={{ y: [-10, 10, -10] }}
+                                                    transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                                                    className="w-full h-px bg-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.8)] absolute z-20"
+                                                />
+                                                <div className="flex gap-2">
+                                                    <span className="text-xs font-mono text-gray-500">Processing vectors...</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-purple-900/30 border border-purple-500/30 p-4 rounded-2xl w-[90%]">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <Shield className="w-4 h-4 text-purple-400" />
+                                                    <span className="text-xs font-bold text-purple-300">Engine Output</span>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <div className="flex justify-between text-xs">
+                                                        <span className="text-gray-400">Literal Meaning:</span>
+                                                        <span className="text-gray-300">Agreement</span>
+                                                    </div>
+                                                    <div className="flex justify-between text-xs">
+                                                        <span className="text-purple-400 font-bold">Inferred Intent:</span>
+                                                        <span className="text-red-400 font-bold">Frustration / Disagreement</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {activeTechFeature === 1 && (
+                                    <motion.div
+                                        key="context"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 1.1 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="relative w-full h-full flex items-center justify-center p-4"
+                                    >
+                                        <div className="relative w-full h-[300px]">
+                                            {/* Central Hub representing memory */}
+                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-blue-500/20 border border-blue-500/50 rounded-full flex items-center justify-center z-10 backdrop-blur-sm">
+                                                <Building className="w-8 h-8 text-blue-400" />
+                                            </div>
+
+                                            {/* Circular nodes connecting to center */}
+                                            {[
+                                                { label: "Inside Jokes", angle: 0 },
+                                                { label: "Tone History", angle: 72 },
+                                                { label: "Preferences", angle: 144 },
+                                                { label: "Past Conflicts", angle: 216 },
+                                                { label: "Relationship", angle: 288 }
+                                            ].map((node, i) => {
+                                                const rad = (node.angle * Math.PI) / 180;
+                                                const radius = 100;
+                                                const x = Math.cos(rad) * radius;
+                                                const y = Math.sin(rad) * radius;
+
+                                                return (
+                                                    <motion.div
+                                                        key={i}
+                                                        initial={{ opacity: 0, scale: 0 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        transition={{ delay: i * 0.1 }}
+                                                        className="absolute top-1/2 left-1/2 w-12 h-12 -ml-6 -mt-6"
+                                                        style={{ x, y }}
+                                                    >
+                                                        <div className="w-full h-full bg-zinc-800 border border-white/10 rounded-full flex items-center justify-center relative group">
+                                                            <div className="w-2 h-2 bg-blue-400 rounded-full" />
+                                                            {/* Line to center */}
+                                                            <div className="absolute top-1/2 left-1/2 w-[100px] h-px bg-blue-500/20 origin-left -z-10" style={{ transform: `rotate(${Math.PI + rad}rad)` }} />
+                                                            <span className="absolute -bottom-6 whitespace-nowrap text-[10px] text-gray-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                {node.label}
+                                                            </span>
+                                                        </div>
+                                                    </motion.div>
+                                                );
+                                            })}
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {activeTechFeature === 2 && (
+                                    <motion.div
+                                        key="privacy"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 1.1 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="relative w-full h-full flex flex-col items-center justify-center"
+                                    >
+                                        <div className="relative">
+                                            <Shield className="w-32 h-32 text-gray-800" />
+                                            <motion.div
+                                                animate={{ opacity: [0.5, 1, 0.5] }}
+                                                transition={{ repeat: Infinity, duration: 2 }}
+                                                className="absolute inset-0"
+                                            >
+                                                <Shield className="w-32 h-32 text-green-500/30 blur-md" />
+                                            </motion.div>
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <Shield className="w-16 h-16 text-green-400" />
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-8 text-center space-y-4 w-full px-8">
+                                            <div className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg border border-white/5">
+                                                <span className="text-xs text-gray-400 font-mono">End-to-End Encryption</span>
+                                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                                            </div>
+                                            <div className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg border border-white/5">
+                                                <span className="text-xs text-gray-400 font-mono">Local Vibe Analysis</span>
+                                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                                            </div>
+                                            <div className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg border border-white/5">
+                                                <span className="text-xs text-gray-400 font-mono">Cloud Diagnostics</span>
+                                                <div className="w-2 h-2 rounded-full bg-red-500" />
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </div>
