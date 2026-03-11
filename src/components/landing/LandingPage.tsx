@@ -62,9 +62,9 @@ export function LandingPage() {
                     initial="hidden"
                     animate="visible"
                 >
-                    <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-purple-300 mb-8">
+                    <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-purple-300 mb-8 hover:bg-white/10 transition-colors cursor-default">
                         <span className="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
-                        Introducing AI Communication Coaching
+                        beyond texting
                     </motion.div>
 
                     <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
@@ -97,13 +97,36 @@ export function LandingPage() {
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-center max-w-4xl mx-auto"
+                        className="text-center max-w-4xl mx-auto mb-16"
                     >
                         <h2 className="text-3xl md:text-5xl font-bold mb-6">The Digital Divide</h2>
                         <p className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light">
                             "People struggle to interpret mood, intent, and engagement in online chats, leading to frequent misunderstandings and less meaningful digital connections."
                         </p>
                     </motion.div>
+
+                    <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-zinc-900/40 p-6 rounded-2xl border border-white/5"
+                        >
+                            <div className="text-4xl font-bold text-purple-500 mb-2">55%</div>
+                            <p className="text-gray-400">of communication is non-verbal. In texts, you're flying blind, leading to anxiety over how messages are received.</p>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                            className="bg-zinc-900/40 p-6 rounded-2xl border border-white/5"
+                        >
+                            <div className="text-4xl font-bold text-blue-500 mb-2">3x</div>
+                            <p className="text-gray-400">more likely to have a conflict escalate in text compared to face-to-face conversations due to misread tones.</p>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 
@@ -117,41 +140,57 @@ export function LandingPage() {
                         <p className="text-xl text-gray-400 max-w-2xl mx-auto">When communication breaks down, everyone feels the friction.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {/* Impact Card 1 */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {/* Impact Card - Love */}
                         <motion.div
-                            whileHover={{ y: -10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl backdrop-blur-sm"
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
                         >
-                            <div className="w-14 h-14 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6">
-                                <Users className="w-7 h-7 text-pink-500" />
+                            <div className="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-pink-500/20 transition-all">
+                                <Heart className="w-6 h-6 text-pink-500 group-hover:fill-pink-500/20 transition-colors" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-4">Online Users</h3>
-                            <p className="text-gray-400">Face confusing conversations, missed signals, and anxiety over how messages are perceived.</p>
+                            <h3 className="text-xl font-bold mb-3">Love</h3>
+                            <p className="text-gray-400 text-sm">Find what is really in their mind. Uncover hidden affection and avoid overthinking short replies.</p>
                         </motion.div>
 
-                        {/* Impact Card 2 */}
+                        {/* Impact Card - Friends */}
                         <motion.div
-                            whileHover={{ y: -10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl backdrop-blur-sm"
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
                         >
-                            <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6">
-                                <Building className="w-7 h-7 text-blue-500" />
+                            <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-yellow-500/20 transition-all">
+                                <Users className="w-6 h-6 text-yellow-500" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-4">Businesses</h3>
-                            <p className="text-gray-400">See measurable drops in team productivity, collaboration, and overall customer satisfaction.</p>
+                            <h3 className="text-xl font-bold mb-3">Friends</h3>
+                            <p className="text-gray-400 text-sm">Crack the right joke at the right time. Measure the room's vibe before sending that meme.</p>
                         </motion.div>
 
-                        {/* Impact Card 3 */}
+                        {/* Impact Card - Work */}
                         <motion.div
-                            whileHover={{ y: -10 }}
-                            className="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl backdrop-blur-sm"
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
                         >
-                            <div className="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center mb-6">
-                                <GraduationCap className="w-7 h-7 text-green-500" />
+                            <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all">
+                                <Building className="w-6 h-6 text-blue-500" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-4">Educators</h3>
-                            <p className="text-gray-400">Struggle to engage students effectively in remote environments without physical cues.</p>
+                            <h3 className="text-xl font-bold mb-3">Work</h3>
+                            <p className="text-gray-400 text-sm">Be more productive. Ensure your professional instructions are clear, polite, and well-received.</p>
+                        </motion.div>
+
+                        {/* Impact Card - Artistic */}
+                        <motion.div
+                            whileHover={{ y: -10, scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                            className="bg-zinc-900/50 border border-white/10 p-6 rounded-3xl backdrop-blur-sm group cursor-default"
+                        >
+                            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-purple-500/20 transition-all">
+                                <Zap className="w-6 h-6 text-purple-500 group-hover:fill-purple-500/20 transition-colors" />
+                            </div>
+                            <h3 className="text-xl font-bold mb-3">Artistic</h3>
+                            <p className="text-gray-400 text-sm">Brainstorm new ideas seamlessly. Let the AI suggest creative tangents based on the conversation's flow.</p>
                         </motion.div>
                     </div>
                 </div>
