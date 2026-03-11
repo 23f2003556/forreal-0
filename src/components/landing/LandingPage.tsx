@@ -106,26 +106,44 @@ export function LandingPage() {
                         </p>
                     </motion.div>
 
-                    <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            className="bg-zinc-900/40 p-6 rounded-2xl border border-white/5"
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            whileHover={{ y: -5, scale: 1.02 }}
+                            className="group relative bg-zinc-900/40 p-8 rounded-3xl border border-white/5 hover:border-purple-500/30 transition-all cursor-default overflow-hidden"
                         >
-                            <div className="text-4xl font-bold text-purple-500 mb-2">55%</div>
-                            <p className="text-gray-400">of communication is non-verbal. In texts, you're flying blind, leading to anxiety over how messages are received.</p>
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">55%</div>
+                                    <div className="h-px bg-white/10 flex-1 ml-4 group-hover:bg-purple-500/20 transition-colors" />
+                                </div>
+                                <p className="text-gray-400 text-lg leading-relaxed">
+                                    of communication is non-verbal. In texts, you're flying blind, leading to anxiety over how messages are received.
+                                </p>
+                            </div>
                         </motion.div>
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: 0.3 }}
-                            className="bg-zinc-900/40 p-6 rounded-2xl border border-white/5"
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            whileHover={{ y: -5, scale: 1.02 }}
+                            className="group relative bg-zinc-900/40 p-8 rounded-3xl border border-white/5 hover:border-blue-500/30 transition-all cursor-default overflow-hidden"
                         >
-                            <div className="text-4xl font-bold text-blue-500 mb-2">3x</div>
-                            <p className="text-gray-400">more likely to have a conflict escalate in text compared to face-to-face conversations due to misread tones.</p>
+                            <div className="absolute inset-0 bg-gradient-to-bl from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">3x</div>
+                                    <div className="h-px bg-white/10 flex-1 ml-4 group-hover:bg-blue-500/20 transition-colors" />
+                                </div>
+                                <p className="text-gray-400 text-lg leading-relaxed">
+                                    more likely to have a conflict escalate in text compared to face-to-face conversations due to misread tones.
+                                </p>
+                            </div>
                         </motion.div>
                     </div>
                 </div>
