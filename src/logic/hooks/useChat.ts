@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase/client'
-import { useChatStore } from '@/lib/store'
+import { supabase } from '@/backend/supabase/client'
+import { useChatStore } from '@/logic/store'
 
 export function useChat() {
     const {
@@ -167,27 +167,27 @@ export function useChat() {
                 const roomProcessedMap: Record<string, boolean> = {}
 
                 // Group by room
-                const roomsGrouped = allRoomsMessages.reduce((acc: any, msg) => {
+                const roomsGrouped: Record<string, any[]> = allRoomsMessages.reduce((acc: any, msg) => {
                     if (!acc[msg.room_id]) acc[msg.room_id] = []
                     acc[msg.room_id].push(msg)
                     return acc
                 }, {})
 
-                    (Object.entries(roomsGrouped) as [string, any[]][]).forEach(([roomId, msgs]) => {
-                        let unrespondedCount = 0
-                        for (const msg of msgs) {
-                            if (msg.sender_id === currentUser.id) {
-                                // Found user's last response, stop counting
-                                break
-                            } else {
-                                // Message from someone else that appeared after user's last response
-                                unrespondedCount++
-                            }
+                Object.entries(roomsGrouped).forEach(([roomId, msgs]) => {
+                    let unrespondedCount = 0
+                    for (const msg of msgs) {
+                        if (msg.sender_id === currentUser.id) {
+                            // Found user's last response, stop counting
+                            break
+                        } else {
+                            // Message from someone else that appeared after user's last response
+                            unrespondedCount++
                         }
-                        if (unrespondedCount > 0) {
-                            counts[roomId] = unrespondedCount
-                        }
-                    })
+                    }
+                    if (unrespondedCount > 0) {
+                        counts[roomId] = unrespondedCount
+                    }
+                })
 
                 Object.entries(counts).forEach(([roomId, count]) => {
                     setUnreadCount(roomId, count)

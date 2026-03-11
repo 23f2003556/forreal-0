@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Sparkles, Zap, MessageCircle, RefreshCw, ArrowLeft, Heart, Briefcase, Coffee, AlertTriangle, CheckCircle, Snowflake } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/logic/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface CoachPanelProps {

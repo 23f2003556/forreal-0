@@ -3,10 +3,10 @@
 import React from 'react'
 import { Search, MoreVertical, LogOut, ArrowLeft, Check, Edit2, Users, MessageSquare, Sun, Moon, Camera } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { useChat } from '@/hooks/useChat'
-import { cn } from '@/lib/utils'
+import { useChat } from '@/logic/hooks/useChat'
+import { cn } from '@/logic/utils'
 import { format } from 'date-fns'
-import { supabase } from '@/lib/supabase/client'
+import { supabase } from '@/backend/supabase/client'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 

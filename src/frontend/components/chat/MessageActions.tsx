@@ -12,7 +12,7 @@ import {
     MoreHorizontal,
     ChevronDown
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/logic/utils'
 
 interface MessageActionsProps {
     isOutgoing: boolean

@@ -1,5 +1,5 @@
-import { MainLayout } from "@/components/layout/MainLayout";
-import { LandingPage } from "@/components/landing/LandingPage";
+import { MainLayout } from "@/frontend/components/layout/MainLayout";
+import { LandingPage } from "@/frontend/components/landing/LandingPage";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 

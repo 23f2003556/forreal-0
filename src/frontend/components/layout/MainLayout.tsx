@@ -3,8 +3,8 @@
 import React from 'react'
 import { Sidebar } from '../sidebar/Sidebar'
 import { ChatWindow } from '../chat/ChatWindow'
-import { useChat } from '@/hooks/useChat'
-import { cn } from '@/lib/utils'
+import { useChat } from '@/logic/hooks/useChat'
+import { cn } from '@/logic/utils'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 

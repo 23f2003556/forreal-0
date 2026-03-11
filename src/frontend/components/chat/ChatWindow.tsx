@@ -4,10 +4,10 @@ import React, { useState, useRef, useEffect } from 'react'
 import { ArrowLeft, Sparkles, Send, Paperclip } from 'lucide-react'
 import { Virtuoso } from 'react-virtuoso'
 import { MessageBubble } from './MessageBubble'
-import { useChat } from '@/hooks/useChat'
+import { useChat } from '@/logic/hooks/useChat'
 import { format } from 'date-fns'
 import { CoachPanel } from './CoachPanel'
-import { cn } from '@/lib/utils'
+import { cn } from '@/logic/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function ChatWindow() {

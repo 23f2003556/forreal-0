@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { useChat } from '@/hooks/useChat'
+import { useChat } from '@/logic/hooks/useChat'
 import { X } from 'lucide-react'
 
 export function ContactInfo() {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Check, CheckCheck, Play } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/logic/utils'
 import { motion } from 'framer-motion'
 
 interface MessageBubbleProps {
