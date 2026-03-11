@@ -99,7 +99,7 @@ export function LandingPage() {
                         viewport={{ once: true }}
                         className="text-center max-w-4xl mx-auto mb-16"
                     >
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">The Digital Divide</h2>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">Problem</h2>
                         <p className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light">
                             "People struggle to interpret mood, intent, and engagement in online chats, leading to frequent misunderstandings and less meaningful digital connections."
                         </p>
@@ -136,7 +136,7 @@ export function LandingPage() {
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-20">
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">The Real Impact</h2>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">forreal's magic</h2>
                         <p className="text-xl text-gray-400 max-w-2xl mx-auto">When communication breaks down, everyone feels the friction.</p>
                     </div>
 
