@@ -181,44 +181,44 @@ export function ChatWindow() {
             <div className="flex flex-col h-full flex-1 relative min-w-0">
 
                 {/* Header - Glassmorphism */}
-                <div className="absolute top-0 left-0 right-0 h-[70px] z-20 px-4 flex justify-between items-center backdrop-blur-md bg-white/70 dark:bg-black/70 border-b border-gray-200/50 dark:border-gray-800/50">
-                    <div className="flex items-center gap-4 cursor-pointer">
+                <div className="absolute top-0 left-0 right-0 h-[64px] sm:h-[70px] z-20 px-3 sm:px-4 flex justify-between items-center backdrop-blur-md bg-white/70 dark:bg-black/70 border-b border-gray-200/50 dark:border-gray-800/50 pt-[env(safe-area-inset-top)] box-content">
+                    <div className="flex items-center gap-3 sm:gap-4 cursor-pointer">
                         <button
                             onClick={() => setActiveRoomId(null)}
-                            className="md:hidden text-icon-gray hover:text-primary transition-colors"
+                            className="md:hidden text-icon-gray hover:text-primary transition-colors p-1"
                         >
                             <ArrowLeft className="w-6 h-6" />
                         </button>
                         <div className="relative">
                             {activeRoom ? (
                                 <>
-                                    <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white dark:ring-gray-800 shadow-sm">
+                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white dark:ring-gray-800 shadow-sm">
                                         <img src={activeRoom.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${activeRoom.name}`} alt="Contact Avatar" className="w-full h-full object-cover" />
                                     </div>
                                     {activeRoom.is_online && (
-                                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black"></div>
+                                        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-black"></div>
                                     )}
                                 </>
                             ) : (
-                                <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-200 dark:bg-gray-800 animate-pulse" />
                             )}
                         </div>
-                        <div className="flex flex-col justify-center">
+                        <div className="flex flex-col justify-center max-w-[150px] sm:max-w-none">
                             {activeRoom ? (
                                 <>
-                                    <h2 className="font-semibold text-text-primary text-base tracking-tight">
+                                    <h2 className="font-semibold text-text-primary text-sm sm:text-base tracking-tight truncate">
                                         {activeRoom.name}
                                     </h2>
-                                    <p className="text-xs text-text-secondary font-medium">
+                                    <p className="text-[10px] sm:text-xs text-text-secondary font-medium">
                                         {activeRoom.is_online ? 'Active now' : ''}
                                     </p>
                                 </>
                             ) : (
-                                <div className="h-5 w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                                <div className="h-4 w-24 sm:h-5 sm:w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
                             )}
                         </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 sm:gap-2">
                         <button
                             onClick={() => setIsCoachOpen(!isCoachOpen)}
                             className={cn(
@@ -235,13 +235,13 @@ export function ChatWindow() {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 z-10 min-h-0 pt-[70px] pb-[80px]">
+                <div className="flex-1 z-10 min-h-0 pt-[calc(64px+env(safe-area-inset-top))] pb-[calc(80px+env(safe-area-inset-bottom))]">
                     <Virtuoso
                         style={{ height: '100%' }}
                         data={messages}
                         initialTopMostItemIndex={messages.length - 1}
                         followOutput="smooth"
-                        className="custom-scrollbar px-2"
+                        className="custom-scrollbar px-2 pt-4"
                         itemContent={(index, msg) => {
                             if (msg.type === 'audio') return null;
                             return (
@@ -264,12 +264,12 @@ export function ChatWindow() {
                 </div>
 
                 {/* Floating Input Area */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-20 bg-gradient-to-t from-app-background via-app-background to-transparent pb-6">
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 z-20 bg-gradient-to-t from-app-background via-app-background to-transparent pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
                     {replyingTo && (
-                        <div className="max-w-3xl mx-auto mb-2 flex items-center justify-between bg-gray-50 dark:bg-gray-800/80 backdrop-blur-md px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className="max-w-3xl mx-auto mb-2 flex items-center justify-between bg-gray-50 dark:bg-gray-800/80 backdrop-blur-md px-3 sm:px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700">
                             <div className="flex flex-col text-sm border-l-2 border-primary pl-2">
-                                <span className="text-primary font-medium text-xs">Replying to {activeRoom?.name}</span>
-                                <span className="text-text-secondary truncate max-w-xs">{replyingTo.content}</span>
+                                <span className="text-primary font-medium text-[10px] sm:text-xs">Replying to {activeRoom?.name}</span>
+                                <span className="text-text-secondary text-xs truncate max-w-[200px] sm:max-w-xs">{replyingTo.content}</span>
                             </div>
                             <button onClick={() => setReplyingTo(null)} className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full">
                                 <span className="sr-only">Cancel reply</span>

@@ -24,7 +24,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="h-screen w-screen overflow-hidden">
+    <main className="h-screen-safe w-screen overflow-hidden">
       <MainLayout />
     </main>
   );

@@ -259,15 +259,15 @@ export function CoachPanel({
 
                         </div>
 
-                        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 custom-scrollbar">
+                        <div className="flex-1 overflow-y-auto px-5 py-6 space-y-7 custom-scrollbar pb-[calc(100px+env(safe-area-inset-bottom))]">
                             {error && (
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3 text-sm text-red-600 dark:text-red-400 flex items-center gap-2"
+                                    className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-4 text-sm text-red-600 dark:text-red-400 flex items-center gap-3 shadow-sm"
                                 >
-                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                    {error}
+                                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
+                                    <span className="font-medium">{error}</span>
                                 </motion.div>
                             )}
 
@@ -278,12 +278,12 @@ export function CoachPanel({
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         transition={{ delay: 0.1 }}
-                                        className="col-span-1 bg-white dark:bg-gray-900/50 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-800/60 relative overflow-hidden flex flex-col items-center justify-center min-h-[140px]"
+                                        className="col-span-1 bg-white dark:bg-gray-900/50 rounded-[24px] p-5 shadow-sm border border-gray-100 dark:border-gray-800/60 relative overflow-hidden flex flex-col items-center justify-center min-h-[160px]"
                                     >
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
 
-                                        <div className="flex items-center gap-1.5 mb-2 text-gray-500 dark:text-gray-400 text-[10px] font-bold uppercase tracking-widest">
-                                            <Zap className="w-3 h-3" />
+                                        <div className="flex items-center gap-2 mb-3 text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
+                                            <Zap className="w-3.5 h-3.5" />
                                             Interest
                                         </div>
 
@@ -304,23 +304,23 @@ export function CoachPanel({
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         transition={{ delay: 0.15 }}
-                                        className="col-span-1 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-4 shadow-sm border border-blue-100 dark:border-blue-800/30 flex flex-col justify-between min-h-[140px]"
+                                        className="col-span-1 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-[24px] p-5 shadow-sm border border-blue-100 dark:border-blue-800/30 flex flex-col justify-between min-h-[160px]"
                                     >
-                                        <div className="flex items-center gap-1.5 mb-2 text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase tracking-widest">
-                                            <Snowflake className="w-3 h-3" />
+                                        <div className="flex items-center gap-2 mb-3 text-blue-600 dark:text-blue-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
+                                            <Snowflake className="w-3.5 h-3.5" />
                                             Icebreaker
                                         </div>
-                                        <div className="text-xs font-medium text-gray-700 dark:text-gray-200 leading-snug">
+                                        <div className="text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-100 leading-snug">
                                             {insights?.icebreaker ? (
                                                 `"${insights.icebreaker}"`
                                             ) : (
-                                                <span className="opacity-50 italic">Analyzing context...</span>
+                                                <span className="opacity-40 italic font-medium">Analyzing...</span>
                                             )}
                                         </div>
                                         {insights?.icebreaker && (
                                             <button
                                                 onClick={() => onSuggestionClick(insights.icebreaker!)}
-                                                className="mt-2 text-[10px] bg-white/80 dark:bg-black/20 hover:bg-white dark:hover:bg-black/40 text-blue-600 dark:text-blue-300 py-1.5 px-2 rounded-lg transition-colors w-full font-medium"
+                                                className="mt-3 text-[11px] bg-white/90 dark:bg-black/30 hover:bg-white dark:hover:bg-black/50 text-blue-600 dark:text-blue-300 py-2 px-3 rounded-xl transition-all w-full font-bold shadow-sm"
                                             >
                                                 Use This
                                             </button>
@@ -334,16 +334,16 @@ export function CoachPanel({
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 rounded-xl p-4"
+                                    className="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 rounded-2xl p-5"
                                 >
-                                    <div className="flex items-center gap-2 mb-2 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-widest">
-                                        <AlertTriangle className="w-3.5 h-3.5" />
+                                    <div className="flex items-center gap-2 mb-3 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-widest">
+                                        <AlertTriangle className="w-4 h-4" />
                                         Potential Flags
                                     </div>
-                                    <ul className="space-y-1">
+                                    <ul className="space-y-2">
                                         {insights?.redFlags?.map((flag, i) => (
-                                            <li key={i} className="text-xs text-red-700 dark:text-red-300 flex items-start gap-2">
-                                                <span className="mt-1 w-1 h-1 rounded-full bg-red-400 flex-shrink-0" />
+                                            <li key={i} className="text-[13px] font-medium text-red-700 dark:text-red-300 flex items-start gap-3">
+                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
                                                 {flag}
                                             </li>
                                         ))}
@@ -355,16 +355,16 @@ export function CoachPanel({
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/50 rounded-xl p-4"
+                                    className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/50 rounded-2xl p-5"
                                 >
-                                    <div className="flex items-center gap-2 mb-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest">
-                                        <CheckCircle className="w-3.5 h-3.5" />
+                                    <div className="flex items-center gap-2 mb-3 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest">
+                                        <CheckCircle className="w-4 h-4" />
                                         Positive Signals
                                     </div>
-                                    <ul className="space-y-1">
+                                    <ul className="space-y-2">
                                         {insights?.greenFlags?.map((flag, i) => (
-                                            <li key={i} className="text-xs text-emerald-700 dark:text-emerald-300 flex items-start gap-2">
-                                                <span className="mt-1 w-1 h-1 rounded-full bg-emerald-400 flex-shrink-0" />
+                                            <li key={i} className="text-[13px] font-medium text-emerald-700 dark:text-emerald-300 flex items-start gap-3">
+                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
                                                 {flag}
                                             </li>
                                         ))}
@@ -377,19 +377,19 @@ export function CoachPanel({
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.15 }}
-                                className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-900/50 dark:to-gray-900/30 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800/60"
+                                className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-900/50 dark:to-gray-900/30 rounded-[28px] p-6 shadow-sm border border-gray-100 dark:border-gray-800/60"
                             >
-                                <div className="flex items-center gap-2 mb-3 text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">
-                                    <MessageCircle className="w-3.5 h-3.5" />
+                                <div className="flex items-center gap-2 mb-4 text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">
+                                    <MessageCircle className="w-4 h-4" />
                                     Vibe Check
                                 </div>
-                                <div className="text-lg font-medium text-gray-800 dark:text-gray-200 leading-relaxed">
+                                <div className="text-xl font-bold text-gray-900 dark:text-gray-100 leading-relaxed">
                                     {insights?.vibe ? (
                                         <>
                                             "{insights.vibe}"
                                         </>
                                     ) : (
-                                        <span className="text-gray-400 italic text-sm">Thinking...</span>
+                                        <span className="text-gray-400 italic text-base font-medium">Listening for vibes...</span>
                                     )}
                                 </div>
                             </motion.div>
@@ -399,22 +399,22 @@ export function CoachPanel({
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="bg-white dark:bg-gray-900/50 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800/60"
+                                className="bg-white dark:bg-gray-900/50 rounded-[28px] p-6 shadow-sm border border-gray-100 dark:border-gray-800/60"
                             >
-                                <div className="flex items-center gap-2 mb-3 text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">
-                                    <Sparkles className="w-3.5 h-3.5" />
+                                <div className="flex items-center gap-2 mb-4 text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">
+                                    <Sparkles className="w-4 h-4" />
                                     Coach Insights
                                 </div>
-                                <ul className="space-y-3">
+                                <ul className="space-y-4">
                                     {insights?.summary ? (
                                         insights.summary.map((item, idx) => (
-                                            <li key={idx} className="text-sm text-gray-600 dark:text-gray-300 flex items-start gap-3">
-                                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0 shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+                                            <li key={idx} className="text-sm sm:text-[15px] font-medium text-gray-700 dark:text-gray-300 flex items-start gap-4">
+                                                <div className="mt-2 w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0 shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
                                                 <span className="leading-relaxed">{item}</span>
                                             </li>
                                         ))
                                     ) : (
-                                        <li className="text-sm text-gray-400 italic">Analysis in progress...</li>
+                                        <li className="text-[15px] text-gray-400 italic font-medium">Crunching the data...</li>
                                     )}
                                 </ul>
                             </motion.div>
@@ -424,26 +424,26 @@ export function CoachPanel({
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.25 }}
-                                className="space-y-4"
+                                className="space-y-5"
                             >
-                                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">
-                                    <Zap className="w-3.5 h-3.5" />
+                                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest px-1">
+                                    <Zap className="w-4 h-4" />
                                     Suggested Replies
                                 </div>
 
-                                <div className="space-y-2.5">
+                                <div className="space-y-3">
                                     {insights?.suggestions.map((suggestion, idx) => (
                                         <button
                                             key={idx}
                                             onClick={() => onSuggestionClick(suggestion)}
-                                            className="w-full text-left p-4 bg-white dark:bg-gray-800/40 hover:bg-purple-50 dark:hover:bg-purple-900/20 border border-gray-200 dark:border-gray-700/50 hover:border-purple-200 dark:hover:border-purple-700/50 rounded-xl text-sm text-gray-700 dark:text-gray-300 transition-all duration-200 group shadow-sm hover:shadow-md"
+                                            className="w-full text-left p-5 bg-white dark:bg-gray-800/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 border border-gray-200 dark:border-gray-700/60 hover:border-purple-200 dark:hover:border-purple-700/60 rounded-[22px] text-[15px] font-semibold text-gray-800 dark:text-gray-200 transition-all duration-200 group shadow-sm hover:shadow-md active:scale-[0.99]"
                                         >
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-medium text-gray-500 group-hover:bg-purple-100 group-hover:text-purple-600 dark:group-hover:bg-purple-900/50 dark:group-hover:text-purple-300 transition-colors">
+                                            <div className="flex items-start gap-4">
+                                                <div className="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 group-hover:bg-purple-100 group-hover:text-purple-600 dark:group-hover:bg-purple-900/50 dark:group-hover:text-purple-300 transition-colors shrink-0">
                                                     {idx + 1}
                                                 </div>
-                                                <span className="flex-1">{suggestion}</span>
-                                                <ArrowLeft className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-purple-500 rotate-180" />
+                                                <span className="flex-1 leading-snug">{suggestion}</span>
+                                                <ArrowLeft className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all text-purple-500 rotate-180 shrink-0" />
                                             </div>
                                         </button>
                                     ))}

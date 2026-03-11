@@ -144,17 +144,51 @@ export function useChat() {
         if (!currentUser) return
 
         const fetchUnreadCounts = async () => {
-            const { data } = await supabase
-                .from('messages')
-                .select('room_id, id')
-                .neq('sender_id', currentUser.id)
-                .in('status', ['sent', 'delivered'])
+            // Logic: For each room, find the timestamp of the last message sent by the current user.
+            // Then count all messages from others that were sent AFTER that timestamp.
 
-            if (data) {
+            // 1. Get last message timestamp for current user across all rooms
+            const { data: userLastMessages } = await supabase
+                .rpc('get_last_user_messages', { user_id_param: currentUser.id })
+
+            // 2. We'll fallback to a manual query if RPC isn't available or for simplicity in this logic
+            // Actually, let's use a simpler approach: 
+            // Count messages where sender_id != current_user and status != 'read' 
+            // OR even better: just count all messages from others in each room 
+            // that occurred after the most recent message from current user.
+
+            const { data: allRoomsMessages } = await supabase
+                .from('messages')
+                .select('room_id, sender_id, created_at')
+                .order('created_at', { ascending: false })
+
+            if (allRoomsMessages) {
                 const counts: Record<string, number> = {}
-                data.forEach(msg => {
-                    counts[msg.room_id] = (counts[msg.room_id] || 0) + 1
-                })
+                const roomProcessedMap: Record<string, boolean> = {}
+
+                // Group by room
+                const roomsGrouped = allRoomsMessages.reduce((acc: any, msg) => {
+                    if (!acc[msg.room_id]) acc[msg.room_id] = []
+                    acc[msg.room_id].push(msg)
+                    return acc
+                }, {})
+
+                    (Object.entries(roomsGrouped) as [string, any[]][]).forEach(([roomId, msgs]) => {
+                        let unrespondedCount = 0
+                        for (const msg of msgs) {
+                            if (msg.sender_id === currentUser.id) {
+                                // Found user's last response, stop counting
+                                break
+                            } else {
+                                // Message from someone else that appeared after user's last response
+                                unrespondedCount++
+                            }
+                        }
+                        if (unrespondedCount > 0) {
+                            counts[roomId] = unrespondedCount
+                        }
+                    })
+
                 Object.entries(counts).forEach(([roomId, count]) => {
                     setUnreadCount(roomId, count)
                 })
@@ -264,7 +298,7 @@ export function useChat() {
                 console.error('❌ Error marking messages as read:', error)
             } else {
                 console.log(`✅ Marked ${count || '?'} messages as read`)
-                setUnreadCount(activeRoomId, 0)
+                // setUnreadCount(activeRoomId, 0) // REMOVED: Only clear when responding
             }
         }
         markAsRead()
@@ -351,6 +385,9 @@ export function useChat() {
 
         if (error) {
             console.error('Error sending message:', error)
+        } else {
+            // Successfully sent a message, so this chat is now "responded"
+            setUnreadCount(activeRoomId, 0)
         }
     }
 

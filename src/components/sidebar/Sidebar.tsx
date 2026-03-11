@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { Search, MoreVertical, LogOut, ArrowLeft, Check, Edit2, Users, MessageSquare, Sun, Moon } from 'lucide-react'
+import { Search, MoreVertical, LogOut, ArrowLeft, Check, Edit2, Users, MessageSquare, Sun, Moon, Camera } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useChat } from '@/hooks/useChat'
 import { cn } from '@/lib/utils'
@@ -70,107 +70,164 @@ export function Sidebar() {
         setIsEditingStatus(false)
     }
 
-    // Profile Panel (Modernized)
+    // Profile Panel (Modernized & Premium)
     if (isProfileOpen) {
         return (
             <motion.div
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                className="flex flex-col h-full bg-white dark:bg-gray-900 w-full md:w-[400px] border-r border-gray-100 dark:border-gray-800"
+                className="flex flex-col h-full bg-[#f8fafc] dark:bg-[#0a0f1d] w-full md:w-[400px] border-r border-gray-100 dark:border-gray-800/50 pt-safe"
             >
-                <div className="h-[180px] bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 relative p-6 flex flex-col justify-end text-white shrink-0">
+                {/* Premium Banner Header */}
+                <div className="h-[220px] bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 relative p-8 flex flex-col justify-end text-white shrink-0 pt-[calc(2rem+env(safe-area-inset-top))]">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-400/20 rounded-full blur-2xl -ml-16 -mb-16 pointer-events-none" />
+
                     <button
                         onClick={() => setIsProfileOpen(false)}
-                        className="absolute top-6 left-6 p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full transition-colors"
+                        className="absolute top-[calc(1.5rem+env(safe-area-inset-top))] left-6 p-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-full transition-all active:scale-95 border border-white/10 z-20 group"
                     >
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                     </button>
-                    <div>
-                        <h2 className="text-3xl font-bold mb-1">Profile</h2>
-                        <p className="text-blue-100 text-sm">Customize how others see you</p>
+
+                    <div className="relative z-10">
+                        <motion.h2
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            className="text-4xl font-black mb-2 tracking-tight"
+                        >
+                            Profile
+                        </motion.h2>
+                        <motion.p
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.1 }}
+                            className="text-white/80 text-sm font-medium tracking-wide"
+                        >
+                            Customize your digital identity
+                        </motion.p>
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto custom-scrollbar px-6 pt-0 pb-6 bg-white dark:bg-gray-950">
-                    <div className="relative -mt-16 mb-6 flex justify-center">
-                        <div className="w-32 h-32 rounded-full ring-4 ring-white dark:ring-gray-950 bg-gray-200 overflow-hidden relative group cursor-pointer shadow-xl z-10">
-                            <img src={currentUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${currentUser?.username}`} alt="Profile" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center text-white text-[10px] font-bold tracking-widest uppercase flex-col gap-1 transition-all">
-                                <span>Change</span>
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-6 pt-10 pb-10 bg-transparent pb-safe">
+                    {/* Centered Avatar with Glow - Now fully below banner */}
+                    <div className="relative mb-12 flex justify-center">
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", damping: 15 }}
+                            className="relative group"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity" />
+                            <div className="w-36 h-36 rounded-full ring-8 ring-white dark:ring-[#0a0f1d] bg-gray-200 overflow-hidden relative shadow-2xl z-10">
+                                <img
+                                    src={currentUser?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${currentUser?.username}`}
+                                    alt="Profile"
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-black tracking-widest uppercase flex-col gap-1 transition-all cursor-pointer">
+                                    <Camera className="w-6 h-6 mb-1" />
+                                    <span>Change</span>
+                                </div>
                             </div>
-                        </div>
+                            {/* Discrete indicator button */}
+                            <button className="absolute bottom-1 right-1 w-10 h-10 bg-gradient-to-tr from-purple-600 to-pink-500 rounded-full border-4 border-white dark:border-[#0a0f1d] shadow-lg flex items-center justify-center text-white z-20 hover:scale-110 transition-transform active:scale-95">
+                                <Camera className="w-4 h-4" />
+                            </button>
+                        </motion.div>
                     </div>
 
-                    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
-                        {/* Display Name Section */}
-                        <div className="p-4 border-b border-gray-50 dark:border-gray-800 group transition-colors hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
-                            <div className="flex items-center gap-3 mb-2">
-                                <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-                                    <Users className="w-4 h-4" />
-                                </div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Display Name</label>
+                    <div className="space-y-6">
+                        {/* Display Name Card */}
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-white dark:bg-gray-900/40 backdrop-blur-xl rounded-[28px] p-6 shadow-sm border border-white dark:border-white/5"
+                        >
+                            <div className="flex items-center gap-3 mb-4 text-purple-600 dark:text-purple-400">
+                                <Users className="w-5 h-5" />
+                                <label className="text-xs font-black uppercase tracking-[0.2em] opacity-80">Display Name</label>
                             </div>
 
-                            <div className="pl-11">
+                            <div className="relative">
                                 {isEditingUsername ? (
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-3">
                                         <input
                                             type="text"
                                             value={newUsername}
                                             onChange={(e) => setNewUsername(e.target.value)}
-                                            className="w-full bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-gray-900 dark:text-gray-100 font-medium text-sm transition-all"
+                                            className="w-full bg-gray-50 dark:bg-[#1a1f2e] px-5 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500/30 text-gray-900 dark:text-gray-100 font-bold transition-all border border-transparent focus:border-purple-500/30"
                                             autoFocus
-                                            placeholder="Enter your name"
                                         />
-                                        <button onClick={handleUpdateProfile} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
-                                            <Check className="w-4 h-4" />
+                                        <button
+                                            onClick={handleUpdateProfile}
+                                            className="p-4 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all"
+                                        >
+                                            <Check className="w-5 h-5" />
                                         </button>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center justify-between group/edit cursor-pointer" onClick={() => setIsEditingUsername(true)}>
-                                        <span className="text-gray-900 dark:text-gray-100 font-medium text-base">{currentUser?.username}</span>
-                                        <button className="text-gray-300 group-hover/edit:text-blue-600 p-1 opacity-0 group-hover/edit:opacity-100 transition-all">
-                                            <Edit2 className="w-3.5 h-3.5" />
-                                        </button>
+                                    <div
+                                        className="flex items-center justify-between group/field cursor-pointer p-1"
+                                        onClick={() => setIsEditingUsername(true)}
+                                    >
+                                        <span className="text-gray-900 dark:text-white font-black text-2xl tracking-tight leading-none group-hover/field:text-purple-600 transition-colors">
+                                            {currentUser?.username}
+                                        </span>
+                                        <div className="p-2.5 bg-gray-50 dark:bg-white/5 rounded-xl opacity-0 group-hover/field:opacity-100 transition-all active:scale-95">
+                                            <Edit2 className="w-4 h-4 text-gray-400" />
+                                        </div>
                                     </div>
                                 )}
                             </div>
-                        </div>
+                        </motion.div>
 
-                        {/* Bio / Status Section */}
-                        <div className="p-4 group transition-colors hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
-                            <div className="flex items-center gap-3 mb-2">
-                                <div className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
-                                    <MessageSquare className="w-4 h-4" />
-                                </div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Bio / Status</label>
+                        {/* Status Card */}
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="bg-white dark:bg-gray-900/40 backdrop-blur-xl rounded-[28px] p-6 shadow-sm border border-white dark:border-white/5"
+                        >
+                            <div className="flex items-center gap-3 mb-4 text-blue-600 dark:text-blue-400">
+                                <MessageSquare className="w-5 h-5" />
+                                <label className="text-xs font-black uppercase tracking-[0.2em] opacity-80">Bio / Status</label>
                             </div>
 
-                            <div className="pl-11">
+                            <div className="relative">
                                 {isEditingStatus ? (
-                                    <div className="flex items-center gap-2">
-                                        <input
-                                            type="text"
+                                    <div className="flex items-center gap-3">
+                                        <textarea
                                             value={newStatus}
                                             onChange={(e) => setNewStatus(e.target.value)}
-                                            className="w-full bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/20 text-gray-900 dark:text-gray-100 text-sm transition-all"
+                                            rows={2}
+                                            className="w-full bg-gray-50 dark:bg-[#1a1f2e] px-5 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/30 text-gray-900 dark:text-gray-100 font-medium transition-all border border-transparent focus:border-blue-500/30 resize-none text-sm"
                                             autoFocus
                                             placeholder="What's on your mind?"
                                         />
-                                        <button onClick={handleUpdateProfile} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors">
-                                            <Check className="w-4 h-4" />
+                                        <button
+                                            onClick={handleUpdateProfile}
+                                            className="p-4 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all self-end"
+                                        >
+                                            <Check className="w-5 h-5" />
                                         </button>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center justify-between group/edit cursor-pointer" onClick={() => setIsEditingStatus(true)}>
-                                        <span className="text-gray-600 dark:text-gray-400 text-sm">{currentUser?.status || "Hey there! I am using ForReal."}</span>
-                                        <button className="text-gray-300 group-hover/edit:text-purple-600 p-1 opacity-0 group-hover/edit:opacity-100 transition-all">
-                                            <Edit2 className="w-3.5 h-3.5" />
-                                        </button>
+                                    <div
+                                        className="flex items-center justify-between group/field cursor-pointer p-1"
+                                        onClick={() => setIsEditingStatus(true)}
+                                    >
+                                        <p className="text-gray-600 dark:text-gray-400 text-base font-medium leading-relaxed group-hover/field:text-gray-900 dark:group-hover:text-gray-100 transition-colors italic">
+                                            "{currentUser?.status || "Hey there! I am using ForReal."}"
+                                        </p>
+                                        <div className="p-2.5 bg-gray-50 dark:bg-white/5 rounded-xl opacity-0 group-hover/field:opacity-100 transition-all active:scale-95 shrink-0 ml-4">
+                                            <Edit2 className="w-4 h-4 text-gray-400" />
+                                        </div>
                                     </div>
                                 )}
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </motion.div>
@@ -180,7 +237,7 @@ export function Sidebar() {
     return (
         <div className="flex flex-col h-full bg-white dark:bg-gray-950 w-full md:w-[400px] border-r border-gray-100 dark:border-gray-800/50 relative z-10">
             {/* Modern Header */}
-            <div className="px-5 py-4 flex justify-between items-center bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl sticky top-0 z-20 border-b border-gray-100 dark:border-gray-800">
+            <div className="px-5 py-4 flex justify-between items-center bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl sticky top-0 z-20 border-b border-gray-100 dark:border-gray-800 pt-[calc(1rem+env(safe-area-inset-top))]">
                 <div onClick={() => setIsProfileOpen(true)} className="flex items-center gap-3 cursor-pointer group">
                     <div className="relative">
                         <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent group-hover:ring-purple-500/20 transition-all">
@@ -343,7 +400,7 @@ export function Sidebar() {
                                             {room.last_message || "Active now"}
                                         </p>
                                         {unreadCounts[room.id] > 0 && (
-                                            <div className="ml-2 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[18px] h-[18px] animate-in zoom-in duration-300">
+                                            <div className="ml-2 bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[18px] h-[18px] animate-in zoom-in duration-300">
                                                 {unreadCounts[room.id]}
                                             </div>
                                         )}
