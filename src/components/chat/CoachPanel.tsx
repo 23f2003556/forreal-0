@@ -23,9 +23,16 @@ interface CoachPanelProps {
     onRefresh: (prompt?: string, style?: string) => void
     mode: 'work' | 'chill' | 'love' | null
     onModeChange: (mode: 'work' | 'chill' | 'love' | null) => void
+    timeWindow: 'realtime' | 'week' | 'month' | 'all'
+    onTimeWindowChange: (window: 'realtime' | 'week' | 'month' | 'all') => void
+    customObjective: string
+    onObjectiveChange: (objective: string) => void
 }
 
-export function CoachPanel({ isOpen, onClose, loading, error, insights, onSuggestionClick, onRefresh, mode, onModeChange }: CoachPanelProps) {
+export function CoachPanel({
+    isOpen, onClose, loading, error, insights, onSuggestionClick, onRefresh, mode, onModeChange,
+    timeWindow, onTimeWindowChange, customObjective, onObjectiveChange
+}: CoachPanelProps) {
     const getScoreColor = (score: number) => {
         if (score >= 80) return 'text-emerald-500 from-emerald-500 to-teal-400'
         if (score >= 50) return 'text-amber-500 from-amber-500 to-orange-400'
@@ -201,6 +208,59 @@ export function CoachPanel({ isOpen, onClose, loading, error, insights, onSugges
                                         {style}
                                     </button>
                                 ))}
+                            </div>
+
+                            {/* Time Frame selector */}
+                            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800/50">
+                                <div className="flex items-center justify-between mb-3 px-1">
+                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Time Window</span>
+                                    <span className="text-[10px] font-medium text-purple-500 bg-purple-50 dark:bg-purple-900/20 px-1.5 py-0.5 rounded uppercase">{timeWindow}</span>
+                                </div>
+                                <div className="grid grid-cols-4 gap-1.5 px-0.5">
+                                    {[
+                                        { id: 'realtime', label: 'Now' },
+                                        { id: 'week', label: 'Week' },
+                                        { id: 'month', label: 'Month' },
+                                        { id: 'all', label: 'All' }
+                                    ].map((w) => (
+                                        <button
+                                            key={w.id}
+                                            onClick={() => onTimeWindowChange(w.id as any)}
+                                            className={cn(
+                                                "text-[10px] font-semibold py-2 rounded-xl border transition-all",
+                                                timeWindow === w.id
+                                                    ? "bg-purple-500 border-purple-500 text-white shadow-lg shadow-purple-500/20"
+                                                    : "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800 text-gray-500 hover:border-purple-200 dark:hover:border-purple-800"
+                                            )}
+                                        >
+                                            {w.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Objective Input */}
+                            <div className="mt-4">
+                                <div className="relative group">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500">
+                                        <Sparkles className="w-3.5 h-3.5" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={customObjective}
+                                        onChange={(e) => onObjectiveChange(e.target.value)}
+                                        placeholder="Set Goal (e.g. improve engagement)"
+                                        className="w-full pl-9 pr-4 py-2.5 text-[11px] bg-purple-500/5 border border-purple-500/10 rounded-2xl focus:outline-none focus:ring-1 focus:ring-purple-500/30 focus:border-purple-500/40 transition-all font-medium placeholder-gray-500"
+                                    />
+                                    {customObjective && (
+                                        <button
+                                            onClick={() => onObjectiveChange('')}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
+                                        >
+                                            <RefreshCw className="w-3 h-3" />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
 

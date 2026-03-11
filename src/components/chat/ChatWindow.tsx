@@ -54,6 +54,8 @@ export function ChatWindow() {
     } | null>(null)
     const [isAnalyzing, setIsAnalyzing] = useState(false)
     const [analysisError, setAnalysisError] = useState<string | null>(null)
+    const [timeWindow, setTimeWindow] = useState<'realtime' | 'week' | 'month' | 'all'>('realtime')
+    const [customObjective, setCustomObjective] = useState('')
 
     const handleAnalyze = async (selectedMode?: 'work' | 'chill' | 'love', userPrompt?: string, style?: string) => {
         const modeToUse = selectedMode || coachMode
@@ -62,10 +64,25 @@ export function ChatWindow() {
         setIsAnalyzing(true)
         setAnalysisError(null)
         try {
-            // Get last 10 messages
-            const recentMessages = messages.slice(-10).map(m => ({
+            // Determine message scope based on timeWindow
+            let filteredMessages = [...messages]
+            const now = new Date()
+
+            if (timeWindow === 'realtime') {
+                filteredMessages = messages.slice(-15)
+            } else if (timeWindow === 'week') {
+                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+                filteredMessages = messages.filter(m => new Date(m.created_at) > weekAgo)
+            } else if (timeWindow === 'month') {
+                const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+                filteredMessages = messages.filter(m => new Date(m.created_at) > monthAgo)
+            }
+            // 'all' uses all messages in filteredMessages
+
+            const recentMessages = filteredMessages.map(m => ({
                 role: m.sender_id === currentUser?.id ? 'user' : 'partner',
-                content: m.content
+                content: m.content,
+                timestamp: m.created_at
             }))
 
             const response = await fetch('/api/analyze', {
@@ -74,9 +91,11 @@ export function ChatWindow() {
                 body: JSON.stringify({
                     messages: recentMessages,
                     partnerName: activeRoom.name,
+                    userName: currentUser?.username || 'the user',
                     mode: modeToUse,
-                    userPrompt,
-                    style
+                    userPrompt: userPrompt || customObjective,
+                    style,
+                    timeWindow
                 })
             })
 
@@ -324,6 +343,18 @@ export function ChatWindow() {
                             if (mode) {
                                 handleAnalyze(mode)
                             }
+                        }}
+                        timeWindow={timeWindow}
+                        onTimeWindowChange={(window) => {
+                            setTimeWindow(window)
+                            // Re-analyze when time window changes
+                            handleAnalyze(undefined, undefined, undefined)
+                        }}
+                        customObjective={customObjective}
+                        onObjectiveChange={(obj) => {
+                            setCustomObjective(obj)
+                            // We don't necessarily re-analyze on every keystroke
+                            // but we can if the user stops typing
                         }}
                     />
                 )}
