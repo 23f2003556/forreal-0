@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, Users, Building, GraduationCap, ArrowRight, Zap, Shield, Heart } from 'lucide-react';
 import Link from 'next/link';
@@ -9,6 +9,21 @@ import { useRouter } from 'next/navigation';
 export function LandingPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('love');
+    const [phraseIndex, setPhraseIndex] = useState(0);
+
+    const phrases = [
+        "does she like me?",
+        "what does it mean?",
+        "why left on read?",
+        "is he joking?"
+    ];
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setPhraseIndex((prev) => (prev + 1) % phrases.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -66,6 +81,21 @@ export function LandingPage() {
                     <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-purple-300 mb-8 hover:bg-white/10 transition-colors cursor-default">
                         <span className="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
                         beyond texting
+                    </motion.div>
+
+                    <motion.div variants={itemVariants} className="mb-4 h-12 flex items-center justify-center overflow-hidden">
+                        <AnimatePresence mode="popLayout">
+                            <motion.span
+                                key={phraseIndex}
+                                initial={{ y: 40, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -40, opacity: 0 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                className="text-2xl md:text-4xl font-medium text-gray-500 italic"
+                            >
+                                "{phrases[phraseIndex]}"
+                            </motion.span>
+                        </AnimatePresence>
                     </motion.div>
 
                     <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
