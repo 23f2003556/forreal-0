@@ -23,15 +23,18 @@ interface CoachPanelProps {
     onRefresh: (prompt?: string, style?: string) => void
     mode: 'work' | 'chill' | 'love' | null
     onModeChange: (mode: 'work' | 'chill' | 'love' | null) => void
-    timeWindow: 'realtime' | 'week' | 'month' | 'all'
-    onTimeWindowChange: (window: 'realtime' | 'week' | 'month' | 'all') => void
+    timeWindow: 'realtime' | 'week' | 'month' | 'date'
+    onTimeWindowChange: (window: 'realtime' | 'week' | 'month' | 'date') => void
     customObjective: string
     onObjectiveChange: (objective: string) => void
+    selectedDate: string
+    onDateChange: (date: string) => void
 }
 
 export function CoachPanel({
     isOpen, onClose, loading, error, insights, onSuggestionClick, onRefresh, mode, onModeChange,
-    timeWindow, onTimeWindowChange, customObjective, onObjectiveChange
+    timeWindow, onTimeWindowChange, customObjective, onObjectiveChange,
+    selectedDate, onDateChange
 }: CoachPanelProps) {
     const getScoreColor = (score: number) => {
         if (score >= 80) return 'text-emerald-500 from-emerald-500 to-teal-400'
@@ -46,9 +49,9 @@ export function CoachPanel({
     ] as const
 
     const modeStyles = {
-        work: ['Concise', 'Formal', 'Action-oriented'],
-        chill: ['Funny', 'Empathetic', 'Slang'],
-        love: ['Flirty', 'Poetic', 'Supportive'],
+        work: ['Concise', 'Formal', 'Action-oriented', 'Custom'],
+        chill: ['Funny', 'Empathetic', 'Slang', 'Custom'],
+        love: ['Flirty', 'Poetic', 'Supportive', 'Custom'],
     }
 
     const [customPrompt, setCustomPrompt] = React.useState('')
@@ -214,14 +217,16 @@ export function CoachPanel({
                             <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800/50">
                                 <div className="flex items-center justify-between mb-3 px-1">
                                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Time Window</span>
-                                    <span className="text-[10px] font-medium text-purple-500 bg-purple-50 dark:bg-purple-900/20 px-1.5 py-0.5 rounded uppercase">{timeWindow}</span>
+                                    <span className="text-[10px] font-medium text-purple-500 bg-purple-50 dark:bg-purple-900/20 px-1.5 py-0.5 rounded uppercase">
+                                        {timeWindow === 'date' ? selectedDate || 'Select Date' : timeWindow}
+                                    </span>
                                 </div>
                                 <div className="grid grid-cols-4 gap-1.5 px-0.5">
                                     {[
                                         { id: 'realtime', label: 'Now' },
                                         { id: 'week', label: 'Week' },
                                         { id: 'month', label: 'Month' },
-                                        { id: 'all', label: 'All' }
+                                        { id: 'date', label: 'Date' }
                                     ].map((w) => (
                                         <button
                                             key={w.id}
@@ -237,31 +242,55 @@ export function CoachPanel({
                                         </button>
                                     ))}
                                 </div>
+
+                                {timeWindow === 'date' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        className="mt-3 px-0.5"
+                                    >
+                                        <input
+                                            type="date"
+                                            value={selectedDate}
+                                            onChange={(e) => onDateChange(e.target.value)}
+                                            className="w-full p-2 text-xs bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-purple-500 text-gray-700 dark:text-gray-200"
+                                        />
+                                    </motion.div>
+                                )}
                             </div>
 
-                            {/* Objective Input */}
-                            <div className="mt-4">
-                                <div className="relative group">
-                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500">
-                                        <Sparkles className="w-3.5 h-3.5" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={customObjective}
-                                        onChange={(e) => onObjectiveChange(e.target.value)}
-                                        placeholder="Set Goal (e.g. improve engagement)"
-                                        className="w-full pl-9 pr-4 py-2.5 text-[11px] bg-purple-500/5 border border-purple-500/10 rounded-2xl focus:outline-none focus:ring-1 focus:ring-purple-500/30 focus:border-purple-500/40 transition-all font-medium placeholder-gray-500"
-                                    />
-                                    {customObjective && (
-                                        <button
-                                            onClick={() => onObjectiveChange('')}
-                                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
-                                        >
-                                            <RefreshCw className="w-3 h-3" />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
+                            {/* Objective Input - Only show when 'Custom' style is selected */}
+                            <AnimatePresence>
+                                {selectedStyle === 'Custom' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        className="mt-4"
+                                    >
+                                        <div className="relative group">
+                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500">
+                                                <Sparkles className="w-3.5 h-3.5" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={customObjective}
+                                                onChange={(e) => onObjectiveChange(e.target.value)}
+                                                placeholder="Custom Goal/Style..."
+                                                className="w-full pl-9 pr-4 py-2.5 text-[11px] bg-purple-500/5 border border-purple-500/10 rounded-2xl focus:outline-none focus:ring-1 focus:ring-purple-500/30 focus:border-purple-500/40 transition-all font-medium placeholder-gray-500"
+                                            />
+                                            {customObjective && (
+                                                <button
+                                                    onClick={() => onObjectiveChange('')}
+                                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
+                                                >
+                                                    <RefreshCw className="w-3 h-3" />
+                                                </button>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 custom-scrollbar">

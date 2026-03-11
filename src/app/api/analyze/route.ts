@@ -49,7 +49,7 @@ Here are the messages (most recent at the end):
 ${JSON.stringify(messages, null, 2)}
 
 ${userPrompt ? `**USER'S SPECIFIC OBJECTIVE/COACHING GOAL:** \n"${userPrompt}"\n-> You MUST analyze the chat through this lens and ensure all suggestions and insights directly help achieving this objective.` : ''}
-${style ? `**STYLE:** Ensure all output strictly follows a "${style}" tone.` : ''}
+${style && style !== 'Custom' ? `**STYLE:** Ensure all output strictly follows a "${style}" tone.` : ''}
 
 **Your Goal:**
 1.  **Analyze Personality:** Briefly describe the partner's communication style towards ${userName}.

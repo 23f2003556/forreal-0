@@ -54,8 +54,9 @@ export function ChatWindow() {
     } | null>(null)
     const [isAnalyzing, setIsAnalyzing] = useState(false)
     const [analysisError, setAnalysisError] = useState<string | null>(null)
-    const [timeWindow, setTimeWindow] = useState<'realtime' | 'week' | 'month' | 'all'>('realtime')
+    const [timeWindow, setTimeWindow] = useState<'realtime' | 'week' | 'month' | 'date'>('realtime')
     const [customObjective, setCustomObjective] = useState('')
+    const [selectedDate, setSelectedDate] = useState('')
 
     const handleAnalyze = async (selectedMode?: 'work' | 'chill' | 'love', userPrompt?: string, style?: string) => {
         const modeToUse = selectedMode || coachMode
@@ -76,8 +77,13 @@ export function ChatWindow() {
             } else if (timeWindow === 'month') {
                 const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
                 filteredMessages = messages.filter(m => new Date(m.created_at) > monthAgo)
+            } else if (timeWindow === 'date' && selectedDate) {
+                const targetDate = new Date(selectedDate)
+                filteredMessages = messages.filter(m => {
+                    const msgDate = new Date(m.created_at)
+                    return msgDate.toDateString() === targetDate.toDateString()
+                })
             }
-            // 'all' uses all messages in filteredMessages
 
             const recentMessages = filteredMessages.map(m => ({
                 role: m.sender_id === currentUser?.id ? 'user' : 'partner',
@@ -353,8 +359,13 @@ export function ChatWindow() {
                         customObjective={customObjective}
                         onObjectiveChange={(obj) => {
                             setCustomObjective(obj)
-                            // We don't necessarily re-analyze on every keystroke
-                            // but we can if the user stops typing
+                        }}
+                        selectedDate={selectedDate}
+                        onDateChange={(date) => {
+                            setSelectedDate(date)
+                            if (timeWindow === 'date') {
+                                handleAnalyze()
+                            }
                         }}
                     />
                 )}
