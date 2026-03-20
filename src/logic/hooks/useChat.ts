@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '@/backend/supabase/client'
 import { useChatStore } from '@/logic/store'
 
@@ -465,16 +465,26 @@ export function useChat() {
         })
     }
 
-    const searchUsers = async (query: string) => {
+    const searchUsers = useCallback(async (query: string) => {
         if (!query.trim()) return []
-        const { data } = await supabase
-            .from('profiles')
-            .select('*')
-            .ilike('username', `%${query}%`)
-            .neq('id', currentUser?.id)
-            .limit(10)
-        return data || []
-    }
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .ilike('username', `%${query}%`)
+                .neq('id', currentUser?.id || '00000000-0000-0000-0000-000000000000')
+                .limit(10)
+                
+            if (error) {
+                console.error('Search error:', error)
+                return []
+            }
+            return data || []
+        } catch (e) {
+            console.error('Search exception:', e)
+            return []
+        }
+    }, [currentUser?.id])
 
     // Simple UUID generator to avoid crypto issues
     const uuidv4 = () => {

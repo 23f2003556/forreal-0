@@ -43,7 +43,8 @@ The user ("${userName}") is chatting with "${partnerName}".
 ${modeInstructions}
 
 **Analysis Scope:**
-Analyzing ${timeWindow === 'realtime' ? 'real-time context' : `context from the ${timeWindow}`} (${messages.length} messages).
+Analyzing conversational history (${messages.length} messages). 
+CRITICAL: Pay close attention to the ENTIRE relationship progression over time. Use the historical messages to understand the relationship dynamic, inside jokes, vulnerabilities, and past context, allowing your insights to become highly personalized and accurate based on this accumulated data. As the message count increases, your insights MUST demonstrably reflect a deeper understanding of the partner.
 
 Here are the messages (most recent at the end):
 ${JSON.stringify(messages, null, 2)}

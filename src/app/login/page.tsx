@@ -249,11 +249,7 @@ export default function LoginPage() {
                 </div>
             </motion.div>
 
-            <div className="absolute bottom-6 w-full text-center pointer-events-none">
-                <p className="text-[10px] text-gray-500 font-bold tracking-[0.2em] uppercase">
-                    jannu की rachna
-                </p>
-            </div>
+
         </div>
     )
 }

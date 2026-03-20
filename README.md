@@ -37,6 +37,20 @@ Our engine uses advanced LLMs fine-tuned on nuanced human conversation. It detec
 
 ---
 
+## 💻 Tech Stack & Platforms
+
+*   **Framework:** Next.js (App Router)
+*   **Language:** TypeScript
+*   **Styling:** Tailwind CSS
+*   **Animations:** Framer Motion
+*   **State Management:** Zustand
+*   **Database & Auth:** Supabase (PostgreSQL, Row Level Security, Realtime subscriptions)
+*   **AI Inference Platform:** Groq (for ultra-low latency response times)
+*   **LLM Model:** Llama-3.3-70b-versatile (via Groq)
+*   **Icons & UI Utilities:** Lucide React, React Virtuoso, Tailwind Merge (cn)
+
+---
+
 ## 🛠️ Technical Depth & Architecture
 
 We've reorganized this project into a high-performance, developer-friendly architecture split into three logical pillars.
@@ -90,4 +104,4 @@ src/
 
 ---
 
-*Made with ❤️ by [Namasteyy](https://www.linkedin.com/in/namasteyy/)*
+*Built with ❤️ for real conversations.*

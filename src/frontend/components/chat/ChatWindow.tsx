@@ -43,7 +43,6 @@ export function ChatWindow() {
 
     const [isCoachOpen, setIsCoachOpen] = useState(false)
     const { roomModes, setRoomMode, unreadCounts } = useChat()
-    const [selectedDate, setSelectedDate] = useState('')
 
     // Get current mode for this room
     const coachMode = activeRoomId ? roomModes[activeRoomId] || null : null
@@ -59,7 +58,6 @@ export function ChatWindow() {
     } | null>(null)
     const [isAnalyzing, setIsAnalyzing] = useState(false)
     const [analysisError, setAnalysisError] = useState<string | null>(null)
-    const [timeWindow, setTimeWindow] = useState<'realtime' | 'week' | 'month' | 'date'>('realtime')
 
     const handleAnalyze = async (selectedMode?: 'work' | 'chill' | 'love', userPrompt?: string, style?: string) => {
         const modeToUse = selectedMode || coachMode
@@ -68,25 +66,8 @@ export function ChatWindow() {
         setIsAnalyzing(true)
         setAnalysisError(null)
         try {
-            // Determine message scope based on timeWindow
-            let filteredMessages = [...messages]
-            const now = new Date()
-
-            if (timeWindow === 'realtime') {
-                filteredMessages = messages.slice(-15)
-            } else if (timeWindow === 'week') {
-                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-                filteredMessages = messages.filter(m => new Date(m.created_at) > weekAgo)
-            } else if (timeWindow === 'month') {
-                const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-                filteredMessages = messages.filter(m => new Date(m.created_at) > monthAgo)
-            } else if (timeWindow === 'date' && selectedDate) {
-                const targetDate = new Date(selectedDate)
-                filteredMessages = messages.filter(m => {
-                    const msgDate = new Date(m.created_at)
-                    return msgDate.toDateString() === targetDate.toDateString()
-                })
-            }
+            // Pass a larger window of historical messages (up to 100) so the AI can learn from past data and relationship progression
+            const filteredMessages = messages.slice(-100)
 
             const recentMessages = filteredMessages.map(m => ({
                 role: m.sender_id === currentUser?.id ? 'user' : 'partner',
@@ -104,7 +85,7 @@ export function ChatWindow() {
                     mode: modeToUse,
                     userPrompt: userPrompt, // Now only passed if explicitly provided (e.g. from a custom manual ask)
                     style,
-                    timeWindow
+                    timeWindow: 'realtime'
                 })
             })
 
@@ -362,20 +343,6 @@ export function ChatWindow() {
                             }
                             if (mode) {
                                 handleAnalyze(mode)
-                            }
-                        }}
-                        timeWindow={timeWindow}
-                        onTimeWindowChange={(window) => {
-                            setTimeWindow(window)
-                            // Re-analyze when time window changes
-                            handleAnalyze(undefined, undefined, undefined)
-                        }}
-
-                        selectedDate={selectedDate}
-                        onDateChange={(date) => {
-                            setSelectedDate(date)
-                            if (timeWindow === 'date') {
-                                handleAnalyze()
                             }
                         }}
                     />

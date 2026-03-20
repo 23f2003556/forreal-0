@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { MessageSquare, Users, Building, GraduationCap, ArrowRight, Zap, Shield, Heart, ChevronDown, Linkedin } from 'lucide-react';
+import { MessageSquare, Users, Building, GraduationCap, ArrowRight, Zap, Shield, Heart, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -103,15 +103,6 @@ export function LandingPage() {
                             <span className="font-bold text-xl tracking-tight">forreal.</span>
                         </div>
                         <div className="flex items-center gap-4">
-                            <a
-                                href="https://www.linkedin.com/in/namasteyy/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2 text-gray-400 hover:text-white transition-colors"
-                                title="LinkedIn"
-                            >
-                                <Linkedin className="w-5 h-5" />
-                            </a>
                             <Link href="/login" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
                                 Log in
                             </Link>
@@ -659,20 +650,7 @@ export function LandingPage() {
                     >
                         Join Forreal Today
                     </button>
-                    <div className="mt-12 flex flex-col items-center gap-4">
-                        <p className="text-gray-500 font-medium tracking-[0.3em] uppercase text-[10px]">
-                            jannu की rachna
-                        </p>
-                        <a
-                            href="https://www.linkedin.com/in/namasteyy/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-gray-400 hover:text-[#0a66c2] transition-all group px-4 py-2 rounded-full border border-white/5 hover:border-[#0a66c2]/30 hover:bg-[#0a66c2]/5"
-                        >
-                            <Linkedin className="w-4 h-4" />
-                            <span className="text-xs font-bold tracking-widest uppercase opacity-60 group-hover:opacity-100 italic">Connect on LinkedIn</span>
-                        </a>
-                    </div>
+
                 </div>
             </section>
         </div>

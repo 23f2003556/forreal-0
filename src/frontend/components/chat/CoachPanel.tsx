@@ -23,49 +23,24 @@ interface CoachPanelProps {
     onRefresh: (prompt?: string, style?: string) => void
     mode: 'work' | 'chill' | 'love' | null
     onModeChange: (mode: 'work' | 'chill' | 'love' | null) => void
-    timeWindow: 'realtime' | 'week' | 'month' | 'date'
-    onTimeWindowChange: (window: 'realtime' | 'week' | 'month' | 'date') => void
-    selectedDate: string
-    onDateChange: (date: string) => void
 }
 
 export function CoachPanel({
-    isOpen, onClose, loading, error, insights, onSuggestionClick, onRefresh, mode, onModeChange,
-    timeWindow, onTimeWindowChange,
-    selectedDate, onDateChange
+    isOpen, onClose, loading, error, insights, onSuggestionClick, onRefresh, mode, onModeChange
 }: CoachPanelProps) {
-    const getScoreColor = (score: number) => {
-        if (score >= 80) return 'text-emerald-500 from-emerald-500 to-teal-400'
-        if (score >= 50) return 'text-amber-500 from-amber-500 to-orange-400'
-        return 'text-rose-500 from-rose-500 to-red-600'
-    }
-
     const modes = [
         { id: 'work', label: 'Work', icon: Briefcase, color: 'text-blue-500', gradient: 'from-blue-500/10 to-cyan-500/10', border: 'hover:border-blue-500/50', desc: 'Professional & Efficient' },
         { id: 'chill', label: 'Chill', icon: Coffee, color: 'text-amber-600', gradient: 'from-amber-500/10 to-orange-500/10', border: 'hover:border-amber-500/50', desc: 'Casual & Friendly' },
         { id: 'love', label: 'Love', icon: Heart, color: 'text-pink-500', gradient: 'from-pink-500/10 to-rose-500/10', border: 'hover:border-pink-500/50', desc: 'Romantic & Deep' },
     ] as const
 
-    const modeStyles = {
-        work: ['Concise', 'Formal', 'Action-oriented', 'Custom'],
-        chill: ['Funny', 'Empathetic', 'Slang', 'Custom'],
-        love: ['Flirty', 'Poetic', 'Supportive', 'Custom'],
-    }
-
     const [customPrompt, setCustomPrompt] = React.useState('')
-    const [selectedStyle, setSelectedStyle] = React.useState<string | null>(null)
 
     const handleAskAI = (e: React.FormEvent) => {
         e.preventDefault()
         if (!customPrompt.trim()) return
-        onRefresh(customPrompt, selectedStyle || undefined)
+        onRefresh(customPrompt)
         setCustomPrompt('')
-    }
-
-    const handleStyleClick = (style: string) => {
-        const newStyle = selectedStyle === style ? null : style
-        setSelectedStyle(newStyle)
-        onRefresh(undefined, newStyle || undefined)
     }
 
     const panelVariants = {
@@ -169,7 +144,7 @@ export function CoachPanel({
                                     <div>
                                         <h2 className="font-bold text-gray-900 dark:text-white leading-none">{modes.find(m => m.id === mode)?.label} Mode</h2>
                                         <button
-                                            onClick={() => { onModeChange(null); setSelectedStyle(null); }}
+                                            onClick={() => onModeChange(null)}
                                             className="text-xs text-gray-500 hover:text-purple-600 transition-colors mt-1"
                                         >
                                             Change Mode
@@ -178,7 +153,7 @@ export function CoachPanel({
                                 </div>
                                 <div className="flex gap-1">
                                     <button
-                                        onClick={() => onRefresh(undefined, selectedStyle || undefined)}
+                                        onClick={() => onRefresh()}
                                         className={cn(
                                             "p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-all",
                                             loading && "animate-spin text-purple-600"
@@ -193,69 +168,7 @@ export function CoachPanel({
                                 </div>
                             </div>
 
-                            {/* Style Chips */}
-                            <div className="flex flex-wrap gap-2">
-                                {mode && modeStyles[mode].map((style) => (
-                                    <button
-                                        key={style}
-                                        onClick={() => handleStyleClick(style)}
-                                        className={cn(
-                                            "text-[11px] font-medium px-3 py-1.5 rounded-full transition-all border shadow-sm",
-                                            selectedStyle === style
-                                                ? "bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-black dark:border-white shadow-md transform scale-105"
-                                                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-                                        )}
-                                    >
-                                        {style}
-                                    </button>
-                                ))}
-                            </div>
 
-                            {/* Time Frame selector */}
-                            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800/50">
-                                <div className="flex items-center justify-between mb-3 px-1">
-                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Time Window</span>
-                                    <span className="text-[10px] font-medium text-purple-500 bg-purple-50 dark:bg-purple-900/20 px-1.5 py-0.5 rounded uppercase">
-                                        {timeWindow === 'date' ? selectedDate || 'Select Date' : timeWindow}
-                                    </span>
-                                </div>
-                                <div className="grid grid-cols-4 gap-1.5 px-0.5">
-                                    {[
-                                        { id: 'realtime', label: 'Now' },
-                                        { id: 'week', label: 'Week' },
-                                        { id: 'month', label: 'Month' },
-                                        { id: 'date', label: 'Date' }
-                                    ].map((w) => (
-                                        <button
-                                            key={w.id}
-                                            onClick={() => onTimeWindowChange(w.id as any)}
-                                            className={cn(
-                                                "text-[10px] font-semibold py-2 rounded-xl border transition-all",
-                                                timeWindow === w.id
-                                                    ? "bg-purple-500 border-purple-500 text-white shadow-lg shadow-purple-500/20"
-                                                    : "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800 text-gray-500 hover:border-purple-200 dark:hover:border-purple-800"
-                                            )}
-                                        >
-                                            {w.label}
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {timeWindow === 'date' && (
-                                    <motion.div
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        className="mt-3 px-0.5"
-                                    >
-                                        <input
-                                            type="date"
-                                            value={selectedDate}
-                                            onChange={(e) => onDateChange(e.target.value)}
-                                            className="w-full p-2 text-xs bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-purple-500 text-gray-700 dark:text-gray-200"
-                                        />
-                                    </motion.div>
-                                )}
-                            </div>
 
                         </div>
 
@@ -271,106 +184,9 @@ export function CoachPanel({
                                 </motion.div>
                             )}
 
-                            {/* Interest Score & Icebreaker */}
-                            {mode !== 'work' && (
-                                <div className="grid grid-cols-2 gap-4">
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ delay: 0.1 }}
-                                        className="col-span-1 bg-white dark:bg-gray-900/50 rounded-[24px] p-5 shadow-sm border border-gray-100 dark:border-gray-800/60 relative overflow-hidden flex flex-col items-center justify-center min-h-[160px]"
-                                    >
-                                        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
 
-                                        <div className="flex items-center gap-2 mb-3 text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
-                                            <Zap className="w-3.5 h-3.5" />
-                                            Interest
-                                        </div>
 
-                                        <div className="relative flex items-center justify-center">
-                                            <svg className="w-20 h-20 transform -rotate-90">
-                                                <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-gray-100 dark:text-gray-800" />
-                                                <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="6" fill="transparent" strokeDasharray={226} strokeDashoffset={226 - (226 * (insights?.interestScore || 0)) / 100} strokeLinecap="round" className={cn("transition-all duration-1000 ease-out drop-shadow-sm", getScoreColor(insights?.interestScore || 0).split(' ')[0])} />
-                                            </svg>
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <span className={cn("text-xl font-bold bg-clip-text text-transparent bg-gradient-to-br", getScoreColor(insights?.interestScore || 0).split(' ').slice(1).join(' '))}>
-                                                    {insights?.interestScore || 0}%
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </motion.div>
 
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ delay: 0.15 }}
-                                        className="col-span-1 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-[24px] p-5 shadow-sm border border-blue-100 dark:border-blue-800/30 flex flex-col justify-between min-h-[160px]"
-                                    >
-                                        <div className="flex items-center gap-2 mb-3 text-blue-600 dark:text-blue-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
-                                            <Snowflake className="w-3.5 h-3.5" />
-                                            Icebreaker
-                                        </div>
-                                        <div className="text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-100 leading-snug">
-                                            {insights?.icebreaker ? (
-                                                `"${insights.icebreaker}"`
-                                            ) : (
-                                                <span className="opacity-40 italic font-medium">Analyzing...</span>
-                                            )}
-                                        </div>
-                                        {insights?.icebreaker && (
-                                            <button
-                                                onClick={() => onSuggestionClick(insights.icebreaker!)}
-                                                className="mt-3 text-[11px] bg-white/90 dark:bg-black/30 hover:bg-white dark:hover:bg-black/50 text-blue-600 dark:text-blue-300 py-2 px-3 rounded-xl transition-all w-full font-bold shadow-sm"
-                                            >
-                                                Use This
-                                            </button>
-                                        )}
-                                    </motion.div>
-                                </div>
-                            )}
-
-                            {/* Flags Alert Section */}
-                            {(insights?.redFlags?.length || 0) > 0 && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 rounded-2xl p-5"
-                                >
-                                    <div className="flex items-center gap-2 mb-3 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-widest">
-                                        <AlertTriangle className="w-4 h-4" />
-                                        Potential Flags
-                                    </div>
-                                    <ul className="space-y-2">
-                                        {insights?.redFlags?.map((flag, i) => (
-                                            <li key={i} className="text-[13px] font-medium text-red-700 dark:text-red-300 flex items-start gap-3">
-                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
-                                                {flag}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </motion.div>
-                            )}
-
-                            {(insights?.greenFlags?.length || 0) > 0 && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/50 rounded-2xl p-5"
-                                >
-                                    <div className="flex items-center gap-2 mb-3 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest">
-                                        <CheckCircle className="w-4 h-4" />
-                                        Positive Signals
-                                    </div>
-                                    <ul className="space-y-2">
-                                        {insights?.greenFlags?.map((flag, i) => (
-                                            <li key={i} className="text-[13px] font-medium text-emerald-700 dark:text-emerald-300 flex items-start gap-3">
-                                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
-                                                {flag}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </motion.div>
-                            )}
 
                             {/* Vibe Check */}
                             <motion.div

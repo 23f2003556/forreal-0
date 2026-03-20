@@ -45,10 +45,10 @@ export function MessageBubble({ id, content, time, isOutgoing, status = 'sent', 
         >
             <div className="relative max-w-[75%]">
                 <div className={cn(
-                    "relative rounded-2xl shadow-sm text-sm overflow-hidden",
+                    "relative rounded-2xl text-sm overflow-hidden transition-colors",
                     isOutgoing
-                        ? "bg-outgoing-background text-white rounded-br-none"
-                        : "bg-incoming-background text-text-primary border border-gray-100 dark:border-gray-800 rounded-bl-none",
+                        ? "bg-purple-600 text-white shadow-md shadow-purple-500/20 rounded-br-none"
+                        : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-100 dark:border-gray-700/50 shadow-sm rounded-bl-none",
                     type === 'image' ? "p-1" : "px-4 py-2"
                 )}>
                     <div className={cn(
