@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ArrowLeft, Sparkles, Send, Paperclip } from 'lucide-react'
+import { ArrowLeft, Sparkles, Send, Paperclip, MessageSquare, Lock } from 'lucide-react'
 import { Virtuoso } from 'react-virtuoso'
 import { MessageBubble } from './MessageBubble'
 import { useChat } from '@/logic/hooks/useChat'
@@ -151,15 +151,24 @@ export function ChatWindow() {
 
     if (!activeRoomId) {
         return (
-            <div className="flex flex-col h-full bg-app-background w-full items-center justify-center">
-                <div className="text-center max-w-md px-4">
-                    <div className="w-24 h-24 bg-gradient-to-br from-primary to-purple-600 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-primary/20">
-                        <Sparkles className="w-12 h-12 text-white" />
+            <div className="flex flex-col h-full bg-gray-50 dark:bg-[#0a0f1d] w-full items-center justify-center relative overflow-hidden">
+                {/* Subtle Background Pattern */}
+                <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02] pointer-events-none" 
+                     style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)', backgroundSize: '24px 24px' }} 
+                />
+                
+                <div className="text-center max-w-md px-6 relative z-10 flex flex-col items-center">
+                    <div className="w-24 h-24 bg-white dark:bg-gray-900/60 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800/60 flex items-center justify-center mb-8 ring-[8px] ring-gray-50 dark:ring-[#0a0f1d]">
+                        <MessageSquare className="w-10 h-10 text-purple-500/80" strokeWidth={1.5} />
                     </div>
-                    <h1 className="text-3xl font-bold text-text-primary mb-3">ForReal Web</h1>
-                    <p className="text-text-secondary text-base leading-relaxed font-medium uppercase tracking-widest mt-4">
-                        MORE THAN TEXTING
+                    <h1 className="text-[22px] font-semibold text-gray-900 dark:text-gray-100 tracking-tight mb-2.5">ForReal Web</h1>
+                    <p className="text-gray-500 dark:text-gray-400/80 text-[15px] leading-relaxed max-w-[280px] mx-auto mb-8 font-medium">
+                        Select a chat from the sidebar or start a new conversation to begin messaging.
                     </p>
+                    <div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-wide text-gray-400 dark:text-gray-600 uppercase">
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>End-to-End Encrypted</span>
+                    </div>
                 </div>
             </div>
         )

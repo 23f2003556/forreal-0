@@ -344,12 +344,12 @@ export function Sidebar() {
                             <span className="text-xs font-medium">Loading conversations...</span>
                         </div>
                     ) : rooms.length === 0 ? (
-                        <div className="text-center py-12 text-gray-500">
-                            <div className="w-16 h-16 bg-gray-50 dark:bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <MessageSquare className="w-8 h-8 text-gray-300" />
+                        <div className="text-center py-16 px-4 text-gray-500">
+                            <div className="w-16 h-16 bg-gray-50 dark:bg-gray-900/50 rounded-[1.25rem] flex items-center justify-center mx-auto mb-4 ring-4 ring-gray-50/50 dark:ring-gray-900/20">
+                                <MessageSquare className="w-7 h-7 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-gray-900 dark:text-white font-medium mb-1">No chats yet</h3>
-                            <p className="text-xs text-gray-400">Search for a friend to start chatting!</p>
+                            <h3 className="text-gray-900 dark:text-gray-100 font-semibold mb-1 tracking-tight">No chats yet</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400/80">Search for a friend above to start chatting.</p>
                         </div>
                     ) : (
                         rooms.map((room) => (
@@ -380,14 +380,16 @@ export function Sidebar() {
                                 <div className="flex-1 min-w-0 z-10">
                                     <div className="flex justify-between items-baseline mb-0.5">
                                         <h3 className={cn(
-                                            "font-semibold text-sm truncate transition-colors",
-                                            activeRoomId === room.id ? "text-purple-900 dark:text-purple-100" : "text-gray-900 dark:text-gray-100"
+                                            "text-sm truncate transition-colors",
+                                            activeRoomId === room.id ? "font-semibold text-purple-900 dark:text-purple-100" : 
+                                            unreadCounts[room.id] > 0 ? "font-bold text-gray-900 dark:text-white" : "font-medium text-gray-800 dark:text-gray-200"
                                         )}>
                                             {room.name}
                                         </h3>
                                         <span className={cn(
-                                            "text-[10px] font-medium",
-                                            activeRoomId === room.id ? "text-purple-600 dark:text-purple-300" : "text-gray-400"
+                                            "text-[10px]",
+                                            activeRoomId === room.id ? "font-medium text-purple-600 dark:text-purple-300" : 
+                                            unreadCounts[room.id] > 0 ? "font-bold text-purple-600 dark:text-purple-400" : "font-medium text-gray-400"
                                         )}>
                                             {room.last_message_at ? format(new Date(room.last_message_at), 'HH:mm') : ''}
                                         </span>
@@ -395,15 +397,11 @@ export function Sidebar() {
                                     <div className="flex justify-between items-center">
                                         <p className={cn(
                                             "text-xs truncate transition-colors flex-1",
-                                            activeRoomId === room.id ? "text-purple-700/70 dark:text-purple-200/70" : "text-gray-500 dark:text-gray-400"
+                                            activeRoomId === room.id ? "font-medium text-purple-700/70 dark:text-purple-200/70" : 
+                                            unreadCounts[room.id] > 0 ? "font-semibold text-gray-900 dark:text-gray-100" : "font-medium text-gray-500 dark:text-gray-400"
                                         )}>
                                             {room.last_message || "Active now"}
                                         </p>
-                                        {unreadCounts[room.id] > 0 && (
-                                            <div className="ml-2 bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center min-w-[18px] h-[18px] animate-in zoom-in duration-300">
-                                                {unreadCounts[room.id]}
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </motion.div>
