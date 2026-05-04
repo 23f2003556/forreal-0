@@ -60,8 +60,9 @@ export async function middleware(request: NextRequest) {
     const isAuthPage = request.nextUrl.pathname.startsWith('/login')
     const isCallbackPage = request.nextUrl.pathname.startsWith('/auth')
     const isRootPage = request.nextUrl.pathname === '/'
+    const isLandingHtml = request.nextUrl.pathname === '/landing.html'
 
-    if (!user && !isAuthPage && !isCallbackPage && !isRootPage) {
+    if (!user && !isAuthPage && !isCallbackPage && !isRootPage && !isLandingHtml) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
