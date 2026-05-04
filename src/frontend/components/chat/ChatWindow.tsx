@@ -102,11 +102,30 @@ export function ChatWindow() {
 
     if (!activeRoomId) {
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center', background: '#0a0710', color: '#fff' }}>
-                <div style={{ textAlign: 'center', maxWidth: 400 }}>
-                    <MessageSquare size={40} color="#a371ff" style={{ margin: '0 auto 20px' }} />
-                    <h1 style={{ fontSize: 22, fontWeight: 600, marginBottom: 10 }}>ForReal Web</h1>
-                    <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 15 }}>Select a chat from the sidebar or start a new conversation to begin messaging.</p>
+            <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                height: '100%', 
+                width: '100%', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                background: '#0a0710', 
+                color: '#fff',
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
+                {/* Ambient Glow */}
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(163,113,255,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                
+                <div style={{ textAlign: 'center', maxWidth: 420, position: 'relative', zIndex: 1 }}>
+                    <div style={{ width: 80, height: 80, borderRadius: '24px', background: 'linear-gradient(135deg, #a371ff, #ff6bb5)', margin: '0 auto 32px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 20px 40px rgba(163,113,255,0.2)' }}>
+                         <MessageSquare size={32} color="#fff" style={{ margin: 'auto' }} />
+                    </div>
+                    <h1 style={{ fontSize: 32, fontWeight: 800, marginBottom: 12, letterSpacing: '-0.03em' }}>Forreal Web</h1>
+                    <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 16, lineHeight: 1.6 }}>
+                        The future of communication is here.<br />
+                        Select a conversation to start interpreting intent.
+                    </p>
                 </div>
             </div>
         )

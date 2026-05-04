@@ -49,21 +49,18 @@
   /* Zinc-800 */
   --secondary-foreground: #fafafa;
 
-  --app-background: #000000;
-  --chat-background: #09090b;
-  --panel-header-background: rgba(9, 9, 11, 0.8);
-  --panel-background: #18181b;
+  --app-background: #0a0710;
+  --chat-background: #0a0710;
+  --panel-header-background: rgba(10, 7, 16, 0.8);
+  --panel-background: #110d1a;
 
-  --incoming-background: #27272a;
-  /* Zinc-800 */
-  --outgoing-background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  --incoming-background: #16121e;
+  /* Darker Purple */
+  --outgoing-background: linear-gradient(135deg, #a371ff 0%, #7c4ddb 100%);
 
-  --icon-gray: #71717a;
-  /* Zinc-500 */
-  --text-primary: #fafafa;
-  /* Zinc-50 */
-  --text-secondary: #a1a1aa;
-  /* Zinc-400 */
+  --icon-gray: #666;
+  --text-primary: #fff;
+  --text-secondary: rgba(255,255,255,0.4);
 }
 
 @theme inline {
