@@ -7,8 +7,6 @@ import { MessageBubble } from './MessageBubble'
 import { useChat } from '@/logic/hooks/useChat'
 import { format } from 'date-fns'
 import { CoachPanel } from './CoachPanel'
-import { cn } from '@/logic/utils'
-import { motion, AnimatePresence } from 'framer-motion'
 
 export function ChatWindow() {
     const { activeRoomId, messages, currentUser, sendMessage, rooms, sendTyping, setActiveRoomId, deleteMessage, reactToMessage } = useChat()
@@ -30,32 +28,16 @@ export function ChatWindow() {
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file || !currentUser) return
-
-        // In a real app, upload to Supabase Storage here
-        // const { data, error } = await supabase.storage.from('media').upload(...)
-
-        // For MVP demo, we'll use a fake URL or object URL
         const fakeUrl = URL.createObjectURL(file)
         await sendMessage(fakeUrl, 'image')
     }
 
-
-
     const [isCoachOpen, setIsCoachOpen] = useState(false)
-    const { roomModes, setRoomMode, unreadCounts } = useChat()
+    const { roomModes, setRoomMode } = useChat()
 
-    // Get current mode for this room
     const coachMode = activeRoomId ? roomModes[activeRoomId] || null : null
 
-    const [coachInsights, setCoachInsights] = useState<{
-        interestScore: number
-        vibe: string
-        summary: string[]
-        suggestions: string[]
-        redFlags?: string[]
-        greenFlags?: string[]
-        icebreaker?: string
-    } | null>(null)
+    const [coachInsights, setCoachInsights] = useState<any>(null)
     const [isAnalyzing, setIsAnalyzing] = useState(false)
     const [analysisError, setAnalysisError] = useState<string | null>(null)
 
@@ -66,9 +48,7 @@ export function ChatWindow() {
         setIsAnalyzing(true)
         setAnalysisError(null)
         try {
-            // Pass a larger window of historical messages (up to 100) so the AI can learn from past data and relationship progression
             const filteredMessages = messages.slice(-100)
-
             const recentMessages = filteredMessages.map(m => ({
                 role: m.sender_id === currentUser?.id ? 'user' : 'partner',
                 content: m.content,
@@ -83,21 +63,14 @@ export function ChatWindow() {
                     partnerName: activeRoom.name,
                     userName: currentUser?.username || 'the user',
                     mode: modeToUse,
-                    userPrompt: userPrompt, // Now only passed if explicitly provided (e.g. from a custom manual ask)
+                    userPrompt: userPrompt,
                     style,
                     timeWindow: 'realtime'
                 })
             })
 
-            let data
-            try {
-                data = await response.json()
-            } catch (e) {
-                throw new Error(`Server error (${response.status}): Unable to parse response`)
-            }
-
+            const data = await response.json()
             if (!response.ok || data.error) throw new Error(data.error || 'Failed to analyze chat')
-
             setCoachInsights(data)
         } catch (error: any) {
             console.error('Analysis failed:', error)
@@ -107,18 +80,15 @@ export function ChatWindow() {
         }
     }
 
-    // Auto-analyze when opening panel or receiving new partner message
     useEffect(() => {
         if (isCoachOpen && messages.length > 0) {
             const lastMsg = messages[messages.length - 1]
-            // Analyze if last message is from partner or if we haven't analyzed yet
             if (lastMsg.sender_id !== currentUser?.id || !coachInsights) {
                 handleAnalyze()
             }
         }
-    }, [isCoachOpen, messages.length]) // Simple dependency on length change
+    }, [isCoachOpen, messages.length])
 
-    // Keyboard shortcut Cmd+K to toggle AI panel
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -132,223 +102,133 @@ export function ChatWindow() {
 
     if (!activeRoomId) {
         return (
-            <div className="flex flex-col h-full bg-gray-50 dark:bg-[#0a0f1d] w-full items-center justify-center relative overflow-hidden">
-                {/* Subtle Background Pattern */}
-                <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02] pointer-events-none" 
-                     style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)', backgroundSize: '24px 24px' }} 
-                />
-                
-                <div className="text-center max-w-md px-6 relative z-10 flex flex-col items-center">
-                    <div className="w-24 h-24 bg-white dark:bg-gray-900/60 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800/60 flex items-center justify-center mb-8 ring-[8px] ring-gray-50 dark:ring-[#0a0f1d]">
-                        <MessageSquare className="w-10 h-10 text-purple-500/80" strokeWidth={1.5} />
-                    </div>
-                    <h1 className="text-[22px] font-semibold text-gray-900 dark:text-gray-100 tracking-tight mb-2.5">ForReal Web</h1>
-                    <p className="text-gray-500 dark:text-gray-400/80 text-[15px] leading-relaxed max-w-[280px] mx-auto mb-8 font-medium">
-                        Select a chat from the sidebar or start a new conversation to begin messaging.
-                    </p>
-                    <div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold tracking-wide text-gray-400 dark:text-gray-600 uppercase">
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>End-to-End Encrypted</span>
-                    </div>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center', background: '#0a0710', color: '#fff' }}>
+                <div style={{ textAlign: 'center', maxWidth: 400 }}>
+                    <MessageSquare size={40} color="#a371ff" style={{ margin: '0 auto 20px' }} />
+                    <h1 style={{ fontSize: 22, fontWeight: 600, marginBottom: 10 }}>ForReal Web</h1>
+                    <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 15 }}>Select a chat from the sidebar or start a new conversation to begin messaging.</p>
                 </div>
             </div>
         )
     }
 
     const handleMessageAction = (id: string, action: string, data?: any) => {
-        if (action === 'delete') {
-            deleteMessage(id)
-        } else if (action === 'react') {
-            reactToMessage(id, data) // data is emoji
-        } else if (action === 'reply') {
+        if (action === 'delete') deleteMessage(id)
+        else if (action === 'react') reactToMessage(id, data)
+        else if (action === 'reply') {
             const msg = messages.find(m => m.id === id)
             if (msg) setReplyingTo(msg)
         }
     }
 
     return (
-        <div className="flex h-full w-full relative bg-app-background">
-            <div className="flex flex-col h-full flex-1 relative min-w-0">
+        <div style={{ display: 'flex', height: '100%', width: '100%', background: '#0a0710', color: '#fff', fontFamily: '"Inter", system-ui, sans-serif', overflow: 'hidden', position: 'relative' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, height: '100%' }}>
+                
+                {/* Header */}
+                <header style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '14px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                    <button onClick={() => setActiveRoomId(null)} className="md:hidden" style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+                        <ArrowLeft size={24} />
+                    </button>
+                    {activeRoom ? (
+                        <>
+                            <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#5fe49a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0a0710', fontWeight: 600, fontSize: 12 }}>
+                                {activeRoom.name.substring(0, 2).toUpperCase()}
+                            </div>
+                            <div style={{ fontWeight: 600, fontSize: 15 }}>{activeRoom.name}</div>
+                        </>
+                    ) : (
+                        <div style={{ width: 100, height: 20, background: 'rgba(255,255,255,0.1)', borderRadius: 4 }} />
+                    )}
+                    <span style={{ flex: 1 }} />
+                    <button onClick={() => setIsCoachOpen(!isCoachOpen)} style={{ background: isCoachOpen ? 'rgba(163,113,255,0.12)' : 'transparent', border: isCoachOpen ? '1px solid rgba(163,113,255,0.35)' : '1px solid rgba(255,255,255,0.06)', color: isCoachOpen ? '#fff' : 'rgba(255,255,255,0.65)', padding: '6px 14px', fontSize: 12.5, borderRadius: 7, cursor: 'pointer' }}>
+                        Insights
+                    </button>
+                </header>
 
-                {/* Header - Glassmorphism */}
-                <div className="absolute top-0 left-0 right-0 h-[64px] sm:h-[70px] z-20 px-3 sm:px-4 flex justify-between items-center backdrop-blur-md bg-white/70 dark:bg-black/70 border-b border-gray-200/50 dark:border-gray-800/50 pt-[env(safe-area-inset-top)] box-content">
-                    <div className="flex items-center gap-3 sm:gap-4 cursor-pointer">
-                        <button
-                            onClick={() => setActiveRoomId(null)}
-                            className="md:hidden text-icon-gray hover:text-primary transition-colors p-1"
-                        >
-                            <ArrowLeft className="w-6 h-6" />
-                        </button>
-                        <div className="relative">
-                            {activeRoom ? (
+                {/* Read Strip */}
+                {coachInsights?.vibe && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 24px', background: 'linear-gradient(90deg, rgba(163,113,255,0.10), rgba(255,107,181,0.04) 50%, transparent)', borderBottom: '1px solid rgba(255,255,255,0.06)', fontSize: 13 }}>
+                        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: '#c9a3ff' }}>READ</span>
+                        <span style={{ width: 1, height: 12, background: 'rgba(163,113,255,0.3)' }} />
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                            <span style={{ color: '#ff8fc2', fontStyle: 'italic', fontFamily: '"Instrument Serif", serif', fontSize: 17 }}>{coachInsights.vibe}</span>
+                            {coachInsights.summary?.[0] && (
                                 <>
-                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-white dark:ring-gray-800 shadow-sm">
-                                        <img src={activeRoom.image_url || `https://api.dicebear.com/7.x/initials/svg?seed=${activeRoom.name}`} alt="Contact Avatar" className="w-full h-full object-cover" />
-                                    </div>
-                                    {activeRoom.is_online && (
-                                        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-black"></div>
-                                    )}
+                                    <span style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11 }}>→</span>
+                                    <span style={{ color: 'rgba(255,255,255,0.65)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{coachInsights.summary[0]}</span>
                                 </>
-                            ) : (
-                                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-200 dark:bg-gray-800 animate-pulse" />
                             )}
-                        </div>
-                        <div className="flex flex-col justify-center max-w-[150px] sm:max-w-none">
-                            {activeRoom ? (
-                                <>
-                                    <h2 className="font-semibold text-text-primary text-sm sm:text-base tracking-tight truncate">
-                                        {activeRoom.name}
-                                    </h2>
-                                    <p className="text-[10px] sm:text-xs text-text-secondary font-medium">
-                                        {activeRoom.is_online ? 'Active now' : ''}
-                                    </p>
-                                </>
-                            ) : (
-                                <div className="h-4 w-24 sm:h-5 sm:w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-                            )}
-                        </div>
+                        </span>
                     </div>
-                    <div className="flex gap-1 sm:gap-2">
-                        <button
-                            onClick={() => setIsCoachOpen(!isCoachOpen)}
-                            className={cn(
-                                "p-2 rounded-full transition-all duration-300",
-                                isCoachOpen
-                                    ? "bg-primary/10 text-primary"
-                                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-icon-gray"
-                            )}
-                            title="ForReal AI"
-                        >
-                            <Sparkles className="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
+                )}
 
                 {/* Messages Area */}
-                <div className="flex-1 z-10 min-h-0 pt-[calc(64px+env(safe-area-inset-top))] pb-[calc(80px+env(safe-area-inset-bottom))]">
-                    <Virtuoso
-                        style={{ height: '100%' }}
-                        data={messages}
-                        initialTopMostItemIndex={messages.length - 1}
-                        followOutput="smooth"
-                        className="custom-scrollbar px-2 pt-4"
-                        itemContent={(index, msg) => {
-                            if (msg.type === 'audio') return null;
-                            return (
-                                <div className="px-2 py-1 max-w-3xl mx-auto w-full">
-                                    <MessageBubble
-                                        key={msg.id}
-                                        id={msg.id}
-                                        content={msg.content}
-                                        time={format(new Date(msg.created_at), 'HH:mm')}
-                                        isOutgoing={msg.sender_id === currentUser?.id}
-                                        status={msg.status}
-                                        type={msg.type}
-                                        reactions={msg.reactions}
-                                        onAction={handleMessageAction}
-                                    />
-                                </div>
-                            )
-                        }}
-                    />
+                <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+                    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px 16px', height: '100%' }}>
+                        <Virtuoso
+                            style={{ height: '100%' }}
+                            data={messages}
+                            initialTopMostItemIndex={messages.length - 1}
+                            followOutput="smooth"
+                            className="custom-scrollbar"
+                            itemContent={(index, msg) => (
+                                <MessageBubble
+                                    key={msg.id}
+                                    id={msg.id}
+                                    content={msg.content}
+                                    time={format(new Date(msg.created_at), 'HH:mm')}
+                                    isOutgoing={msg.sender_id === currentUser?.id}
+                                    status={msg.status}
+                                    type={msg.type}
+                                    reactions={msg.reactions}
+                                    onAction={handleMessageAction}
+                                />
+                            )}
+                        />
+                    </div>
                 </div>
 
-                {/* Floating Input Area */}
-                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 z-20 bg-gradient-to-t from-app-background via-app-background to-transparent pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+                {/* Composer */}
+                <div style={{ padding: '10px 24px 16px', borderTop: '1px solid rgba(255,255,255,0.06)', background: '#0a0710' }}>
                     {replyingTo && (
-                        <div className="max-w-3xl mx-auto mb-2 flex items-center justify-between bg-gray-50 dark:bg-gray-800/80 backdrop-blur-md px-3 sm:px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700">
-                            <div className="flex flex-col text-sm border-l-2 border-primary pl-2">
-                                <span className="text-primary font-medium text-[10px] sm:text-xs">Replying to {activeRoom?.name}</span>
-                                <span className="text-text-secondary text-xs truncate max-w-[200px] sm:max-w-xs">{replyingTo.content}</span>
+                        <div style={{ maxWidth: 720, margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', borderLeft: '2px solid #a371ff', paddingLeft: 8 }}>
+                                <span style={{ color: '#a371ff', fontSize: 10 }}>Replying to {activeRoom?.name}</span>
+                                <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>{replyingTo.content}</span>
                             </div>
-                            <button onClick={() => setReplyingTo(null)} className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full">
-                                <span className="sr-only">Cancel reply</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            </button>
+                            <button onClick={() => setReplyingTo(null)} style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.42)', cursor: 'pointer' }}>×</button>
                         </div>
                     )}
-                    <form onSubmit={handleSend} className="max-w-3xl mx-auto relative flex items-center gap-2">
-                        <div className="flex-1 bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 px-4 py-3 flex items-center gap-3 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
-                            <button
-                                type="button"
-                                className="text-icon-gray hover:text-primary transition-colors"
-                                onClick={() => fileInputRef.current?.click()}
-                            >
-                                <Paperclip className="w-5 h-5" />
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    className="hidden"
-                                    onChange={handleFileUpload}
-                                    accept="image/*"
-                                />
-                            </button>
 
-                            <input
-                                type="text"
-                                value={newMessage}
-                                onChange={(e) => {
-                                    setNewMessage(e.target.value)
-                                    sendTyping()
-                                }}
-                                placeholder="Type a message..."
-                                className="flex-1 bg-transparent border-none focus:outline-none text-sm text-text-primary placeholder:text-text-secondary font-medium"
-                            />
-
-
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={!newMessage.trim()}
-                            className={cn(
-                                "w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95",
-                                newMessage.trim()
-                                    ? "bg-gradient-to-r from-primary to-purple-600 text-white shadow-primary/30"
-                                    : "bg-gray-200 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
-                            )}
-                        >
-                            <Send className="w-5 h-5 ml-0.5" />
-                        </button>
+                    <form onSubmit={handleSend} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: 6, maxWidth: 720, margin: '0 auto' }}>
+                        <button type="button" onClick={() => fileInputRef.current?.click()} style={{ width: 32, height: 32, background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.42)', fontSize: 18, cursor: 'pointer', flexShrink: 0 }}>+</button>
+                        <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileUpload} accept="image/*" style={{ display: 'none' }} />
+                        
+                        <input
+                            type="text"
+                            value={newMessage}
+                            onChange={(e) => { setNewMessage(e.target.value); sendTyping(); }}
+                            placeholder="Message..."
+                            style={{ flex: 1, padding: '8px 4px', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontSize: 14, minWidth: 0, fontFamily: 'inherit' }}
+                        />
+                        
+                        <button type="submit" disabled={!newMessage.trim()} style={{ width: 36, height: 36, background: newMessage.trim() ? 'linear-gradient(135deg,#a371ff,#ff6bb5)' : 'rgba(255,255,255,0.06)', border: 'none', color: newMessage.trim() ? '#fff' : 'rgba(255,255,255,0.42)', borderRadius: 10, fontSize: 16, cursor: 'pointer', flexShrink: 0, transition: 'background 0.15s, color 0.15s' }}>↑</button>
                     </form>
                 </div>
             </div>
 
-            {/* Coach Panel */}
-            <AnimatePresence>
-                {isCoachOpen && (
-                    <CoachPanel
-                        isOpen={isCoachOpen}
-                        onClose={() => setIsCoachOpen(false)}
-                        loading={isAnalyzing}
-                        error={analysisError}
-                        insights={coachInsights}
-                        onSuggestionClick={(text) => {
-                            setNewMessage(text)
-                            if (window.innerWidth < 768) {
-                                setIsCoachOpen(false)
-                            }
-                        }}
-                        onRefresh={(prompt, style) => {
-                            if (typeof prompt === 'string') {
-                                handleAnalyze(undefined, prompt, style)
-                            } else {
-                                handleAnalyze(undefined, undefined, style)
-                            }
-                        }}
-                        mode={coachMode}
-                        onModeChange={(mode) => {
-                            if (activeRoomId) {
-                                setRoomMode(activeRoomId, mode)
-                            }
-                            if (mode) {
-                                handleAnalyze(mode)
-                            }
-                        }}
-                    />
-                )}
-            </AnimatePresence>
+            <CoachPanel
+                isOpen={isCoachOpen}
+                onClose={() => setIsCoachOpen(false)}
+                loading={isAnalyzing}
+                error={analysisError}
+                insights={coachInsights}
+                onSuggestionClick={(text) => { setNewMessage(text); }}
+                onRefresh={(prompt, style) => handleAnalyze(undefined, prompt, style)}
+                mode={coachMode}
+                onModeChange={(mode) => { if (activeRoomId) setRoomMode(activeRoomId, mode); if (mode) handleAnalyze(mode); }}
+            />
         </div>
     )
 }
-

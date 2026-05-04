@@ -2,15 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/backend/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { MessageSquare, ArrowLeft } from 'lucide-react'
+import { Suspense } from 'react'
 
 export const dynamic = 'force-dynamic'
 
-export default function LoginPage() {
-    const [isSignUp, setIsSignUp] = useState(false)
+function LoginContent() {
+    const searchParams = useSearchParams()
+    const [isSignUp, setIsSignUp] = useState(searchParams.get('signup') === 'true')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -251,5 +253,13 @@ export default function LoginPage() {
 
 
         </div>
+    )
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="min-h-[100dvh] bg-black" />}>
+            <LoginContent />
+        </Suspense>
     )
 }
