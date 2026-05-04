@@ -145,37 +145,72 @@ export function ChatWindow() {
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, height: '100%' }}>
                 
                 {/* Header */}
-                <header style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '14px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <header style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 12, 
+                    padding: '16px 24px', 
+                    borderBottom: '1px solid rgba(255,255,255,0.04)',
+                    background: 'rgba(10, 7, 16, 0.85)',
+                    backdropFilter: 'blur(20px)',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 30
+                }}>
                     <button onClick={() => setActiveRoomId(null)} className="md:hidden" style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
                         <ArrowLeft size={24} />
                     </button>
                     {activeRoom ? (
                         <>
-                            <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#5fe49a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0a0710', fontWeight: 600, fontSize: 12 }}>
-                                {activeRoom.name.substring(0, 2).toUpperCase()}
+                            <div style={{ width: 34, height: 34, borderRadius: '12px', background: 'linear-gradient(135deg, #a371ff, #7c4ddb)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13, boxShadow: '0 4px 12px rgba(163,113,255,0.2)' }}>
+                                {activeRoom.name.substring(0, 1).toUpperCase()}
                             </div>
-                            <div style={{ fontWeight: 600, fontSize: 15 }}>{activeRoom.name}</div>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{activeRoom.name}</div>
+                                <div style={{ fontSize: 10, color: '#5fe49a', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Active Now</div>
+                            </div>
                         </>
                     ) : (
                         <div style={{ width: 100, height: 20, background: 'rgba(255,255,255,0.1)', borderRadius: 4 }} />
                     )}
                     <span style={{ flex: 1 }} />
-                    <button onClick={() => setIsCoachOpen(!isCoachOpen)} style={{ background: isCoachOpen ? 'rgba(163,113,255,0.12)' : 'transparent', border: isCoachOpen ? '1px solid rgba(163,113,255,0.35)' : '1px solid rgba(255,255,255,0.06)', color: isCoachOpen ? '#fff' : 'rgba(255,255,255,0.65)', padding: '6px 14px', fontSize: 12.5, borderRadius: 7, cursor: 'pointer' }}>
+                    <button 
+                        onClick={() => setIsCoachOpen(!isCoachOpen)} 
+                        style={{ 
+                            background: isCoachOpen ? 'rgba(163,113,255,0.12)' : 'rgba(255,255,255,0.03)', 
+                            border: '1px solid rgba(255,255,255,0.06)', 
+                            color: isCoachOpen ? '#a371ff' : 'rgba(255,255,255,0.65)', 
+                            padding: '7px 16px', 
+                            fontSize: 12, 
+                            fontWeight: 600,
+                            borderRadius: 9, 
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                        }}
+                    >
                         Insights
                     </button>
                 </header>
 
                 {/* Read Strip */}
                 {coachInsights?.vibe && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 24px', background: 'linear-gradient(90deg, rgba(163,113,255,0.10), rgba(255,107,181,0.04) 50%, transparent)', borderBottom: '1px solid rgba(255,255,255,0.06)', fontSize: 13 }}>
-                        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 10, letterSpacing: '0.22em', color: '#c9a3ff' }}>READ</span>
-                        <span style={{ width: 1, height: 12, background: 'rgba(163,113,255,0.3)' }} />
+                    <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 12, 
+                        padding: '12px 24px', 
+                        background: 'linear-gradient(90deg, rgba(163,113,255,0.12), rgba(255,107,181,0.06) 50%, transparent)', 
+                        borderBottom: '1px solid rgba(255,255,255,0.04)', 
+                        fontSize: 13 
+                    }}>
+                        <span style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', fontSize: 10, fontWeight: 800, letterSpacing: '0.22em', color: '#a371ff' }}>READ</span>
+                        <span style={{ width: 1, height: 12, background: 'rgba(163,113,255,0.2)' }} />
                         <span style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                            <span style={{ color: '#ff8fc2', fontStyle: 'italic', fontFamily: '"Instrument Serif", serif', fontSize: 17 }}>{coachInsights.vibe}</span>
+                            <span style={{ color: '#ff8fc2', fontStyle: 'italic', fontFamily: 'serif', fontSize: 18 }}>{coachInsights.vibe}</span>
                             {coachInsights.summary?.[0] && (
                                 <>
-                                    <span style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11 }}>→</span>
-                                    <span style={{ color: 'rgba(255,255,255,0.65)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{coachInsights.summary[0]}</span>
+                                    <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>—</span>
+                                    <span style={{ color: 'rgba(255,255,255,0.7)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>{coachInsights.summary[0]}</span>
                                 </>
                             )}
                         </span>
@@ -183,8 +218,8 @@ export function ChatWindow() {
                 )}
 
                 {/* Messages Area */}
-                <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
-                    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px 16px', height: '100%' }}>
+                <div style={{ flex: 1, minHeight: 0, overflow: 'auto', background: '#0a0710' }}>
+                    <div style={{ maxWidth: 760, margin: '0 auto', padding: '32px 24px 16px', height: '100%' }}>
                         <Virtuoso
                             style={{ height: '100%' }}
                             data={messages}
@@ -209,19 +244,33 @@ export function ChatWindow() {
                 </div>
 
                 {/* Composer */}
-                <div style={{ padding: '10px 24px 16px', borderTop: '1px solid rgba(255,255,255,0.06)', background: '#0a0710' }}>
+                <div style={{ padding: '12px 24px 24px', background: '#0a0710', position: 'relative' }}>
+                    {/* Gradient Fade Top */}
+                    <div style={{ position: 'absolute', top: -40, left: 0, right: 0, height: 40, background: 'linear-gradient(to top, #0a0710, transparent)', pointerEvents: 'none' }} />
+                    
                     {replyingTo && (
-                        <div style={{ maxWidth: 720, margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', borderLeft: '2px solid #a371ff', paddingLeft: 8 }}>
-                                <span style={{ color: '#a371ff', fontSize: 10 }}>Replying to {activeRoom?.name}</span>
-                                <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>{replyingTo.content}</span>
+                        <div style={{ maxWidth: 760, margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '8px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', borderLeft: '2px solid #a371ff', paddingLeft: 12 }}>
+                                <span style={{ color: '#a371ff', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Replying to {activeRoom?.name}</span>
+                                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 400 }}>{replyingTo.content}</span>
                             </div>
-                            <button onClick={() => setReplyingTo(null)} style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.42)', cursor: 'pointer' }}>×</button>
+                            <button onClick={() => setReplyingTo(null)} style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.3)', fontSize: 20, cursor: 'pointer', padding: 4 }}>×</button>
                         </div>
                     )}
 
-                    <form onSubmit={handleSend} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: 6, maxWidth: 720, margin: '0 auto' }}>
-                        <button type="button" onClick={() => fileInputRef.current?.click()} style={{ width: 32, height: 32, background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.42)', fontSize: 18, cursor: 'pointer', flexShrink: 0 }}>+</button>
+                    <form onSubmit={handleSend} style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 12, 
+                        background: 'rgba(255,255,255,0.04)', 
+                        border: '1px solid rgba(255,255,255,0.06)', 
+                        borderRadius: 20, 
+                        padding: '8px 10px', 
+                        maxWidth: 760, 
+                        margin: '0 auto',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+                    }}>
+                        <button type="button" onClick={() => fileInputRef.current?.click()} style={{ width: 36, height: 36, background: 'rgba(255,255,255,0.04)', border: 'none', color: 'rgba(255,255,255,0.5)', borderRadius: 14, fontSize: 20, cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>+</button>
                         <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileUpload} accept="image/*" style={{ display: 'none' }} />
                         
                         <input
@@ -229,10 +278,31 @@ export function ChatWindow() {
                             value={newMessage}
                             onChange={(e) => { setNewMessage(e.target.value); sendTyping(); }}
                             placeholder="Message..."
-                            style={{ flex: 1, padding: '8px 4px', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontSize: 14, minWidth: 0, fontFamily: 'inherit' }}
+                            style={{ flex: 1, padding: '10px 4px', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontSize: 15, minWidth: 0, fontFamily: 'inherit' }}
                         />
                         
-                        <button type="submit" disabled={!newMessage.trim()} style={{ width: 36, height: 36, background: newMessage.trim() ? 'linear-gradient(135deg,#a371ff,#ff6bb5)' : 'rgba(255,255,255,0.06)', border: 'none', color: newMessage.trim() ? '#fff' : 'rgba(255,255,255,0.42)', borderRadius: 10, fontSize: 16, cursor: 'pointer', flexShrink: 0, transition: 'background 0.15s, color 0.15s' }}>↑</button>
+                        <button 
+                            type="submit" 
+                            disabled={!newMessage.trim()} 
+                            style={{ 
+                                width: 40, 
+                                height: 40, 
+                                background: newMessage.trim() ? 'linear-gradient(135deg, #a371ff, #7c4ddb)' : 'rgba(255,255,255,0.04)', 
+                                border: 'none', 
+                                color: newMessage.trim() ? '#fff' : 'rgba(255,255,255,0.2)', 
+                                borderRadius: 14, 
+                                fontSize: 18, 
+                                cursor: newMessage.trim() ? 'pointer' : 'default', 
+                                flexShrink: 0, 
+                                transition: 'all 0.2s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: newMessage.trim() ? '0 8px 20px rgba(163,113,255,0.3)' : 'none'
+                            }}
+                        >
+                            ↑
+                        </button>
                     </form>
                 </div>
             </div>
